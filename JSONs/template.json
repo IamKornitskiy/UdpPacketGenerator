@@ -1,0 +1,44 @@
+{
+  "fields": [
+    {
+      "name": "sync",
+      "type": "uint16",
+      "value_source": "constant",
+      "default_value_hex": "1213"
+    },
+    {
+      "name": "counter",
+      "type": "uint16",
+      "value_source": "counter",
+      "start_value": 0
+    },
+    {
+      "name": "reserved",
+      "type": "bytes",
+      "size": 4,
+      "value_source": "reserved",
+      "default_value_hex": "11223344"
+    },
+    {
+      "name": "spin",
+      "type": "uint8",
+      "value_source": "input",
+      "maxInt": 10,
+      "minInt": -5
+    },
+    {
+      "name": "double spin",
+      "type": "float32",
+      "value_source": "input",
+      "maxDouble": 1.5,
+      "minDouble": -0.5
+    },
+    {
+      "name": "payload",
+      "type": "bytes",
+      "size": 1,
+      "value_source": "constant",
+      "default_value_hex": "33"
+    }
+  ]
+}
