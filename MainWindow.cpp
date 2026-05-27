@@ -76,12 +76,12 @@ void MainWindow::onStart()
 
     // Проверка адреса назначения
     QHostAddress destAddr;
-    destAddr.setAddress(ui->leAddress->text());
+    destAddr.setAddress(ui->leDestAddress->text());
     if (destAddr.isNull()) {
         QMessageBox::warning(this, "Error", "Invalid destination IP address.");
         return;
     }
-    quint16 destPort = static_cast<quint16>(ui->sbPort->value());
+    quint16 destPort = static_cast<quint16>(ui->sbDestPort->value());
 
     // Сбор значений константных полей
     QHash<QString, QByteArray> userValues = collectConstantValues();
@@ -99,7 +99,7 @@ void MainWindow::onStart()
     connect(generator, &TrafficGenerator::errorOccurred, this, &MainWindow::onError);
 
     QHostAddress localAddr("0.0.0.0");
-    quint16 localPort = 0;
+    quint16 localPort = ui->sbSrcPort->value();
     int intervalMs = ui->sbInterval->value();
 
     generator->configure(destAddr, destPort, localAddr, localPort, intervalMs, packetBuilder);
