@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(UdpPacketGenerator VERSION 0.1 LANGUAGES CXX)
+project(UdpPacketGenerator VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -45,6 +45,7 @@ else()
     endif()
 endif()
 
+target_compile_definitions(UdpPacketGenerator PRIVATE APP_VERSION="${PROJECT_VERSION}")
 target_link_libraries(UdpPacketGenerator PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Network Qt6::UiTools)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    this->setWindowTitle(QString("Udp Packet Generator v%1").arg(APP_VERSION));
     dynamicLayout = new QFormLayout(ui->scrollAreaWidgetContents);
     ui->scrollAreaWidgetContents->setLayout(dynamicLayout);
 
