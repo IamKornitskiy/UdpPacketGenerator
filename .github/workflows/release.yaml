@@ -142,7 +142,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # важно для истории коммитов
+          fetch-depth: 0
 
       - name: Download Windows artifact
         uses: actions/download-artifact@v4
@@ -156,13 +156,14 @@ jobs:
           name: linux-packages
           path: artifacts
 
+      - name: Install git-cliff
+        run: |
+          curl -sL https://github.com/orhun/git-cliff/releases/download/v2.1.2/git-cliff-2.1.2-x86_64-unknown-linux-gnu.tar.gz | tar xz
+          sudo mv git-cliff-2.1.2/git-cliff /usr/local/bin/
+
       - name: Generate changelog with git-cliff
-        uses: orhun/git-cliff-action@v3
-        with:
-          config: cliff.toml
-          args: --latest --strip all
-        env:
-          OUTPUT: CHANGELOG.md
+        run: |
+          git cliff --config cliff.toml --latest --strip all -o CHANGELOG.md
 
       - name: Create release body
         run: |
