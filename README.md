@@ -20,7 +20,7 @@ Define packet fields with different types, set them as constants, counters, or u
 
 ## Screenshot
 
-![Main Window](screenshots/mainwindow.png)
+![Main Window](Screenshots/mainWindow.jpg)
 
 ## Build
 
