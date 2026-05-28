@@ -1,0 +1,188 @@
+name: Build and release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            platform: linux
+          - os: windows-latest
+            platform: windows
+    runs-on: ${{ matrix.os }}
+    env:
+      QT_VERSION: 6.8.2
+      BUILD_TYPE: Release
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          modules: ''
+
+      # ----- Linux: системные зависимости -----
+      - name: Install Linux build dependencies
+        if: matrix.platform == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgl1-mesa-dev libxkbcommon-x11-0 libxcb-cursor0 rpm patchelf fuse
+
+      # ----- Конфигурация CMake -----
+      - name: Configure CMake
+        run: cmake -B build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_PREFIX_PATH=${{ env.QT_ROOT_DIR }}
+
+      # ----- Сборка -----
+      - name: Build
+        run: cmake --build build --config ${{ env.BUILD_TYPE }} --parallel
+
+      # ----- Windows: упаковка -----
+      - name: Deploy and package (Windows)
+        if: matrix.platform == 'windows'
+        shell: powershell
+        run: |
+          mkdir deploy
+          Copy-Item build\${{ env.BUILD_TYPE }}\UdpPacketGenerator.exe deploy\
+          windeployqt deploy\UdpPacketGenerator.exe
+          Compress-Archive -Path deploy\* -DestinationPath UdpPacketGenerator-${{ github.ref_name }}-win64.zip
+
+      - name: Upload Windows artifact
+        if: matrix.platform == 'windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-zip
+          path: UdpPacketGenerator-*-win64.zip
+
+      # ----- Linux: подготовка и упаковка -----
+      - name: Prepare deploy directory (Linux)
+        if: matrix.platform == 'linux'
+        run: |
+          mkdir deploy_dir
+          cp build/UdpPacketGenerator deploy_dir/
+          python3 -c "
+          import base64
+          png = base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNg+M9QDwADgQH/P4YKxQAAAABJRU5ErkJggg==')
+          with open('deploy_dir/UDP_Packet_Generator.png', 'wb') as f:
+              f.write(png)
+          "
+          cat > deploy_dir/default.desktop <<'EOF'
+          [Desktop Entry]
+          Type=Application
+          Name=UDP Packet Generator
+          Exec=UdpPacketGenerator
+          Icon=UDP_Packet_Generator
+          Categories=Development;
+          EOF
+
+      - name: Download linuxdeployqt
+        if: matrix.platform == 'linux'
+        run: |
+          wget -q "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
+          chmod +x linuxdeployqt-continuous-x86_64.AppImage
+
+      - name: Create portable tar.gz
+        if: matrix.platform == 'linux'
+        env:
+          QMAKE: ${{ env.QT_ROOT_DIR }}/bin/qmake
+        run: |
+          ./linuxdeployqt-continuous-x86_64.AppImage deploy_dir/UdpPacketGenerator -qmake=$QMAKE -verbose=2
+          tar -czf UdpPacketGenerator-${{ github.ref_name }}-linux-portable.tar.gz -C deploy_dir .
+
+      - name: Create AppImage
+        if: matrix.platform == 'linux'
+        env:
+          QMAKE: ${{ env.QT_ROOT_DIR }}/bin/qmake
+        run: |
+          ./linuxdeployqt-continuous-x86_64.AppImage deploy_dir/UdpPacketGenerator -qmake=$QMAKE -appimage -verbose=2
+          rm -f linuxdeployqt-continuous-x86_64.AppImage
+          APPIMAGE=$(find . -maxdepth 1 -name "*.AppImage" -print -quit)
+          if [ -n "$APPIMAGE" ]; then
+            mv "$APPIMAGE" UdpPacketGenerator-${{ github.ref_name }}-x86_64.AppImage
+          else
+            echo "Error: AppImage was not created"
+            exit 1
+          fi
+
+      - name: Build deb and rpm packages
+        if: matrix.platform == 'linux'
+        working-directory: build
+        run: |
+          if [ ! -f ../mainwindow.ui ]; then
+            echo "mainwindow.ui not found in repository, creating placeholder"
+            touch ../mainwindow.ui
+          fi
+          cpack -G DEB
+          cpack -G RPM
+
+      - name: Upload Linux artifacts
+        if: matrix.platform == 'linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-packages
+          path: |
+            *.tar.gz
+            *.AppImage
+            build/*.deb
+            build/*.rpm
+
+    release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # важно для истории коммитов
+
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-zip
+          path: artifacts
+
+      - name: Download Linux artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-packages
+          path: artifacts
+
+      - name: Generate changelog with git-cliff
+        uses: orhun/git-cliff-action@v3
+        with:
+          config: cliff.toml
+          args: --latest --strip all
+        env:
+          OUTPUT: CHANGELOG.md
+
+      - name: Create release body
+        run: |
+          VERSION="${{ github.ref_name }}"
+          BASE="https://github.com/${{ github.repository }}/releases/download/$VERSION"
+          echo '## Downloads' > body.md
+          echo '| Platform | Download |' >> body.md
+          echo '|----------|----------|' >> body.md
+          echo "| Windows | [![Windows](https://img.shields.io/badge/Windows-64bit-blue?logo=windows)](${BASE}/UdpPacketGenerator-${VERSION}-win64.zip) |" >> body.md
+          echo "| Linux AppImage | [![AppImage](https://img.shields.io/badge/AppImage-x86__64-orange?logo=linux)](${BASE}/UdpPacketGenerator-${VERSION}-x86_64.AppImage) |" >> body.md
+          echo "| Linux portable | [![tar.gz](https://img.shields.io/badge/Portable-tar.gz-lightgrey?logo=linux)](${BASE}/UdpPacketGenerator-${VERSION}-linux-portable.tar.gz) |" >> body.md
+          echo "| DEB | [![DEB](https://img.shields.io/badge/DEB-package-red?logo=debian)](${BASE}/udp-packet-generator_${VERSION}_amd64.deb) |" >> body.md
+          echo "| RPM | [![RPM](https://img.shields.io/badge/RPM-package-red?logo=fedora)](${BASE}/udp-packet-generator-${VERSION}-1.x86_64.rpm) |" >> body.md
+          echo -e "\n## Changes" >> body.md
+          cat CHANGELOG.md >> body.md
+
+      - name: Upload to release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: body.md
+          files: artifacts/**/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

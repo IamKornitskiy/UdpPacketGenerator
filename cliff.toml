@@ -1,0 +1,14 @@
+[changelog]
+header = ""
+body = """
+{% for group, commits in commits | group_by(attribute="group") %}
+{% if group == "feat" or group == "fix" or group == "perf" %}
+### {{ group | upper_first }}
+{% for commit in commits %}
+- {{ commit.message | upper_first }} ([{{ commit.id | truncate(length=7, end="") }}](https://github.com/IamKornitskiy/UdpPacketGenerator/commit/{{ commit.id }})){% if commit.github.pr_number %} by @{{ commit.github.pr_author }} in [#{{ commit.github.pr_number }}](https://github.com/IamKornitskiy/UdpPacketGenerator/pull/{{ commit.github.pr_number }}){% endif %}
+{% endfor %}
+{% endif %}
+{% endfor %}
+"""
+footer = ""
+trim = true
