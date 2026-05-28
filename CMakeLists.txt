@@ -72,3 +72,27 @@ install(TARGETS UdpPacketGenerator
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(UdpPacketGenerator)
 endif()
+
+# === CPack ===
+
+install(TARGETS UdpPacketGenerator DESTINATION bin)
+install(FILES mainwindow.ui DESTINATION bin)
+
+set(CPACK_PACKAGE_NAME "udp-packet-generator")
+set(CPACK_PACKAGE_VERSION "1.0.0")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A flexible UDP packet generator configured through JSON templates.")
+set(CPACK_PACKAGE_VENDOR "Oleg Kornitskiy")
+set(CPACK_PACKAGE_CONTACT "iam@kornitskiy.ru")
+set(CPACK_GENERATOR "DEB;RPM")
+
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.28), libqt6core6a, libqt6gui6, libqt6widgets6, libqt6network6")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Oleg Kornitskiy <iam@kornitskiy.ru>")
+set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/IamKornitskiy/UdpPacketGenerator")
+set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
+
+set(CPACK_RPM_PACKAGE_REQUIRES "qt6-qtbase, qt6-qtbase-gui, qt6-qtbase-network")
+set(CPACK_RPM_PACKAGE_LICENSE "GPL-3.0")
+set(CPACK_RPM_PACKAGE_GROUP "Development/Tools")
+set(CPACK_RPM_PACKAGE_URL "https://github.com/IamKornitskiy/UdpPacketGenerator")
+
+include(CPack)
