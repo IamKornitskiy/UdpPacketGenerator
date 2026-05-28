@@ -39,11 +39,19 @@ jobs:
         run: |
           mkdir deploy_dir
           cp build/UdpPacketGenerator deploy_dir/
+          # Минимальный PNG 1x1 для иконки
+          python3 -c "
+          import base64
+          png = base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNg+M9QDwADgQH/P4YKxQAAAABJRU5ErkJggg==')
+          with open('deploy_dir/UDP_Packet_Generator.png', 'wb') as f:
+              f.write(png)
+          "
           cat > deploy_dir/default.desktop <<'EOF'
           [Desktop Entry]
           Type=Application
           Name=UDP Packet Generator
           Exec=UdpPacketGenerator
+          Icon=UDP_Packet_Generator
           Categories=Development;
           EOF
 
