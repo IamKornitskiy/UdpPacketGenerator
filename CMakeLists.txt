@@ -71,7 +71,7 @@ endif()
 # === CPack ===
 
 install(TARGETS UdpPacketGenerator RUNTIME DESTINATION bin)
-install(FILES mainwindow.ui DESTINATION bin)
+install(FILES MainWindow.ui DESTINATION bin)
 
 set(CPACK_PACKAGE_NAME "udp-packet-generator")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
