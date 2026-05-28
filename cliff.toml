@@ -1,14 +1,42 @@
 [changelog]
+remote = "https://github.com/IamKornitskiy/UdpPacketGenerator.git"
 header = ""
 body = """
+{% if version %}
+## {{ version | trim_start_matches(pat="v") }}
+{% else %}
+## Unreleased
+{% endif %}
+
 {% for group, commits in commits | group_by(attribute="group") %}
-{% if group == "feat" or group == "fix" or group == "perf" %}
-### {{ group | upper_first }}
+{% if group == "Added" or group == "Fixed" or group == "Changed" %}
+### {{ group }}
 {% for commit in commits %}
-- {{ commit.message | upper_first }} ([{{ commit.id | truncate(length=7, end="") }}](https://github.com/IamKornitskiy/UdpPacketGenerator/commit/{{ commit.id }})){% if commit.github.pr_number %} by @{{ commit.github.pr_author }} in [#{{ commit.github.pr_number }}](https://github.com/IamKornitskiy/UdpPacketGenerator/pull/{{ commit.github.pr_number }}){% endif %}
-{% endfor %}
+- {{ commit.message | split(pat="\n") | first | upper_first | trim }}\
+    {% if commit.remote.pr_number %} ([#{{ commit.remote.pr_number }}]({{ remote }}/pull/{{ commit.remote.pr_number }})){% endif %}\
+    {% if commit.remote.username %} by @{{ commit.remote.username }}{% endif %}
+{%- endfor %}
 {% endif %}
 {% endfor %}
 """
 footer = ""
 trim = true
+
+[git]
+conventional_commits = true
+filter_unconventional = false
+
+commit_parsers = [
+  # feat: добавления
+  { message = "^feat", group = "Added" },
+  { message = "^[a|A]dd", group = "Added" },
+  # fix: исправления
+  { message = "^fix", group = "Fixed" },
+  { message = "^bug", group = "Fixed" },
+  # perf: улучшения
+  { message = "^perf", group = "Changed" },
+  # всё остальное (docs, chore, ci, style, refactor, test и т.д.) → Other
+  { message = ".*", group = "Other" },
+]
+
+sort_commits = "newest"
