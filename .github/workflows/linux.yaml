@@ -72,12 +72,11 @@ jobs:
           QMAKE: ${{ env.QT_ROOT_DIR }}/bin/qmake
         run: |
           ./linuxdeployqt-continuous-x86_64.AppImage deploy_dir/UdpPacketGenerator -qmake=$QMAKE -appimage -verbose=2
-
-          APPIMAGE=$(find . -maxdepth 1 -name "*.AppImage" -print -quit)
+          APPIMAGE=$(find . -maxdepth 1 -name "*.AppImage" ! -name "linuxdeployqt*" -print -quit)
           if [ -n "$APPIMAGE" ]; then
             mv "$APPIMAGE" UdpPacketGenerator-${{ github.ref_name }}-x86_64.AppImage
           else
-            echo "No AppImage found"
+            echo "Error: AppImage was not created"
             exit 1
           fi
 
