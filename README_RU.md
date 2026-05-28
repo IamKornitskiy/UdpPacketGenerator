@@ -20,7 +20,7 @@ UDP Packet Generator создаёт и отправляет пользовате
 
 ## Скриншот
 
-![Главное окно](screenshots/mainwindow.png)
+![Главное окно](Screenshots/mainWindow.jpg)
 
 ## Сборка
 
