@@ -136,7 +136,7 @@ jobs:
             build/*.deb
             build/*.rpm
 
-    release:
+  release:
     needs: build
     runs-on: ubuntu-latest
     steps:
