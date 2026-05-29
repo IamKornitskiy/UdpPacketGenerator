@@ -67,6 +67,7 @@ QStatusBar {
     background-color: #f0f0f0;
     border-bottom: 1px solid #c0c0c0;
 }
+
 #titleBar QPushButton {
     background: transparent;
     border: none;
@@ -74,16 +75,20 @@ QStatusBar {
     color: #333333;
     padding: 0px;
 }
+
 #titleBar QPushButton:hover {
     background-color: #e0e0e0;
 }
+
 #titleBar QPushButton:pressed {
     background-color: #c0c0c0;
 }
-#closeButton:hover {
+
+#titleBar #closeButton:hover {
     background-color: #E81123;
     color: white;
 }
-#closeButton:pressed {
+
+#titleBar #closeButton:pressed {
     background-color: #BF0F1A;
 }

@@ -17,7 +17,8 @@ set(PROJECT_SOURCES
         MainWindow.cpp
         MainWindow.h
         MainWindow.ui
-        style/style.qss
+        style/light.qss
+        style/dark.qss
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

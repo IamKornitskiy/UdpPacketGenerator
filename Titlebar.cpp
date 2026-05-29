@@ -2,6 +2,7 @@
 #include <QApplication>
 #include <QEvent>
 #include <QMouseEvent>
+#include <QPainter>
 #include <QStyle>
 #include <QWindow>
 
@@ -15,6 +16,16 @@ TitleBar::TitleBar(QWidget *parent)
     if (QWidget *win = window()) {
         win->installEventFilter(this);
     }
+}
+
+static QIcon makeWhiteIcon(QStyle::StandardPixmap standardIcon)
+{
+    QPixmap pix = qApp->style()->standardIcon(standardIcon).pixmap(16, 16);
+    QPainter painter(&pix);
+    painter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+    painter.fillRect(pix.rect(), Qt::white);
+    painter.end();
+    return QIcon(pix);
 }
 
 void TitleBar::setupUi()
@@ -71,6 +82,23 @@ void TitleBar::setupUi()
     m_closeButton->setFlat(true);
     connect(m_closeButton, &QPushButton::clicked, this, &TitleBar::onClose);
     layout->addWidget(m_closeButton);
+
+    QIcon whiteMin = makeWhiteIcon(QStyle::SP_TitleBarMinButton);
+    QIcon whiteMax = makeWhiteIcon(QStyle::SP_TitleBarMaxButton);
+    QIcon whiteNorm = makeWhiteIcon(QStyle::SP_TitleBarNormalButton);
+    QIcon whiteClose = makeWhiteIcon(QStyle::SP_TitleBarCloseButton);
+
+    m_minButton->setIcon(whiteMin);
+    m_maxButton->setIcon(whiteMax); // начальная иконка (не развёрнуто)
+    m_closeButton->setIcon(whiteClose);
+
+    // Сохраняем белые иконки для последующего переключения
+    // Можно запомнить их как члены класса или использовать лямбды.
+    // Проще сохранить в членах:
+    m_iconMin = whiteMin;
+    m_iconMax = whiteMax;
+    m_iconNormal = whiteNorm;
+    m_iconClose = whiteClose;
 }
 
 void TitleBar::applyDefaultStyle()
@@ -159,9 +187,8 @@ void TitleBar::onClose()
 
 void TitleBar::updateMaximizeIcon(bool maximized)
 {
-    QStyle *s = qApp->style();
     if (maximized)
-        m_maxButton->setIcon(s->standardIcon(QStyle::SP_TitleBarNormalButton));
+        m_maxButton->setIcon(m_iconNormal);
     else
-        m_maxButton->setIcon(s->standardIcon(QStyle::SP_TitleBarMaxButton));
+        m_maxButton->setIcon(m_iconMax);
 }

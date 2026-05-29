@@ -4,6 +4,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <QStyle>
 #include <QWidget>
 
 class TitleBar : public QWidget
@@ -35,6 +36,11 @@ private:
     QPushButton *m_minButton;
     QPushButton *m_maxButton;
     QPushButton *m_closeButton;
+
+    QIcon m_iconMin;
+    QIcon m_iconMax;
+    QIcon m_iconNormal;
+    QIcon m_iconClose;
 };
 
 #endif // TITLEBAR_H
