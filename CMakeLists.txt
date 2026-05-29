@@ -17,6 +17,7 @@ set(PROJECT_SOURCES
         MainWindow.cpp
         MainWindow.h
         MainWindow.ui
+        style/style.qss
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -26,6 +27,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         PacketTemplate.h PacketTemplate.cpp
         FieldGenerator.h FieldGenerator.cpp
         TrafficGenerator.h TrafficGenerator.cpp
+        resources.qrc
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET UdpPacketGenerator APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
