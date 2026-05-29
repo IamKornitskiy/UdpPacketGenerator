@@ -102,6 +102,7 @@ void MainWindow::onStart()
 
     connect(generator, &TrafficGenerator::packetSent, this, &MainWindow::onPacketSent);
     connect(generator, &TrafficGenerator::errorOccurred, this, &MainWindow::onError);
+    connect(ui->sbInterval, &QSpinBox::valueChanged, generator, &TrafficGenerator::setIntervalMs);
 
     QHostAddress localAddr("0.0.0.0");
     quint16 localPort = ui->sbSrcPort->value();
