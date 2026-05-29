@@ -29,7 +29,6 @@ filter_unconventional = false
 commit_parsers = [
   # feat: добавления
   { message = "^feat", group = "Added" },
-  { message = "^[a|A]dd", group = "Added" },
   # fix: исправления
   { message = "^fix", group = "Fixed" },
   { message = "^bug", group = "Fixed" },
