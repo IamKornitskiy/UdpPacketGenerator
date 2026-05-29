@@ -24,7 +24,7 @@
        <widget class="QGroupBox" name="groupBox">
         <property name="maximumSize">
          <size>
-          <width>300</width>
+          <width>500</width>
           <height>16777215</height>
          </size>
         </property>
@@ -49,7 +49,7 @@
        <widget class="QGroupBox" name="groupBox_2">
         <property name="maximumSize">
          <size>
-          <width>300</width>
+          <width>500</width>
           <height>16777215</height>
          </size>
         </property>
@@ -175,6 +175,9 @@
     </item>
     <item>
      <widget class="QScrollArea" name="scrollArea">
+      <property name="frameShape">
+       <enum>QFrame::Shape::HLine</enum>
+      </property>
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
@@ -183,8 +186,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>383</width>
-         <height>525</height>
+         <width>344</width>
+         <height>523</height>
         </rect>
        </property>
       </widget>

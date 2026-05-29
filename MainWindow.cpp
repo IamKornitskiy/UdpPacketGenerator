@@ -17,6 +17,9 @@ MainWindow::MainWindow(QWidget *parent)
     dynamicLayout = new QFormLayout(ui->scrollAreaWidgetContents);
     ui->scrollAreaWidgetContents->setLayout(dynamicLayout);
 
+    ui->btnStart->setEnabled(false);
+    ui->btnStop->setEnabled(false);
+
     connect(ui->btnLoadJson, &QPushButton::clicked, this, &MainWindow::onLoadJson);
     connect(ui->btnStart, &QPushButton::clicked, this, &MainWindow::onStart);
     connect(ui->btnStop, &QPushButton::clicked, this, &MainWindow::onStop);
@@ -61,6 +64,7 @@ void MainWindow::onLoadJson()
 
     buildDynamicFields();
 
+    ui->btnStart->setEnabled(true);
     statusBar()->showMessage("Loaded " + fileName);
 }
 
@@ -98,6 +102,7 @@ void MainWindow::onStart()
 
     connect(generator, &TrafficGenerator::packetSent, this, &MainWindow::onPacketSent);
     connect(generator, &TrafficGenerator::errorOccurred, this, &MainWindow::onError);
+    connect(ui->sbInterval, &QSpinBox::valueChanged, generator, &TrafficGenerator::setIntervalMs);
 
     QHostAddress localAddr("0.0.0.0");
     quint16 localPort = ui->sbSrcPort->value();
