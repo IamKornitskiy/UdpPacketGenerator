@@ -28,6 +28,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         FieldGenerator.h FieldGenerator.cpp
         TrafficGenerator.h TrafficGenerator.cpp
         resources.qrc
+        Titlebar.h Titlebar.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET UdpPacketGenerator APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

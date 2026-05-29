@@ -13,7 +13,27 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    this->setWindowTitle(QString("Udp Packet Generator v%1").arg(APP_VERSION));
+    setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+
+    QWidget *oldCentral = takeCentralWidget();
+
+    QWidget *container = new QWidget(this);
+    QVBoxLayout *vLayout = new QVBoxLayout(container);
+    vLayout->setContentsMargins(0, 0, 0, 0);
+    vLayout->setSpacing(0);
+
+    m_titleBar = new TitleBar(this);
+    vLayout->addWidget(m_titleBar);
+
+    // Основной контент из UI
+    if (oldCentral) {
+        oldCentral->setParent(container);
+        vLayout->addWidget(oldCentral);
+    }
+
+    setCentralWidget(container);
+
+    m_titleBar->setTitle(QString("Udp Packet Generator v%1").arg(APP_VERSION));
     dynamicLayout = new QFormLayout(ui->scrollAreaWidgetContents);
     ui->scrollAreaWidgetContents->setLayout(dynamicLayout);
 

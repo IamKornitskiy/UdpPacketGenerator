@@ -9,6 +9,7 @@
 #include <QSpinBox>
 #include <QThread>
 #include "PacketTemplate.h"
+#include "Titlebar.h"
 #include "TrafficGenerator.h"
 #include <memory>
 
@@ -36,6 +37,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    TitleBar *m_titleBar = nullptr;
 
     void clearDynamicFields();
     void buildDynamicFields();
