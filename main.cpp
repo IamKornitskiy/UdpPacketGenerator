@@ -11,7 +11,6 @@ int main(int argc, char *argv[])
     if (styleFile.open(QFile::ReadOnly)) {
         a.setStyleSheet(styleFile.readAll());
         styleFile.close();
-        qDebug() << "ok";
     }
 
     MainWindow w;
