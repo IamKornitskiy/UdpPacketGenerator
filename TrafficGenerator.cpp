@@ -78,3 +78,10 @@ void TrafficGenerator::updateFields(const QHash<QString, QByteArray> &values)
         builder->updateField(it.key(), it.value());
     }
 }
+
+void TrafficGenerator::setIntervalMs(int newIntervalMs)
+{
+    intervalMs = newIntervalMs;
+    if (timer)
+        timer->setInterval(intervalMs);
+}

@@ -26,6 +26,7 @@ public slots:
     void start();
     void stop();
     void updateFields(const QHash<QString, QByteArray> &values);
+    void setIntervalMs(int newIntervalMs);
 
 signals:
     void packetSent(int totalPackets);
