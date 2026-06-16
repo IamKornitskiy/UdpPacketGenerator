@@ -2,7 +2,7 @@
 #define FIELD_GENERATOR_H
 
 #include <QByteArray>
-#include "packet_template.h"
+#include "packet/packet_template.h"
 #include <memory>
 
 class FieldGenerator

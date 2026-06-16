@@ -8,7 +8,7 @@
 #include <QPushButton>
 #include <QSpinBox>
 #include <QThread>
-#include "packet_template.h"
+#include "packet/packet_template.h"
 #include "titlebar.h"
 #include "traffic_generator.h"
 #include <memory>

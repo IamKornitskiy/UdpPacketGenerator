@@ -170,13 +170,3 @@ bool PacketTemplate::parseField(const QJsonObject &obj, PacketField &field, QStr
 
     return true;
 }
-
-int PacketTemplate::typeSize(const QString &type)
-{
-    return kTypeSizes.value(type, 0); // 0 означает bytes — размер задаётся отдельно
-}
-
-FieldInput PacketTemplate::typeInput(const QString &type)
-{
-    return kTypeInputs.value(type, FieldInput::None);
-}
