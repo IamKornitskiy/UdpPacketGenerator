@@ -39,10 +39,10 @@ void TitleBar::setupUi()
 
     // app icon
     m_iconLabel = new QLabel(this);
-    m_iconLabel->setFixedSize(20, 20);
+    m_iconLabel->setFixedSize(38, 38);
     m_iconLabel->setScaledContents(true);
-    QIcon defaultIcon = qApp->style()->standardIcon(QStyle::SP_ComputerIcon);
-    m_iconLabel->setPixmap(defaultIcon.pixmap(20, 20));
+    QIcon defaultIcon = QIcon("://style/logo.svg");
+    m_iconLabel->setPixmap(defaultIcon.pixmap(38, 38));
     layout->addWidget(m_iconLabel);
 
     m_titleLabel = new QLabel(QCoreApplication::applicationName().isEmpty()
