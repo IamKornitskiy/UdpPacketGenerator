@@ -27,7 +27,7 @@ To contribute a template:
 1. Place the `.json` file in the [`templates/`](templates/) folder.
 2. Make sure the template follows the [Template guide](templates/README.md).
 3. If applicable, add a short description to `templates/README.md` (and `templates/README_RU.md`) and/or a usage example.
-4. Submit a Pull Request targeting the `master` branch.
+4. Submit a Pull Request targeting the `main` branch.
 
 ## Pull Request Process
 
