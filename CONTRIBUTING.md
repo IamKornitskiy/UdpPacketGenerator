@@ -1,4 +1,4 @@
-## En [Ru](CONTRIBUTION_RU.md)
+## En [Ru](CONTRIBUTING_RU.md)
 
 # Contributing to UDP Packet Generator
 
