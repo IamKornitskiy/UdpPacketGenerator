@@ -53,7 +53,7 @@
 | Классы, структуры, перечисления   | PascalCase        | `class UserAccount`, `struct Point3D`, `enum class ColorType` |
 | Функции (глобальные и методы)     | camelCase         | `getUserBalance()`, `calculateTotal()`, `setName()`   |
 | Локальные переменные и параметры  | camelCase         | `userName`, `totalCount`, `maxRetries`                |
-| Члены класса                      | `m_` + PascalCase | `m_Name`, `m_Count`                                  |
+| Члены класса                      | `m_` + camelCase | `m_name`, `m_count`                                  |
 | Константы и `constexpr`           | `k` + PascalCase  | `kMaxSize`                                           |
 | Значения enum class               | PascalCase        | `enum class Color { Red, Green, Blue };`          |
 | Макросы                           | SNAKE_UPPER_CASE  | `TOTAL_COUNT`                                        |
