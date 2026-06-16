@@ -1,11 +1,11 @@
-#ifndef TRAFFICGENERATOR_H
-#define TRAFFICGENERATOR_H
+#ifndef TRAFFIC_GENERATOR_H
+#define TRAFFIC_GENERATOR_H
 
 #include <QHostAddress>
 #include <QObject>
 #include <QTimer>
 #include <QUdpSocket>
-#include "FieldGenerator.h"
+#include "field_generator.h"
 #include <memory>
 
 class TrafficGenerator : public QObject
@@ -33,15 +33,15 @@ signals:
     void errorOccurred(const QString &msg);
 
 private:
-    QUdpSocket *socket = nullptr;
-    QTimer *timer = nullptr;
-    QHostAddress destAddress;
-    quint16 destPort = 0;
-    QHostAddress localAddress;
-    quint16 localPort = 0;
-    std::shared_ptr<PacketBuilder> builder;
-    int sentCount = 0;
-    int intervalMs = 1000;
+    QUdpSocket *m_socket = nullptr;
+    QTimer *m_timer = nullptr;
+    QHostAddress m_destAddress;
+    quint16 m_destPort = 0;
+    QHostAddress m_localAddress;
+    quint16 m_localPort = 0;
+    std::shared_ptr<PacketBuilder> m_builder;
+    int m_sentCount = 0;
+    int m_intervalMs = 1000;
 };
 
-#endif // TRAFFICGENERATOR_H
+#endif // TRAFFIC_GENERATOR_H

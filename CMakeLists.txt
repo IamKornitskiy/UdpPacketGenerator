@@ -14,9 +14,9 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network Core Gui 
 
 set(PROJECT_SOURCES
         main.cpp
-        MainWindow.cpp
-        MainWindow.h
-        MainWindow.ui
+        main_window.cpp
+        main_window.h
+        main_window.ui
         style/light.qss
         style/dark.qss
 )
@@ -25,11 +25,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(UdpPacketGenerator
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        PacketTemplate.h PacketTemplate.cpp
-        FieldGenerator.h FieldGenerator.cpp
-        TrafficGenerator.h TrafficGenerator.cpp
+        packet_template.h packet_template.cpp
+        field_generator.h field_generator.cpp
+        traffic_generator.h traffic_generator.cpp
         resources.qrc
-        Titlebar.h Titlebar.cpp
+        titlebar.h titlebar.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET UdpPacketGenerator APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

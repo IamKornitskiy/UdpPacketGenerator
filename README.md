@@ -20,7 +20,7 @@ Define packet fields with different types, set them as constants, counters, or u
 
 ## Screenshot
 
-![Main Window](Screenshots/mainWindow.jpg)
+![Main Window](screenshots/mainWindow.jpg)
 
 ## Build
 
@@ -50,7 +50,7 @@ cmake --build .
 ## JSON Template
 
 Packet structure is defined in a JSON file.  
-See [`JSONs/`](JSONs/) for examples and a detailed guide on writing your own templates.
+See [`templates/`](templates/) for examples and a detailed guide on writing your own templates.
 
 If you create a JSON template for a well-known protocol or packet, feel free to submit a pull request — I'll be happy to add it to the collection.
 
