@@ -33,15 +33,15 @@ signals:
     void errorOccurred(const QString &msg);
 
 private:
-    QUdpSocket *socket = nullptr;
-    QTimer *timer = nullptr;
-    QHostAddress destAddress;
-    quint16 destPort = 0;
-    QHostAddress localAddress;
-    quint16 localPort = 0;
-    std::shared_ptr<PacketBuilder> builder;
-    int sentCount = 0;
-    int intervalMs = 1000;
+    QUdpSocket *m_socket = nullptr;
+    QTimer *m_timer = nullptr;
+    QHostAddress m_destAddress;
+    quint16 m_destPort = 0;
+    QHostAddress m_localAddress;
+    quint16 m_localPort = 0;
+    std::shared_ptr<PacketBuilder> m_builder;
+    int m_sentCount = 0;
+    int m_intervalMs = 1000;
 };
 
 #endif // TRAFFIC_GENERATOR_H

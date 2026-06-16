@@ -36,8 +36,8 @@ class PacketTemplate
 public:
     PacketTemplate();
 
-    QVector<PacketField> fields;
-    int totalSize = 0;
+    QVector<PacketField> m_fields;
+    int m_totalSize = 0;
 
     QString loadFromJson(const QByteArray &jsonData);
     QString validate() const;

@@ -48,15 +48,15 @@ private:
     QByteArray integerToBytes(qint64 value, int size);
     QByteArray floatToBytes(double value, const QString &type);
 
-    PacketTemplate packetTemplate;
+    PacketTemplate m_packetTemplate;
 
-    QFormLayout *dynamicLayout;
-    QMap<QString, QWidget *> fieldEditors;
+    QFormLayout *m_dynamicLayout;
+    QMap<QString, QWidget *> m_fieldEditors;
 
-    QThread *workerThread;
-    TrafficGenerator *generator;
-    bool isRunning = false;
-    std::shared_ptr<PacketBuilder> packetBuilder;
+    QThread *m_workerThread;
+    TrafficGenerator *m_generator;
+    bool m_isRunning = false;
+    std::shared_ptr<PacketBuilder> m_packetBuilder;
 };
 
 #endif // MAIN_WINDOW_H

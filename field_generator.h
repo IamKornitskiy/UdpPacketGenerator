@@ -59,8 +59,8 @@ public:
     void updateField(const QString &name, const QByteArray &newValue);
 
 private:
-    std::vector<std::unique_ptr<FieldGenerator>> generators;
-    QVector<QString> fieldNames;
+    std::vector<std::unique_ptr<FieldGenerator>> m_generators;
+    QVector<QString> m_fieldNames;
 };
 
 #endif // FIELD_GENERATOR_H

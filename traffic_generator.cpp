@@ -16,72 +16,72 @@ void TrafficGenerator::configure(const QHostAddress &destAddr,
                                  int intervalMs,
                                  std::shared_ptr<PacketBuilder> builder)
 {
-    this->destAddress = destAddr;
-    this->destPort = destPort;
-    this->localAddress = localAddr;
-    this->localPort = localPort;
-    this->intervalMs = intervalMs;
-    this->builder = builder;
+    this->m_destAddress = destAddr;
+    this->m_destPort = destPort;
+    this->m_localAddress = localAddr;
+    this->m_localPort = localPort;
+    this->m_intervalMs = intervalMs;
+    this->m_builder = builder;
 }
 
 void TrafficGenerator::start()
 {
-    if (timer)
+    if (m_timer)
         return;
 
-    socket = new QUdpSocket(this);
-    if (!localAddress.isNull() || localPort != 0) {
-        if (!socket->bind(localAddress, localPort)) {
-            emit errorOccurred("Failed to bind UDP socket: " + socket->errorString());
-            delete socket;
-            socket = nullptr;
+    m_socket = new QUdpSocket(this);
+    if (!m_localAddress.isNull() || m_localPort != 0) {
+        if (!m_socket->bind(m_localAddress, m_localPort)) {
+            emit errorOccurred("Failed to bind UDP socket: " + m_socket->errorString());
+            delete m_socket;
+            m_socket = nullptr;
             return;
         }
     }
 
-    timer = new QTimer(this);
-    timer->setInterval(intervalMs);
-    connect(timer, &QTimer::timeout, this, [this]() {
-        if (!builder)
+    m_timer = new QTimer(this);
+    m_timer->setInterval(m_intervalMs);
+    connect(m_timer, &QTimer::timeout, this, [this]() {
+        if (!m_builder)
             return;
-        QByteArray packet = builder->buildPacket();
-        qint64 ret = socket->writeDatagram(packet, destAddress, destPort);
+        QByteArray packet = m_builder->buildPacket();
+        qint64 ret = m_socket->writeDatagram(packet, m_destAddress, m_destPort);
         if (ret == -1) {
-            emit errorOccurred("Send error: " + socket->errorString());
+            emit errorOccurred("Send error: " + m_socket->errorString());
         }
-        sentCount++;
-        emit packetSent(sentCount);
+        m_sentCount++;
+        emit packetSent(m_sentCount);
     });
-    timer->start();
+    m_timer->start();
 }
 
 void TrafficGenerator::stop()
 {
-    if (timer) {
-        timer->stop();
-        delete timer;
-        timer = nullptr;
+    if (m_timer) {
+        m_timer->stop();
+        delete m_timer;
+        m_timer = nullptr;
     }
-    if (socket) {
-        socket->close();
-        delete socket;
-        socket = nullptr;
+    if (m_socket) {
+        m_socket->close();
+        delete m_socket;
+        m_socket = nullptr;
     }
-    sentCount = 0;
+    m_sentCount = 0;
 }
 
 void TrafficGenerator::updateFields(const QHash<QString, QByteArray> &values)
 {
-    if (!builder)
+    if (!m_builder)
         return;
     for (auto it = values.begin(); it != values.end(); ++it) {
-        builder->updateField(it.key(), it.value());
+        m_builder->updateField(it.key(), it.value());
     }
 }
 
 void TrafficGenerator::setIntervalMs(int newIntervalMs)
 {
-    intervalMs = newIntervalMs;
-    if (timer)
-        timer->setInterval(intervalMs);
+    m_intervalMs = newIntervalMs;
+    if (m_timer)
+        m_timer->setInterval(m_intervalMs);
 }

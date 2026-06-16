@@ -41,10 +41,10 @@ QByteArray CounterGenerator::generate()
 void PacketBuilder::setup(const QVector<PacketField> &fields,
                           const QHash<QString, QByteArray> &userValues)
 {
-    generators.clear();
-    fieldNames.clear();
+    m_generators.clear();
+    m_fieldNames.clear();
     for (const auto &f : fields) {
-        fieldNames.append(f.name);
+        m_fieldNames.append(f.name);
         switch (f.source) {
         case FieldSource::Constant: {
             QByteArray val = userValues.value(f.name);
@@ -52,22 +52,22 @@ void PacketBuilder::setup(const QVector<PacketField> &fields,
                 val = f.defaultValue;
             if (val.size() != f.size)
                 val.resize(f.size);
-            generators.push_back(std::make_unique<ConstantGenerator>(val));
+            m_generators.push_back(std::make_unique<ConstantGenerator>(val));
             break;
         }
         case FieldSource::Counter: {
-            generators.push_back(std::make_unique<CounterGenerator>(f.size, f.counterStart));
+            m_generators.push_back(std::make_unique<CounterGenerator>(f.size, f.counterStart));
             break;
         }
         case FieldSource::Reserved: {
-            generators.emplace_back(new ReservedGenerator(f.defaultValue));
+            m_generators.emplace_back(new ReservedGenerator(f.defaultValue));
             break;
         }
         case FieldSource::Input:
             QByteArray val = userValues.value(f.name);
             if (val.size() != f.size)
                 val.resize(f.size);                              // дополнить нулями
-            generators.emplace_back(new ConstantGenerator(val)); // Лишний генератор не нужен
+            m_generators.emplace_back(new ConstantGenerator(val)); // Лишний генератор не нужен
             break;
         }
     }
@@ -76,7 +76,7 @@ void PacketBuilder::setup(const QVector<PacketField> &fields,
 QByteArray PacketBuilder::buildPacket()
 {
     QByteArray packet;
-    for (auto &gen : generators) {
+    for (auto &gen : m_generators) {
         packet.append(gen->generate());
     }
     return packet;
@@ -84,9 +84,9 @@ QByteArray PacketBuilder::buildPacket()
 
 void PacketBuilder::updateField(const QString &name, const QByteArray &newValue)
 {
-    for (int i = 0; i < fieldNames.size(); ++i) {
-        if (fieldNames[i] == name) {
-            if (auto *cgen = dynamic_cast<ConstantGenerator *>(generators[i].get())) {
+    for (int i = 0; i < m_fieldNames.size(); ++i) {
+        if (m_fieldNames[i] == name) {
+            if (auto *cgen = dynamic_cast<ConstantGenerator *>(m_generators[i].get())) {
                 cgen->setValue(newValue);
                 break;
             }
