@@ -1,8 +1,8 @@
-#ifndef FIELDGENERATOR_H
-#define FIELDGENERATOR_H
+#ifndef FIELD_GENERATOR_H
+#define FIELD_GENERATOR_H
 
 #include <QByteArray>
-#include "PacketTemplate.h"
+#include "packet_template.h"
 #include <memory>
 
 class FieldGenerator
@@ -63,4 +63,4 @@ private:
     QVector<QString> fieldNames;
 };
 
-#endif // FIELDGENERATOR_H
+#endif // FIELD_GENERATOR_H

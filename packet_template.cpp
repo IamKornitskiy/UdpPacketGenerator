@@ -1,4 +1,4 @@
-#include "PacketTemplate.h"
+#include "packet_template.h"
 #include <QJsonArray>
 #include <QJsonValue>
 

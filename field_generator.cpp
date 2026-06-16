@@ -1,4 +1,4 @@
-#include "FieldGenerator.h"
+#include "field_generator.h"
 #include <cstring>
 
 CounterGenerator::CounterGenerator(int size, quint64 start)

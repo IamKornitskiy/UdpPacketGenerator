@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MAIN_WINDOW_H
+#define MAIN_WINDOW_H
 
 #include <QFormLayout>
 #include <QLabel>
@@ -8,9 +8,9 @@
 #include <QPushButton>
 #include <QSpinBox>
 #include <QThread>
-#include "PacketTemplate.h"
-#include "Titlebar.h"
-#include "TrafficGenerator.h"
+#include "packet_template.h"
+#include "titlebar.h"
+#include "traffic_generator.h"
 #include <memory>
 
 QT_BEGIN_NAMESPACE
@@ -59,4 +59,4 @@ private:
     std::shared_ptr<PacketBuilder> packetBuilder;
 };
 
-#endif // MAINWINDOW_H
+#endif // MAIN_WINDOW_H

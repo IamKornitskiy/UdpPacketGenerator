@@ -1,11 +1,11 @@
-#ifndef TRAFFICGENERATOR_H
-#define TRAFFICGENERATOR_H
+#ifndef TRAFFIC_GENERATOR_H
+#define TRAFFIC_GENERATOR_H
 
 #include <QHostAddress>
 #include <QObject>
 #include <QTimer>
 #include <QUdpSocket>
-#include "FieldGenerator.h"
+#include "field_generator.h"
 #include <memory>
 
 class TrafficGenerator : public QObject
@@ -44,4 +44,4 @@ private:
     int intervalMs = 1000;
 };
 
-#endif // TRAFFICGENERATOR_H
+#endif // TRAFFIC_GENERATOR_H

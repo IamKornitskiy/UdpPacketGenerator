@@ -1,5 +1,5 @@
-#ifndef PACKETTEMPLATE_H
-#define PACKETTEMPLATE_H
+#ifndef PACKET_TEMPLATE_H
+#define PACKET_TEMPLATE_H
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -48,4 +48,4 @@ private:
     static FieldInput typeInput(const QString &type);
 };
 
-#endif // PACKETTEMPLATE_H
+#endif // PACKET_TEMPLATE_H

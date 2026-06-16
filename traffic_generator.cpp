@@ -1,4 +1,4 @@
-#include "TrafficGenerator.h"
+#include "traffic_generator.h"
 
 TrafficGenerator::TrafficGenerator(QObject *parent)
     : QObject(parent)

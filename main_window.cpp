@@ -1,11 +1,11 @@
-#include "MainWindow.h"
+#include "main_window.h"
 #include <QFile>
 #include <QFileDialog>
 #include <QLabel>
 #include <QMessageBox>
 #include <QRegularExpression>
 #include <QUiLoader>
-#include "./ui_MainWindow.h"
+#include "./ui_main_window.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
