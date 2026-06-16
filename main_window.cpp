@@ -1,11 +1,11 @@
-#include "MainWindow.h"
+#include "main_window.h"
 #include <QFile>
 #include <QFileDialog>
 #include <QLabel>
 #include <QMessageBox>
 #include <QRegularExpression>
 #include <QUiLoader>
-#include "./ui_MainWindow.h"
+#include "./ui_main_window.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -34,8 +34,8 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(container);
 
     m_titleBar->setTitle(QString("Udp Packet Generator v%1").arg(APP_VERSION));
-    dynamicLayout = new QFormLayout(ui->scrollAreaWidgetContents);
-    ui->scrollAreaWidgetContents->setLayout(dynamicLayout);
+    m_dynamicLayout = new QFormLayout(ui->scrollAreaWidgetContents);
+    ui->scrollAreaWidgetContents->setLayout(m_dynamicLayout);
 
     ui->btnStart->setEnabled(false);
     ui->btnStop->setEnabled(false);
@@ -51,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    if (isRunning)
+    if (m_isRunning)
         onStop();
     delete ui;
 }
@@ -76,13 +76,13 @@ void MainWindow::onLoadJson()
     QByteArray data = file.readAll();
     file.close();
 
-    QString err = packetTemplate.loadFromJson(data);
+    QString err = m_packetTemplate.loadFromJson(data);
     if (!err.isEmpty()) {
         QMessageBox::critical(this, "Invalid JSON", err);
         return;
     }
 
-    if (isRunning)
+    if (m_isRunning)
         onStop();
 
     buildDynamicFields();
@@ -94,11 +94,11 @@ void MainWindow::onLoadJson()
 
 void MainWindow::onStart()
 {
-    if (isRunning)
+    if (m_isRunning)
         return;
 
     // Проверка, что шаблон загружен
-    if (packetTemplate.fields.isEmpty()) {
+    if (m_packetTemplate.m_fields.isEmpty()) {
         QMessageBox::warning(this, "Error", "Load a JSON template first.");
         return;
     }
@@ -116,28 +116,28 @@ void MainWindow::onStart()
     QHash<QString, QByteArray> userValues = collectConstantValues();
 
     // Создаём сборщик пакетов
-    packetBuilder = std::make_shared<PacketBuilder>();
-    packetBuilder->setup(packetTemplate.fields, userValues);
+    m_packetBuilder = std::make_shared<PacketBuilder>();
+    m_packetBuilder->setup(m_packetTemplate.m_fields, userValues);
 
     // Создаём генератор и поток
-    generator = new TrafficGenerator();
-    workerThread = new QThread(this);
-    generator->moveToThread(workerThread);
+    m_generator = new TrafficGenerator();
+    m_workerThread = new QThread(this);
+    m_generator->moveToThread(m_workerThread);
 
-    connect(generator, &TrafficGenerator::packetSent, this, &MainWindow::onPacketSent);
-    connect(generator, &TrafficGenerator::errorOccurred, this, &MainWindow::onError);
-    connect(ui->sbInterval, &QSpinBox::valueChanged, generator, &TrafficGenerator::setIntervalMs);
+    connect(m_generator, &TrafficGenerator::packetSent, this, &MainWindow::onPacketSent);
+    connect(m_generator, &TrafficGenerator::errorOccurred, this, &MainWindow::onError);
+    connect(ui->sbInterval, &QSpinBox::valueChanged, m_generator, &TrafficGenerator::setIntervalMs);
 
     QHostAddress localAddr("0.0.0.0");
     quint16 localPort = ui->sbSrcPort->value();
     int intervalMs = ui->sbInterval->value();
 
-    generator->configure(destAddr, destPort, localAddr, localPort, intervalMs, packetBuilder);
+    m_generator->configure(destAddr, destPort, localAddr, localPort, intervalMs, m_packetBuilder);
 
-    workerThread->start();
-    QMetaObject::invokeMethod(generator, "start", Qt::QueuedConnection);
+    m_workerThread->start();
+    QMetaObject::invokeMethod(m_generator, "start", Qt::QueuedConnection);
 
-    isRunning = true;
+    m_isRunning = true;
     ui->btnStart->setEnabled(false);
     ui->btnStop->setEnabled(true);
     statusBar()->showMessage("Running...");
@@ -145,21 +145,21 @@ void MainWindow::onStart()
 
 void MainWindow::onStop()
 {
-    if (!isRunning)
+    if (!m_isRunning)
         return;
 
-    if (generator && workerThread && workerThread->isRunning()) {
-        QMetaObject::invokeMethod(generator, "stop", Qt::BlockingQueuedConnection);
-        workerThread->quit();
-        workerThread->wait();
+    if (m_generator && m_workerThread && m_workerThread->isRunning()) {
+        QMetaObject::invokeMethod(m_generator, "stop", Qt::BlockingQueuedConnection);
+        m_workerThread->quit();
+        m_workerThread->wait();
 
-        delete generator;
-        generator = nullptr;
-        delete workerThread;
-        workerThread = nullptr;
+        delete m_generator;
+        m_generator = nullptr;
+        delete m_workerThread;
+        m_workerThread = nullptr;
     }
 
-    isRunning = false;
+    m_isRunning = false;
     ui->btnStart->setEnabled(true);
     ui->btnStop->setEnabled(false);
     statusBar()->showMessage("Stopped");
@@ -177,31 +177,31 @@ void MainWindow::onError(const QString &msg)
 
 void MainWindow::onFieldChanged()
 {
-    if (!isRunning || !generator)
+    if (!m_isRunning || !m_generator)
         return;
     QHash<QString, QByteArray> values = collectConstantValues();
 
     QMetaObject::invokeMethod(
-        generator,
-        [gen = generator, vals = std::move(values)]() { gen->updateFields(vals); },
+        m_generator,
+        [gen = m_generator, vals = std::move(values)]() { gen->updateFields(vals); },
         Qt::QueuedConnection);
 }
 
 void MainWindow::clearDynamicFields()
 {
-    if (!dynamicLayout)
+    if (!m_dynamicLayout)
         return;
-    while (dynamicLayout->rowCount() > 0) {
-        dynamicLayout->removeRow(0);
+    while (m_dynamicLayout->rowCount() > 0) {
+        m_dynamicLayout->removeRow(0);
     }
-    fieldEditors.clear();
+    m_fieldEditors.clear();
 }
 
 void MainWindow::buildDynamicFields()
 {
     clearDynamicFields();
 
-    for (const auto &field : packetTemplate.fields) {
+    for (const auto &field : m_packetTemplate.m_fields) {
         if (field.input == FieldInput::SpinBox) {
             QSpinBox *spinBox = new QSpinBox();
             spinBox->setMaximum(field.maxInt);
@@ -210,8 +210,8 @@ void MainWindow::buildDynamicFields()
                     QOverload<int>::of(&QSpinBox::valueChanged),
                     this,
                     &MainWindow::onFieldChanged);
-            dynamicLayout->addRow(field.name, spinBox);
-            fieldEditors.insert(field.name, spinBox);
+            m_dynamicLayout->addRow(field.name, spinBox);
+            m_fieldEditors.insert(field.name, spinBox);
         } else if (field.input == FieldInput::DoubleSpinBox) {
             QDoubleSpinBox *doubleSpinBox = new QDoubleSpinBox();
             doubleSpinBox->setMaximum(field.maxDouble);
@@ -220,18 +220,18 @@ void MainWindow::buildDynamicFields()
                     QOverload<double>::of(&QDoubleSpinBox::valueChanged),
                     this,
                     &MainWindow::onFieldChanged);
-            dynamicLayout->addRow(field.name, doubleSpinBox);
-            fieldEditors.insert(field.name, doubleSpinBox);
+            m_dynamicLayout->addRow(field.name, doubleSpinBox);
+            m_fieldEditors.insert(field.name, doubleSpinBox);
         } else if (field.input == FieldInput::None) {
             if (field.source == FieldSource::Constant) {
                 QLabel *lbl = new QLabel(QString("%1").arg(field.defaultValue.toInt()));
-                dynamicLayout->addRow(field.name + " (" + field.type + ")", lbl);
+                m_dynamicLayout->addRow(field.name + " (" + field.type + ")", lbl);
             } else if (field.source == FieldSource::Counter) {
                 QLabel *lbl = new QLabel("[counter]");
-                dynamicLayout->addRow(field.name + " (" + field.type + ")", lbl);
+                m_dynamicLayout->addRow(field.name + " (" + field.type + ")", lbl);
             } else if (field.source == FieldSource::Reserved) {
                 QLabel *lbl = new QLabel("[reserved]");
-                dynamicLayout->addRow(field.name + " (" + field.type + ")", lbl);
+                m_dynamicLayout->addRow(field.name + " (" + field.type + ")", lbl);
             }
         }
     }
@@ -240,7 +240,7 @@ void MainWindow::buildDynamicFields()
 QHash<QString, QByteArray> MainWindow::collectConstantValues()
 {
     QHash<QString, QByteArray> values;
-    for (auto it = fieldEditors.begin(); it != fieldEditors.end(); ++it) {
+    for (auto it = m_fieldEditors.begin(); it != m_fieldEditors.end(); ++it) {
         const QString &fieldName = it.key();
         QWidget *w = it.value();
         if (!w)
@@ -248,7 +248,7 @@ QHash<QString, QByteArray> MainWindow::collectConstantValues()
 
         // Находим описание поля из шаблона
         const PacketField *field = nullptr;
-        for (const auto &f : packetTemplate.fields) {
+        for (const auto &f : m_packetTemplate.m_fields) {
             if (f.name == fieldName) {
                 field = &f;
                 break;

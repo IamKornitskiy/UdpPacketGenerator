@@ -1,5 +1,5 @@
-#ifndef PACKETTEMPLATE_H
-#define PACKETTEMPLATE_H
+#ifndef PACKET_TEMPLATE_H
+#define PACKET_TEMPLATE_H
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -36,8 +36,8 @@ class PacketTemplate
 public:
     PacketTemplate();
 
-    QVector<PacketField> fields;
-    int totalSize = 0;
+    QVector<PacketField> m_fields;
+    int m_totalSize = 0;
 
     QString loadFromJson(const QByteArray &jsonData);
     QString validate() const;
@@ -48,4 +48,4 @@ private:
     static FieldInput typeInput(const QString &type);
 };
 
-#endif // PACKETTEMPLATE_H
+#endif // PACKET_TEMPLATE_H

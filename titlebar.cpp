@@ -1,4 +1,4 @@
-#include "Titlebar.h"
+#include "titlebar.h"
 #include <QApplication>
 #include <QEvent>
 #include <QMouseEvent>
@@ -10,7 +10,6 @@ TitleBar::TitleBar(QWidget *parent)
     : QWidget(parent)
 {
     setupUi();
-    // applyDefaultStyle();
     updateMaximizeIcon(false);
 
     if (QWidget *win = window()) {

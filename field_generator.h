@@ -1,8 +1,8 @@
-#ifndef FIELDGENERATOR_H
-#define FIELDGENERATOR_H
+#ifndef FIELD_GENERATOR_H
+#define FIELD_GENERATOR_H
 
 #include <QByteArray>
-#include "PacketTemplate.h"
+#include "packet_template.h"
 #include <memory>
 
 class FieldGenerator
@@ -59,8 +59,8 @@ public:
     void updateField(const QString &name, const QByteArray &newValue);
 
 private:
-    std::vector<std::unique_ptr<FieldGenerator>> generators;
-    QVector<QString> fieldNames;
+    std::vector<std::unique_ptr<FieldGenerator>> m_generators;
+    QVector<QString> m_fieldNames;
 };
 
-#endif // FIELDGENERATOR_H
+#endif // FIELD_GENERATOR_H

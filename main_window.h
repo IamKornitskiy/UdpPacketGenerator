@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MAIN_WINDOW_H
+#define MAIN_WINDOW_H
 
 #include <QFormLayout>
 #include <QLabel>
@@ -8,9 +8,9 @@
 #include <QPushButton>
 #include <QSpinBox>
 #include <QThread>
-#include "PacketTemplate.h"
-#include "Titlebar.h"
-#include "TrafficGenerator.h"
+#include "packet_template.h"
+#include "titlebar.h"
+#include "traffic_generator.h"
 #include <memory>
 
 QT_BEGIN_NAMESPACE
@@ -48,15 +48,15 @@ private:
     QByteArray integerToBytes(qint64 value, int size);
     QByteArray floatToBytes(double value, const QString &type);
 
-    PacketTemplate packetTemplate;
+    PacketTemplate m_packetTemplate;
 
-    QFormLayout *dynamicLayout;
-    QMap<QString, QWidget *> fieldEditors;
+    QFormLayout *m_dynamicLayout;
+    QMap<QString, QWidget *> m_fieldEditors;
 
-    QThread *workerThread;
-    TrafficGenerator *generator;
-    bool isRunning = false;
-    std::shared_ptr<PacketBuilder> packetBuilder;
+    QThread *m_workerThread;
+    TrafficGenerator *m_generator;
+    bool m_isRunning = false;
+    std::shared_ptr<PacketBuilder> m_packetBuilder;
 };
 
-#endif // MAINWINDOW_H
+#endif // MAIN_WINDOW_H

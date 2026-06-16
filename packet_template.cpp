@@ -1,28 +1,28 @@
-#include "PacketTemplate.h"
+#include "packet_template.h"
 #include <QJsonArray>
 #include <QJsonValue>
 
-static const QMap<QString, int> typeSizes = {{"uint8", 1},
-                                             {"uint16", 2},
-                                             {"uint32", 4},
-                                             {"uint64", 8},
-                                             {"int8", 1},
-                                             {"int16", 2},
-                                             {"int32", 4},
-                                             {"int64", 8},
-                                             {"float32", 4},
-                                             {"float64", 8}};
+static const QMap<QString, int> kTypeSizes = {{"uint8", 1},
+                                              {"uint16", 2},
+                                              {"uint32", 4},
+                                              {"uint64", 8},
+                                              {"int8", 1},
+                                              {"int16", 2},
+                                              {"int32", 4},
+                                              {"int64", 8},
+                                              {"float32", 4},
+                                              {"float64", 8}};
 
-static const QMap<QString, FieldInput> typeInputs = {{"uint8", FieldInput::SpinBox},
-                                                     {"uint16", FieldInput::SpinBox},
-                                                     {"uint32", FieldInput::SpinBox},
-                                                     {"uint64", FieldInput::None},
-                                                     {"int8", FieldInput::SpinBox},
-                                                     {"int16", FieldInput::SpinBox},
-                                                     {"int32", FieldInput::SpinBox},
-                                                     {"int64", FieldInput::None},
-                                                     {"float32", FieldInput::DoubleSpinBox},
-                                                     {"float64", FieldInput::DoubleSpinBox}};
+static const QMap<QString, FieldInput> kTypeInputs = {{"uint8", FieldInput::SpinBox},
+                                                      {"uint16", FieldInput::SpinBox},
+                                                      {"uint32", FieldInput::SpinBox},
+                                                      {"uint64", FieldInput::None},
+                                                      {"int8", FieldInput::SpinBox},
+                                                      {"int16", FieldInput::SpinBox},
+                                                      {"int32", FieldInput::SpinBox},
+                                                      {"int64", FieldInput::None},
+                                                      {"float32", FieldInput::DoubleSpinBox},
+                                                      {"float64", FieldInput::DoubleSpinBox}};
 // ToDo: для 64 разрядов использовать DoubleSpinBox без десятых с шагом 1
 
 PacketTemplate::PacketTemplate() {}
@@ -39,16 +39,16 @@ QString PacketTemplate::loadFromJson(const QByteArray &jsonData)
     if (fieldsArray.isEmpty())
         return "No 'fields' array in JSON";
 
-    fields.clear();
-    totalSize = 0;
+    m_fields.clear();
+    m_totalSize = 0;
     for (const QJsonValue &val : fieldsArray) {
         QJsonObject obj = val.toObject();
         PacketField field;
         QString error;
         if (!parseField(obj, field, error))
             return error;
-        fields.append(field);
-        totalSize += field.size;
+        m_fields.append(field);
+        m_totalSize += field.size;
     }
 
     return validate();
@@ -58,7 +58,7 @@ QString PacketTemplate::validate() const
 {
     // Проверка на уникальность имён
     QSet<QString> names;
-    for (const auto &f : fields) {
+    for (const auto &f : m_fields) {
         if (names.contains(f.name))
             return QString("Duplicate field name: %1").arg(f.name);
         names.insert(f.name);
@@ -173,10 +173,10 @@ bool PacketTemplate::parseField(const QJsonObject &obj, PacketField &field, QStr
 
 int PacketTemplate::typeSize(const QString &type)
 {
-    return typeSizes.value(type, 0); // 0 означает bytes — размер задаётся отдельно
+    return kTypeSizes.value(type, 0); // 0 означает bytes — размер задаётся отдельно
 }
 
 FieldInput PacketTemplate::typeInput(const QString &type)
 {
-    return typeInputs.value(type, FieldInput::None);
+    return kTypeInputs.value(type, FieldInput::None);
 }
