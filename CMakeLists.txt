@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(UdpPacketGenerator VERSION 1.1.0 LANGUAGES CXX)
+project(UdpPacketGenerator VERSION 1.1.1 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -77,6 +77,7 @@ endif()
 install(TARGETS UdpPacketGenerator RUNTIME DESTINATION bin)
 install(FILES MainWindow.ui DESTINATION bin)
 
+set(CPACK_RPM_PACKAGE_AUTOREQ OFF)
 set(CPACK_PACKAGE_NAME "udp-packet-generator")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A flexible UDP packet generator configured through JSON templates.")
@@ -84,12 +85,23 @@ set(CPACK_PACKAGE_VENDOR "Oleg Kornitskiy")
 set(CPACK_PACKAGE_CONTACT "iam@kornitskiy.ru")
 set(CPACK_GENERATOR "DEB;RPM")
 
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.28), libqt6core6a, libqt6gui6, libqt6widgets6, libqt6network6, libqt6uitools6")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.28),
+    libqt6core6 (>= 6.8.2),
+    libqt6gui6 (>= 6.8.2),
+    libqt6widgets6 (>= 6.8.2),
+    libqt6network6 (>= 6.8.2),
+    libqt6uitools6 (>= 6.8.2),
+    libqt6opengl6 (>= 6.8.2),
+    libqt6openglwidgets6 (>= 6.8.2),
+    libqt6dbus6 (>= 6.8.2),
+    libgl1,
+    libxkbcommon-x11-0,
+    libxcb-cursor06")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Oleg Kornitskiy <iam@kornitskiy.ru>")
 set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/IamKornitskiy/UdpPacketGenerator")
 set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
 
-set(CPACK_RPM_PACKAGE_REQUIRES "qt6-qtbase, qt6-qtbase-gui, qt6-qtbase-network, qt6-qttools")
+set(CPACK_RPM_PACKAGE_REQUIRES "qt6-qtbase >= 6.8.2, qt6-qttools >= 6.8.2, libxkbcommon, xcb-util-cursor, libglvnd-glx")
 set(CPACK_RPM_PACKAGE_LICENSE "GPL-3.0")
 set(CPACK_RPM_PACKAGE_GROUP "Development/Tools")
 set(CPACK_RPM_PACKAGE_URL "https://github.com/IamKornitskiy/UdpPacketGenerator")

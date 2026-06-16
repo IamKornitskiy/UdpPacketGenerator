@@ -175,8 +175,8 @@ jobs:
           echo "| Windows | [![Windows](https://img.shields.io/badge/Windows-64bit-blue?logo=windows)](${BASE}/UdpPacketGenerator-${VERSION}-win64.zip) |" >> body.md
           echo "| Linux AppImage | [![AppImage](https://img.shields.io/badge/AppImage-x86__64-orange?logo=linux)](${BASE}/UdpPacketGenerator-${VERSION}-x86_64.AppImage) |" >> body.md
           echo "| Linux portable | [![tar.gz](https://img.shields.io/badge/Portable-tar.gz-lightgrey?logo=linux)](${BASE}/UdpPacketGenerator-${VERSION}-linux-portable.tar.gz) |" >> body.md
-          echo "| DEB | [![DEB](https://img.shields.io/badge/DEB-package-red?logo=debian)](${BASE}/udp-packet-generator_${VERSION}_amd64.deb) |" >> body.md
-          echo "| RPM | [![RPM](https://img.shields.io/badge/RPM-package-red?logo=fedora)](${BASE}/udp-packet-generator-${VERSION}-1.x86_64.rpm) |" >> body.md
+          echo "| DEB | [![DEB](https://img.shields.io/badge/DEB-package-red?logo=debian)](${BASE}/udp-packet-generator-${VERSION#v}-Linux.deb) |" >> body.md
+          echo "| RPM | [![RPM](https://img.shields.io/badge/RPM-package-red?logo=fedora)](${BASE}/udp-packet-generator-${VERSION#v}-Linux.rpm) |" >> body.md
           echo -e "\n## Changes" >> body.md
           cat CHANGELOG.md >> body.md
 

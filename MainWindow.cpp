@@ -82,9 +82,13 @@ void MainWindow::onLoadJson()
         return;
     }
 
+    if (isRunning)
+        onStop();
+
     buildDynamicFields();
 
     ui->btnStart->setEnabled(true);
+    ui->btnStop->setEnabled(false);
     statusBar()->showMessage("Loaded " + fileName);
 }
 
