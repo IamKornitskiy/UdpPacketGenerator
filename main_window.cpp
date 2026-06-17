@@ -94,16 +94,15 @@ void MainWindow::onLoadJson()
 
 void MainWindow::onStart()
 {
+    // eng comments is coming soon
     if (m_isRunning)
         return;
 
-    // Проверка, что шаблон загружен
-    if (m_packetTemplate.m_fields.isEmpty()) {
+    if (m_packetTemplate.fields().empty()) {
         QMessageBox::warning(this, "Error", "Load a JSON template first.");
         return;
     }
 
-    // Проверка адреса назначения
     QHostAddress destAddr;
     destAddr.setAddress(ui->leDestAddress->text());
     if (destAddr.isNull()) {
@@ -112,14 +111,11 @@ void MainWindow::onStart()
     }
     quint16 destPort = static_cast<quint16>(ui->sbDestPort->value());
 
-    // Сбор значений константных полей
     QHash<QString, QByteArray> userValues = collectConstantValues();
 
-    // Создаём сборщик пакетов
     m_packetBuilder = std::make_shared<PacketBuilder>();
     m_packetBuilder->setup(m_packetTemplate.m_fields, userValues);
 
-    // Создаём генератор и поток
     m_generator = new TrafficGenerator();
     m_workerThread = new QThread(this);
     m_generator->moveToThread(m_workerThread);

@@ -2,6 +2,7 @@
 #include <QJsonArray>
 #include <QJsonParseError>
 #include <QJsonValue>
+#include "integer_packet_field.h"
 
 QString PacketTemplate::loadFromJson(const QByteArray &jsonData)
 {
@@ -40,15 +41,18 @@ QString PacketTemplate::validate() const
 std::unique_ptr<BasePacketField> PacketTemplate::createField(const QJsonObject &obj)
 {
     QString type = obj["type"].toString();
-    static const QHash<QString, std::function<std::unique_ptr<BasePacketField>(const QJsonObject &)>>
+    static const QHash<QString,
+                       std::function<std::unique_ptr<BasePacketField>(const QJsonObject &, QString *)>>
         factory = {
-            // {"uint8", IntegerField::fromJson},
-            // {"uint16", IntegerField::fromJson},
+            {"uint8", IntegerPacketField::fromJson}, {"uint16", IntegerPacketField::fromJson}
             // {"float32", FloatField::fromJson},
             // {"float64", FloatField::fromJson},
             // {"json", JsonField::fromJson},
             // ... etc.
         };
     auto it = factory.find(type);
-    return (it != factory.end()) ? it.value()(obj) : nullptr;
+
+    QString error;
+
+    return (it != factory.end()) ? it.value()(obj, &error) : nullptr;
 }

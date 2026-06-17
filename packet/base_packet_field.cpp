@@ -1,6 +1,6 @@
 #include "base_packet_field.h"
 
-std::optional<QString> BasePacketField::isValid(QJsonObject &obj)
+std::optional<QString> BasePacketField::isValid(const QJsonObject &obj)
 {
     if (!obj.contains("name") || !obj["name"].isString()) {
         return "Field missing 'name'";
@@ -18,7 +18,7 @@ std::optional<QString> BasePacketField::isValid(QJsonObject &obj)
     return std::nullopt;
 }
 
-BasePacketField::BasePacketField(QJsonObject &obj)
+BasePacketField::BasePacketField(const QJsonObject &obj)
 {
     m_name = obj["name"].toString();
     m_type = obj["type"].toString();

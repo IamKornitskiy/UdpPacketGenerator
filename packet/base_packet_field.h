@@ -7,7 +7,7 @@
 #include <QString>
 #include "field_generator.h"
 
-enum class FieldSource { Input, Constant, Counter, Reserved };
+enum class FieldSource { Input, Constant, Counter };
 
 class BasePacketField
 {
@@ -21,18 +21,18 @@ public:
 
     QByteArray m_defaultValue;
 
-    virtual bool parse(const QJsonObject &fieldObj) = 0;
+    // virtual bool parse(const QJsonObject &fieldObj) = 0;
     // virtual void accept(FieldVisitor &visitor) = 0;
-    virtual std::unique_ptr<FieldGenerator> buildGenerator() const = 0;
+    // virtual std::unique_ptr<FieldGenerator> buildGenerator() const = 0;
 
     QString name() const { return m_name; }
     quint32 size() const { return m_size; }
     FieldSource source() const { return m_source; }
 
-    static std::optional<QString> isValid(QJsonObject &obj);
+    static std::optional<QString> isValid(const QJsonObject &obj);
 
 protected:
-    BasePacketField(QJsonObject &obj);
+    explicit BasePacketField(const QJsonObject &obj);
 
 signals:
     void sendError(const QString &error);
