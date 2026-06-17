@@ -28,7 +28,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
 
-        field_generator.h field_generator.cpp
+
         traffic_generator.h traffic_generator.cpp
         resources.qrc
         titlebar.h titlebar.cpp

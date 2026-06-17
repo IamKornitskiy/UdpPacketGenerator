@@ -2,7 +2,6 @@
 #define FIELD_GENERATOR_H
 
 #include <QByteArray>
-#include "packet/packet_template.h"
 #include <memory>
 
 class FieldGenerator
@@ -54,13 +53,13 @@ private:
 class PacketBuilder
 {
 public:
-    void setup(const QVector<PacketField> &fields, const QHash<QString, QByteArray> &userValues);
+    // void setup(const QVector<PacketField> &fields, const QHash<QString, QByteArray> &userValues);
     QByteArray buildPacket();
     void updateField(const QString &name, const QByteArray &newValue);
 
 private:
     std::vector<std::unique_ptr<FieldGenerator>> m_generators;
-    QVector<QString> m_fieldNames;
+    // QVector<QString> m_fieldNames;
 };
 
 #endif // FIELD_GENERATOR_H

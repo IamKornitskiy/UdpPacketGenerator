@@ -11,15 +11,14 @@ class PacketTemplate
 public:
     PacketTemplate() = default;
 
-    QVector<std::unique_ptr<BasePacketField>> m_fields;
-    int m_totalSize = 0;
-
     QString loadFromJson(const QByteArray &jsonData);
     QString validate() const;
 
+    const std::vector<std::unique_ptr<BasePacketField>> &fields() const { return m_fields; }
+
 private:
-    static std::unique_ptr<BasePacketField> createField(const QString &type);
-    bool parseField(const QJsonObject &obj, std::unique_ptr<BasePacketField> &field, QString &error);
+    std::unique_ptr<BasePacketField> createField(const QJsonObject &obj);
+    std::vector<std::unique_ptr<BasePacketField>> m_fields;
 };
 
 #endif // PACKET_TEMPLATE_H

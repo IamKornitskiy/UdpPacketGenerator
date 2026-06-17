@@ -5,7 +5,7 @@
 #include <QObject>
 #include <QTimer>
 #include <QUdpSocket>
-#include "field_generator.h"
+#include "packet/field_generator.h"
 #include <memory>
 
 class TrafficGenerator : public QObject
