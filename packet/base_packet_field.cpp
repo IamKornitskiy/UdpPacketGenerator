@@ -1,6 +1,6 @@
 #include "base_packet_field.h"
 
-std::unique_ptr<FieldGenerator> BasePacketField::buildGenerator() const
+std::unique_ptr<FieldDataGenerator> BasePacketField::buildGenerator() const
 {
     switch (m_source) {
     case FieldSource::Constant:
@@ -40,9 +40,11 @@ BasePacketField::BasePacketField(const QJsonObject &obj)
         if (m_sourceMap.contains(sourceName))
             m_source = m_sourceMap[sourceName];
     }
+
+    m_DataGenerator = buildGenerator();
 }
 
-std::unique_ptr<FieldGenerator> BasePacketField::createCounterGenerator() const
+std::unique_ptr<FieldDataGenerator> BasePacketField::createCounterGenerator() const
 {
     return std::make_unique<ConstantGenerator>(QByteArray(m_size, '\0'));
 }

@@ -19,7 +19,7 @@ public:
 
 protected:
     QByteArray valueToBytes() const override;
-    std::unique_ptr<FieldGenerator> createCounterGenerator() const override;
+    std::unique_ptr<FieldDataGenerator> createCounterGenerator() const override;
 
 private:
     qint64 m_max; //  maximum value

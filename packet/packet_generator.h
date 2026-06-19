@@ -3,7 +3,7 @@
 
 #include <QByteArray>
 #include "base_packet_field.h"
-#include "field_generator.h"
+#include "field__data_generator.h"
 #include <memory>
 
 class PacketBuilder
@@ -13,7 +13,7 @@ public:
     QByteArray buildPacket();
 
 private:
-    std::vector<std::unique_ptr<FieldGenerator>> m_generators;
+    std::vector<std::unique_ptr<FieldDataGenerator>> m_generators;
 };
 
 #endif // PACKET_GENERATOR_H

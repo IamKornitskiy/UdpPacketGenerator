@@ -4,7 +4,7 @@ add_library(packet
     packet_generator.cpp
     packet_generator.h
     integer_packet_field.h integer_packet_field.cpp
-    field_generator.h field_generator.cpp)
+    field__data_generator.h field__data_generator.cpp)
 
 target_include_directories(packet PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 

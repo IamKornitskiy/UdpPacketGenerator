@@ -72,7 +72,7 @@ QByteArray IntegerPacketField::valueToBytes() const
     return integerToBytes(m_value, m_size);
 }
 
-std::unique_ptr<FieldGenerator> IntegerPacketField::createCounterGenerator() const
+std::unique_ptr<FieldDataGenerator> IntegerPacketField::createCounterGenerator() const
 {
     return std::make_unique<CounterGenerator>(m_size, m_startValue);
 }

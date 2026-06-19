@@ -5,7 +5,7 @@
 #include <QJsonObject>
 #include <QRegularExpression>
 #include <QString>
-#include "field_generator.h"
+#include "field__data_generator.h"
 
 enum class FieldSource { Input, Constant, Counter };
 
@@ -21,7 +21,7 @@ public:
 
     QByteArray m_defaultValue;
 
-    virtual std::unique_ptr<FieldGenerator> buildGenerator() const;
+    virtual std::unique_ptr<FieldDataGenerator> buildGenerator() const;
 
     QString name() const { return m_name; }
     quint32 size() const { return m_size; }
@@ -35,9 +35,11 @@ private:
            {"constant", FieldSource::Constant}, // for constant or reserved fields
            {"counter", FieldSource::Counter}};  //for counters
 
+    std::unique_ptr<FieldDataGenerator> m_DataGenerator;
+
 protected:
     explicit BasePacketField(const QJsonObject &obj);
-    virtual std::unique_ptr<FieldGenerator> createCounterGenerator() const;
+    virtual std::unique_ptr<FieldDataGenerator> createCounterGenerator() const;
     virtual QByteArray valueToBytes() const = 0;
 
 signals:

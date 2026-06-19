@@ -1,17 +1,17 @@
-#ifndef FIELD_GENERATOR_H
-#define FIELD_GENERATOR_H
+#ifndef FIELD_DATA_GENERATOR_H
+#define FIELD_DATA_GENERATOR_H
 
 #include <QByteArray>
 
-class FieldGenerator
+class FieldDataGenerator
 {
 public:
-    virtual ~FieldGenerator() = default;
+    virtual ~FieldDataGenerator() = default;
     virtual QByteArray generate() = 0;
     virtual void reset() {}
 };
 
-class ConstantGenerator : public FieldGenerator
+class ConstantGenerator : public FieldDataGenerator
 {
 public:
     explicit ConstantGenerator(const QByteArray &value)
@@ -24,7 +24,7 @@ private:
     QByteArray m_value;
 };
 
-class CounterGenerator : public FieldGenerator
+class CounterGenerator : public FieldDataGenerator
 {
 public:
     CounterGenerator(int size, quint64 start);
@@ -37,7 +37,7 @@ private:
     quint64 m_start;
 };
 
-class ReservedGenerator : public FieldGenerator
+class ReservedGenerator : public FieldDataGenerator
 {
 public:
     explicit ReservedGenerator(const QByteArray &value)
@@ -49,4 +49,4 @@ private:
     QByteArray m_value;
 };
 
-#endif // FIELD_GENERATOR_H
+#endif // FIELD_DATA_GENERATOR_H
