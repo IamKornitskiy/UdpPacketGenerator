@@ -21,9 +21,7 @@ public:
 
     QByteArray m_defaultValue;
 
-    // virtual bool parse(const QJsonObject &fieldObj) = 0;
-    // virtual void accept(FieldVisitor &visitor) = 0;
-    // virtual std::unique_ptr<FieldGenerator> buildGenerator() const = 0;
+    virtual std::unique_ptr<FieldGenerator> buildGenerator() const;
 
     QString name() const { return m_name; }
     quint32 size() const { return m_size; }
@@ -31,8 +29,16 @@ public:
 
     static std::optional<QString> isValid(const QJsonObject &obj);
 
+private:
+    QMap<QString, FieldSource> m_sourceMap
+        = {{"input", FieldSource::Input},       // for changing values
+           {"constant", FieldSource::Constant}, // for constant or reserved fields
+           {"counter", FieldSource::Counter}};  //for counters
+
 protected:
     explicit BasePacketField(const QJsonObject &obj);
+    virtual std::unique_ptr<FieldGenerator> createCounterGenerator() const;
+    virtual QByteArray valueToBytes() const = 0;
 
 signals:
     void sendError(const QString &error);

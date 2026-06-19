@@ -1,5 +1,4 @@
 #include "field_generator.h"
-#include <cstring>
 
 CounterGenerator::CounterGenerator(int size, quint64 start)
     : m_size(size)
@@ -36,60 +35,4 @@ QByteArray CounterGenerator::generate()
     }
     m_current++;
     return buf;
-}
-
-// void PacketBuilder::setup(const QVector<PacketField> &fields,
-//                           const QHash<QString, QByteArray> &userValues)
-// {
-//     // m_generators.clear();
-//     // m_fieldNames.clear();
-//     // for (const auto &f : fields) {
-//     //     m_fieldNames.append(f.name);
-//     //     switch (f.source) {
-//     //     case FieldSource::Constant: {
-//     //         QByteArray val = userValues.value(f.name);
-//     //         if (val.isEmpty())
-//     //             val = f.defaultValue;
-//     //         if (val.size() != f.size)
-//     //             val.resize(f.size);
-//     //         m_generators.push_back(std::make_unique<ConstantGenerator>(val));
-//     //         break;
-//     //     }
-//     //     case FieldSource::Counter: {
-//     //         m_generators.push_back(std::make_unique<CounterGenerator>(f.size, f.counterStart));
-//     //         break;
-//     //     }
-//     //     case FieldSource::Reserved: {
-//     //         m_generators.emplace_back(new ReservedGenerator(f.defaultValue));
-//     //         break;
-//     //     }
-//     //     case FieldSource::Input:
-//     //         QByteArray val = userValues.value(f.name);
-//     //         if (val.size() != f.size)
-//     //             val.resize(f.size);                              // дополнить нулями
-//     //         m_generators.emplace_back(new ConstantGenerator(val)); // Лишний генератор не нужен
-//     //         break;
-//     //     }
-//     // }
-// }
-
-QByteArray PacketBuilder::buildPacket()
-{
-    QByteArray packet;
-    for (auto &gen : m_generators) {
-        packet.append(gen->generate());
-    }
-    return packet;
-}
-
-void PacketBuilder::updateField(const QString &name, const QByteArray &newValue)
-{
-    // for (int i = 0; i < m_fieldNames.size(); ++i) {
-    //     if (m_fieldNames[i] == name) {
-    //         if (auto *cgen = dynamic_cast<ConstantGenerator *>(m_generators[i].get())) {
-    //             cgen->setValue(newValue);
-    //             break;
-    //         }
-    //     }
-    // }
 }
