@@ -17,7 +17,7 @@ public:
     const std::vector<std::unique_ptr<BasePacketField>> &fields() const { return m_fields; }
 
 private:
-    std::unique_ptr<BasePacketField> createField(const QJsonObject &obj);
+    std::unique_ptr<BasePacketField> createField(const QJsonObject &obj, QString *error);
     std::vector<std::unique_ptr<BasePacketField>> m_fields;
 };
 

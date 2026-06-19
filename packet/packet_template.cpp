@@ -19,9 +19,10 @@ QString PacketTemplate::loadFromJson(const QByteArray &jsonData)
     m_fields.clear();
     for (const QJsonValue &val : fieldsArray) {
         QJsonObject obj = val.toObject();
-        auto field = createField(obj);
+        QString error = QString("Unknown type: %1").arg(obj["type"].toString());
+        auto field = createField(obj, &error);
         if (!field)
-            return QString("Unknown type: %1").arg(obj["type"].toString());
+            return error;
         m_fields.push_back(std::move(field));
     }
     return validate();
@@ -38,13 +39,13 @@ QString PacketTemplate::validate() const
     return {}; // OK
 }
 
-std::unique_ptr<BasePacketField> PacketTemplate::createField(const QJsonObject &obj)
+std::unique_ptr<BasePacketField> PacketTemplate::createField(const QJsonObject &obj, QString *error)
 {
     QString type = obj["type"].toString();
     static const QHash<QString,
                        std::function<std::unique_ptr<BasePacketField>(const QJsonObject &, QString *)>>
         factory = {
-            {"uint8", IntegerPacketField::fromJson}, {"uint16", IntegerPacketField::fromJson}
+            {"int8", IntegerPacketField::fromJson}, {"int16", IntegerPacketField::fromJson}
             // {"float32", FloatField::fromJson},
             // {"float64", FloatField::fromJson},
             // {"json", JsonField::fromJson},
@@ -52,7 +53,5 @@ std::unique_ptr<BasePacketField> PacketTemplate::createField(const QJsonObject &
         };
     auto it = factory.find(type);
 
-    QString error;
-
-    return (it != factory.end()) ? it.value()(obj, &error) : nullptr;
+    return (it != factory.end()) ? it.value()(obj, error) : nullptr;
 }

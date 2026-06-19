@@ -23,14 +23,14 @@ std::unique_ptr<IntegerPacketField> IntegerPacketField::fromJson(const QJsonObje
 
     QString name = obj["name"].toString();
 
-    if (!obj.contains("max") || !obj["max"].isString()) {
+    if (!obj.contains("max") || obj["max"].isNull()) {
         if (outError)
             *outError = QString("Field '%1' missing 'max'").arg(name);
         return nullptr;
     }
     qint64 max = obj["max"].toInteger();
 
-    if (!obj.contains("min") || !obj["min"].isString()) {
+    if (!obj.contains("min") || obj["min"].isNull()) {
         if (outError)
             *outError = QString("Field '%1' missing 'min'").arg(name);
         return nullptr;

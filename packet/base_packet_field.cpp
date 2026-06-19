@@ -38,7 +38,7 @@ BasePacketField::BasePacketField(const QJsonObject &obj)
     if (obj.contains("value_source")) {
         QString sourceName = obj["value_source"].toString();
         if (m_sourceMap.contains(sourceName))
-            m_source = m_sourceMap["sourceName"];
+            m_source = m_sourceMap[sourceName];
     }
 }
 

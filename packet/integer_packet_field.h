@@ -12,6 +12,10 @@ public:
                                                         QString *outError = nullptr);
 
     void setValue(qint64 newValue) { m_value = newValue; }
+    qint64 value() const { return m_value; }
+
+    qint64 max() const { return m_max; }
+    qint64 min() const { return m_min; }
 
 protected:
     QByteArray valueToBytes() const override;
@@ -20,7 +24,7 @@ protected:
 private:
     qint64 m_max; //  maximum value
     qint64 m_min; // minimum value
-    QMap<QString, quint32> m_sizeOfType = {{"quint8", 1}, {"quint16", 2}, {"quint32", 4}};
+    QMap<QString, quint32> m_sizeOfType = {{"int8", 1}, {"int16", 2}, {"int32", 4}};
     qint64 m_value = 0;
     quint64 m_startValue = 0; // for counter
 

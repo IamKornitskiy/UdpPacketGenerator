@@ -2,11 +2,12 @@
 #define FIELD_EDITOR_FACTORY
 
 #include <QWidget>
+#include "base_packet_field.h"
 
 class FieldEditorFactory
 {
 public:
-    static std::unique_ptr<QWidget> createNewEditor();
+    static QWidget *createEditor(BasePacketField &field, QWidget *parent = nullptr);
 };
 
 #endif // FIELD_EDITOR_FACTORY

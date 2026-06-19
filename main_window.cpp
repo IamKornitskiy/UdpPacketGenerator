@@ -6,6 +6,7 @@
 #include <QRegularExpression>
 #include <QUiLoader>
 #include "./ui_main_window.h"
+#include "field_editor_factory.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -114,7 +115,7 @@ void MainWindow::onStart()
     QHash<QString, QByteArray> userValues = collectConstantValues();
 
     m_packetBuilder = std::make_shared<PacketBuilder>();
-    m_packetBuilder->setup(m_packetTemplate.m_fields, userValues);
+    // m_packetBuilder->setup(m_packetTemplate.m_fields, userValues);
 
     m_generator = new TrafficGenerator();
     m_workerThread = new QThread(this);
@@ -197,38 +198,15 @@ void MainWindow::buildDynamicFields()
 {
     clearDynamicFields();
 
-    for (const auto &field : m_packetTemplate.m_fields) {
-        if (field.input == FieldInput::SpinBox) {
-            QSpinBox *spinBox = new QSpinBox();
-            spinBox->setMaximum(field.maxInt);
-            spinBox->setMinimum(field.minInt);
-            connect(spinBox,
-                    QOverload<int>::of(&QSpinBox::valueChanged),
-                    this,
-                    &MainWindow::onFieldChanged);
-            m_dynamicLayout->addRow(field.name, spinBox);
-            m_fieldEditors.insert(field.name, spinBox);
-        } else if (field.input == FieldInput::DoubleSpinBox) {
-            QDoubleSpinBox *doubleSpinBox = new QDoubleSpinBox();
-            doubleSpinBox->setMaximum(field.maxDouble);
-            doubleSpinBox->setMinimum(field.minDouble);
-            connect(doubleSpinBox,
-                    QOverload<double>::of(&QDoubleSpinBox::valueChanged),
-                    this,
-                    &MainWindow::onFieldChanged);
-            m_dynamicLayout->addRow(field.name, doubleSpinBox);
-            m_fieldEditors.insert(field.name, doubleSpinBox);
-        } else if (field.input == FieldInput::None) {
-            if (field.source == FieldSource::Constant) {
-                QLabel *lbl = new QLabel(QString("%1").arg(field.defaultValue.toInt()));
-                m_dynamicLayout->addRow(field.name + " (" + field.type + ")", lbl);
-            } else if (field.source == FieldSource::Counter) {
-                QLabel *lbl = new QLabel("[counter]");
-                m_dynamicLayout->addRow(field.name + " (" + field.type + ")", lbl);
-            } else if (field.source == FieldSource::Reserved) {
-                QLabel *lbl = new QLabel("[reserved]");
-                m_dynamicLayout->addRow(field.name + " (" + field.type + ")", lbl);
-            }
+    for (const auto &field : m_packetTemplate.fields()) {
+        QWidget *editor = FieldEditorFactory::createEditor(*field, ui->scrollAreaWidgetContents);
+        if (editor) {
+            m_dynamicLayout->addRow(field->name(), editor);
+            m_fieldEditors.insert(field->name(), editor);
+        } else {
+            // Для полей без редактора (например, reserved) — просто текст
+            auto *label = new QLabel("[fixed]");
+            m_dynamicLayout->addRow(field->name(), label);
         }
     }
 }
@@ -236,41 +214,41 @@ void MainWindow::buildDynamicFields()
 QHash<QString, QByteArray> MainWindow::collectConstantValues()
 {
     QHash<QString, QByteArray> values;
-    for (auto it = m_fieldEditors.begin(); it != m_fieldEditors.end(); ++it) {
-        const QString &fieldName = it.key();
-        QWidget *w = it.value();
-        if (!w)
-            continue;
+    // for (auto it = m_fieldEditors.begin(); it != m_fieldEditors.end(); ++it) {
+    //     const QString &fieldName = it.key();
+    //     QWidget *w = it.value();
+    //     if (!w)
+    //         continue;
 
-        // Находим описание поля из шаблона
-        const PacketField *field = nullptr;
-        for (const auto &f : m_packetTemplate.m_fields) {
-            if (f.name == fieldName) {
-                field = &f;
-                break;
-            }
-        }
-        if (!field)
-            continue;
+    //     // Находим описание поля из шаблона
+    //     const PacketField *field = nullptr;
+    //     for (const auto &f : m_packetTemplate.m_fields) {
+    //         if (f.name == fieldName) {
+    //             field = &f;
+    //             break;
+    //         }
+    //     }
+    //     if (!field)
+    //         continue;
 
-        QByteArray bytes;
-        if (auto *sb = qobject_cast<QSpinBox *>(w)) {
-            // Целое число (int/uint)
-            qint64 val = sb->value();
-            bytes = integerToBytes(val, field->size);
-        } else if (auto *dsb = qobject_cast<QDoubleSpinBox *>(w)) {
-            // Число с плавающей точкой (float/double)
-            double val = dsb->value();
-            bytes = floatToBytes(val, field->type);
-        } else {
-            QMessageBox::warning(this, "Error", "Unknown editor type for field " + fieldName);
-            continue;
-        }
+    //     QByteArray bytes;
+    //     if (auto *sb = qobject_cast<QSpinBox *>(w)) {
+    //         // Целое число (int/uint)
+    //         qint64 val = sb->value();
+    //         bytes = integerToBytes(val, field->size);
+    //     } else if (auto *dsb = qobject_cast<QDoubleSpinBox *>(w)) {
+    //         // Число с плавающей точкой (float/double)
+    //         double val = dsb->value();
+    //         bytes = floatToBytes(val, field->type);
+    //     } else {
+    //         QMessageBox::warning(this, "Error", "Unknown editor type for field " + fieldName);
+    //         continue;
+    //     }
 
-        // Дополняем/обрезаем до точного размера поля
-        bytes.resize(field->size);
-        values.insert(fieldName, bytes);
-    }
+    //     // Дополняем/обрезаем до точного размера поля
+    //     bytes.resize(field->size);
+    //     values.insert(fieldName, bytes);
+    // }
     return values;
 }
 
