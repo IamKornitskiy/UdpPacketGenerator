@@ -5,7 +5,7 @@ IntegerPacketField::IntegerPacketField(const QJsonObject &obj)
 {
     m_max = obj["max"].toInteger();
     m_min = obj["min"].toInteger();
-    m_size = m_sizeOfType["m_type"];
+    m_size = m_sizeOfType[m_type];
 
     if (obj.contains("start_value"))
         m_startValue = obj["start_value"].toInteger();
