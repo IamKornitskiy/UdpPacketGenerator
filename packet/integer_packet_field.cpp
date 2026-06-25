@@ -1,41 +1,70 @@
 #include "integer_packet_field.h"
 
-IntegerPacketField::IntegerPacketField(const QJsonObject &obj)
-    : BasePacketField(obj)
-{
-    m_max = obj["max"].toInteger();
-    m_min = obj["min"].toInteger();
-    m_size = m_sizeOfType[m_type];
-
-    if (obj.contains("start_value"))
-        m_startValue = obj["start_value"].toInteger();
-}
+IntegerPacketField::IntegerPacketField(const QString &name,
+                                       const QString &type,
+                                       quint32 size,
+                                       qint64 min,
+                                       qint64 max,
+                                       qint64 initialValue,
+                                       FieldSource source,
+                                       QDataStream::ByteOrder byteOrder)
+    : BasePacketField(name, type, size, source, byteOrder)
+    , m_min(min)
+    , m_max(max)
+    , m_value(initialValue)
+{}
 
 std::unique_ptr<IntegerPacketField> IntegerPacketField::fromJson(const QJsonObject &obj,
                                                                  QString *outError)
 {
-    auto validationError = BasePacketField::isValid(obj);
+    auto validationError = BasePacketField::jsonIsValid(obj);
     if (validationError) {
         if (outError)
             *outError = validationError.value();
         return nullptr;
     }
 
-    QString name = obj["name"].toString();
+    auto name = obj["name"].toString();
+    auto type = obj["type"].toString();
+    auto source = FieldSource::Constant;
+    auto size = kSizeOfType.value(type);
 
-    if (!obj.contains("max") || obj["max"].isNull()) {
-        if (outError)
-            *outError = QString("Field '%1' missing 'max'").arg(name);
-        return nullptr;
+    if (obj.contains("value_source")) {
+        QString sourceName = obj["value_source"].toString();
+        if (kSourceMap.contains(sourceName))
+            source = kSourceMap[sourceName];
     }
-    qint64 max = obj["max"].toInteger();
 
-    if (!obj.contains("min") || obj["min"].isNull()) {
-        if (outError)
-            *outError = QString("Field '%1' missing 'min'").arg(name);
-        return nullptr;
+    auto byteOrder = QDataStream::LittleEndian;
+    if (obj.contains("order")) {
+        QString sourceName = obj["order"].toString();
+        if (sourceName == "be")
+            byteOrder = QDataStream::BigEndian;
     }
-    qint64 min = obj["min"].toInteger();
+
+    auto defaultBounds = kTypeBounds.value(type);
+    auto defMax = defaultBounds.second;
+    auto defMin = defaultBounds.first;
+    auto max = defMax;
+    auto min = defMin;
+
+    if (obj.contains("max") && !obj["max"].isNull()) {
+        max = obj["max"].toInteger();
+        if (max > defMax) {
+            if (outError)
+                *outError = QString("'max' greater than max limit of %1").arg(type);
+            return nullptr;
+        }
+    }
+
+    if (obj.contains("min") && !obj["min"].isNull()) {
+        min = obj["min"].toInteger();
+        if (min < defMin) {
+            if (outError)
+                *outError = QString("'min' less than min limit of %1").arg(type);
+            return nullptr;
+        }
+    }
 
     if (min >= max) {
         if (outError)
@@ -43,7 +72,8 @@ std::unique_ptr<IntegerPacketField> IntegerPacketField::fromJson(const QJsonObje
         return nullptr;
     }
 
-    auto field = std::make_unique<IntegerPacketField>(obj);
+    auto field
+        = std::make_unique<IntegerPacketField>(name, type, size, min, max, 0, source, byteOrder);
     return field;
 }
 

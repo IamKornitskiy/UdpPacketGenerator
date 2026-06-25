@@ -1,6 +1,6 @@
 #include "base_packet_field.h"
 
-std::optional<QString> BasePacketField::isValid(const QJsonObject &obj)
+std::optional<QString> BasePacketField::jsonIsValid(const QJsonObject &obj)
 {
     if (!obj.contains("name") || !obj["name"].isString()) {
         return "Field missing 'name'";
@@ -14,20 +14,14 @@ std::optional<QString> BasePacketField::isValid(const QJsonObject &obj)
     return std::nullopt;
 }
 
-BasePacketField::BasePacketField(const QJsonObject &obj)
-{
-    m_name = obj["name"].toString();
-    m_type = obj["type"].toString();
-
-    if (obj.contains("value_source")) {
-        QString sourceName = obj["value_source"].toString();
-        if (m_sourceMap.contains(sourceName))
-            m_source = m_sourceMap[sourceName];
-    }
-
-    if (obj.contains("order")) {
-        QString sourceName = obj["order"].toString();
-        if (sourceName == "be")
-            m_byteOrder = QDataStream::BigEndian;
-    }
-}
+BasePacketField::BasePacketField(const QString &name,
+                                 const QString &type,
+                                 quint32 size,
+                                 FieldSource source,
+                                 QDataStream::ByteOrder byteOrder)
+    : m_name(name)
+    , m_type(type)
+    , m_size(size)
+    , m_source(source)
+    , m_byteOrder(byteOrder)
+{}

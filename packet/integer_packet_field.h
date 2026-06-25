@@ -3,10 +3,19 @@
 
 #include "base_packet_field.h"
 
+const QMap<QString, quint32> kSizeOfType = {{"int8", 1}, {"int16", 2}, {"int32", 4}};
+
 class IntegerPacketField : public BasePacketField
 {
 public:
-    explicit IntegerPacketField(const QJsonObject &obj);
+    explicit IntegerPacketField(const QString &name,
+                                const QString &type,
+                                quint32 size,
+                                qint64 min,
+                                qint64 max,
+                                qint64 initialValue = 0,
+                                FieldSource source = FieldSource::Constant,
+                                QDataStream::ByteOrder byteOrder = QDataStream::LittleEndian);
     QByteArray bytes() const override; // return value in bytes
     void incrementCounter() override;
 
@@ -20,11 +29,10 @@ public:
     qint64 max() const { return m_max; }
     qint64 min() const { return m_min; }
 
-protected:
 private:
     qint64 m_max; //  maximum value
     qint64 m_min; // minimum value
-    QMap<QString, quint32> m_sizeOfType = {{"int8", 1}, {"int16", 2}, {"int32", 4}};
+
     qint64 m_value = 0;
     quint64 m_startValue = 0; // for counter
 };
