@@ -18,9 +18,6 @@ public:
     qint64 min() const { return m_min; }
 
 protected:
-    QByteArray valueToBytes() const override;
-    std::unique_ptr<FieldDataGenerator> createCounterGenerator() const override;
-
 private:
     qint64 m_max; //  maximum value
     qint64 m_min; // minimum value
