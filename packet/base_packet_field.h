@@ -3,6 +3,8 @@
 
 #include <QByteArray>
 #include <QJsonObject>
+#include <QMutex>
+#include <QMutexLocker>
 #include <QRegularExpression>
 #include <QString>
 
@@ -12,6 +14,8 @@ class BasePacketField
 {
 public:
     virtual ~BasePacketField() = default;
+    virtual QByteArray bytes() const = 0; // return value in bytes
+    virtual void incrementCounter() = 0;
 
     QString m_name;
     QString m_type;
@@ -34,6 +38,7 @@ protected:
     explicit BasePacketField(const QJsonObject &obj);
     QMutexLocker<QMutex> lock() const { return QMutexLocker<QMutex>(&m_mutex); }
 
+    mutable QMutex m_mutex;
 
 signals:
     void sendError(const QString &error);

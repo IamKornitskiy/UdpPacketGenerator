@@ -67,12 +67,25 @@ QByteArray IntegerPacketField::integerToBytes(qint64 value, qint64 byteSize)
     return bytes;
 }
 
-QByteArray IntegerPacketField::valueToBytes() const
+QByteArray IntegerPacketField::bytes() const
 {
+    auto locker = lock();
     return integerToBytes(m_value, m_size);
 }
 
-std::unique_ptr<FieldDataGenerator> IntegerPacketField::createCounterGenerator() const
+void IntegerPacketField::incrementCounter()
 {
-    return std::make_unique<CounterGenerator>(m_size, m_startValue);
+    auto locker = lock();
+    m_value++;
+}
+void IntegerPacketField::setValue(qint64 newValue)
+{
+    auto locker = lock();
+    m_value = newValue;
+}
+
+qint64 IntegerPacketField::value() const
+{
+    auto locker = lock();
+    return m_value;
 }

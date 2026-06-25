@@ -7,12 +7,14 @@ class IntegerPacketField : public BasePacketField
 {
 public:
     explicit IntegerPacketField(const QJsonObject &obj);
+    QByteArray bytes() const override;
+    void incrementCounter() override;
 
     static std::unique_ptr<IntegerPacketField> fromJson(const QJsonObject &obj,
                                                         QString *outError = nullptr);
 
-    void setValue(qint64 newValue) { m_value = newValue; }
-    qint64 value() const { return m_value; }
+    void setValue(qint64 newValue);
+    qint64 value() const;
 
     qint64 max() const { return m_max; }
     qint64 min() const { return m_min; }
