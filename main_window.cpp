@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_titleBar = new TitleBar(this);
     vLayout->addWidget(m_titleBar);
 
-    // Основной контент из UI
+    // Main content from UI
     if (oldCentral) {
         oldCentral->setParent(container);
         vLayout->addWidget(oldCentral);

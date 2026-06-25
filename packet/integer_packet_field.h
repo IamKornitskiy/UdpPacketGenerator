@@ -7,9 +7,10 @@ class IntegerPacketField : public BasePacketField
 {
 public:
     explicit IntegerPacketField(const QJsonObject &obj);
-    QByteArray bytes() const override;
+    QByteArray bytes() const override; // return value in bytes
     void incrementCounter() override;
 
+    // static function for checking the validity of JSON object data, and pre-constructor
     static std::unique_ptr<IntegerPacketField> fromJson(const QJsonObject &obj,
                                                         QString *outError = nullptr);
 

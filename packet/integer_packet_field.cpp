@@ -49,6 +49,7 @@ std::unique_ptr<IntegerPacketField> IntegerPacketField::fromJson(const QJsonObje
 
 QByteArray IntegerPacketField::integerToBytes(qint64 value, qint64 byteSize)
 {
+    //TODO: add bigEndian if required
     QByteArray bytes(byteSize, '\0');
     switch (byteSize) {
     case 1:

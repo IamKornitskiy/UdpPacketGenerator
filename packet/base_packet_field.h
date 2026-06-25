@@ -8,25 +8,27 @@
 #include <QRegularExpression>
 #include <QString>
 
-enum class FieldSource { Input, Constant, Counter };
+enum class FieldSource { Input, Constant, Counter }; // see m_sourceMap
 
 class BasePacketField
 {
 public:
     virtual ~BasePacketField() = default;
     virtual QByteArray bytes() const = 0; // return value in bytes
+
+    // it is possible to rename in the future, for implementation and other operations depending on FieldSource
     virtual void incrementCounter() = 0;
 
-    QString m_name;
-    QString m_type;
+    QString m_name;     // name of field
+    QString m_type;     // uint8, int8, float and etc.
     quint32 m_size = 0; // in bytes
-    FieldSource m_source = FieldSource::Constant;
+    FieldSource m_source = FieldSource::Constant; // see m_sourceMap
 
     QString name() const { return m_name; }
     quint32 size() const { return m_size; }
     FieldSource source() const { return m_source; }
 
-    static std::optional<QString> isValid(const QJsonObject &obj);
+    static std::optional<QString> isValid(const QJsonObject &obj); // checks required fields
 
 private:
     QMap<QString, FieldSource> m_sourceMap
@@ -35,13 +37,14 @@ private:
            {"counter", FieldSource::Counter}};  // for counters
 
 protected:
+    // must be called in the constructor of the subclass, after calling isValid
     explicit BasePacketField(const QJsonObject &obj);
+
     QMutexLocker<QMutex> lock() const { return QMutexLocker<QMutex>(&m_mutex); }
 
     mutable QMutex m_mutex;
 
 signals:
-    void sendError(const QString &error);
 };
 
 #endif // PACKET_FIELD_H
