@@ -24,4 +24,10 @@ BasePacketField::BasePacketField(const QJsonObject &obj)
         if (m_sourceMap.contains(sourceName))
             m_source = m_sourceMap[sourceName];
     }
+
+    if (obj.contains("order")) {
+        QString sourceName = obj["order"].toString();
+        if (sourceName == "be")
+            m_byteOrder = QDataStream::BigEndian;
+    }
 }

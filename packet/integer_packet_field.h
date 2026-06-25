@@ -27,8 +27,6 @@ private:
     QMap<QString, quint32> m_sizeOfType = {{"int8", 1}, {"int16", 2}, {"int32", 4}};
     qint64 m_value = 0;
     quint64 m_startValue = 0; // for counter
-
-    static QByteArray integerToBytes(qint64 value, qint64 byteSize);
 };
 
 #endif // INTEGER_PACKET_FIELD_H

@@ -45,7 +45,9 @@ std::unique_ptr<BasePacketField> PacketTemplate::createField(const QJsonObject &
     static const QHash<QString,
                        std::function<std::unique_ptr<BasePacketField>(const QJsonObject &, QString *)>>
         factory = {
-            {"int8", IntegerPacketField::fromJson}, {"int16", IntegerPacketField::fromJson}
+            {"int8", IntegerPacketField::fromJson},
+            {"int16", IntegerPacketField::fromJson},
+            {"int32", IntegerPacketField::fromJson}
             // {"float32", FloatField::fromJson},
             // {"float64", FloatField::fromJson},
             // {"json", JsonField::fromJson},

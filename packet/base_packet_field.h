@@ -36,16 +36,35 @@ protected:
     // must be called in the constructor of the subclass, after calling isValid
     explicit BasePacketField(const QJsonObject &obj);
 
+    mutable QMutex m_mutex;
     QMutexLocker<QMutex> lock() const { return QMutexLocker<QMutex>(&m_mutex); }
+
+    template<typename T>
+    QByteArray serializeValue(const T &value, int size) const
+    {
+        QByteArray bytes(size, '\0');
+        if constexpr (std::is_same_v<T, QString>) {
+            // for future reference: Strings are serialized as UTF-8, and byte order does not matter
+            QByteArray data = value.toUtf8();
+            bytes = data.left(size);
+            bytes.resize(size); // adds zeros to the desired size
+        } else {
+            // number types (int, float, double, uint64 and etc.)
+            memcpy(bytes.data(), &value, size);
+
+            // reverse the byte order, if required
+            if (m_byteOrder != QDataStream::BigEndian && size > 1) {
+                std::reverse(bytes.begin(), bytes.end());
+            }
+        }
+        return bytes;
+    }
 
     QString m_name;                               // name of field
     QString m_type;                               // uint8, int8, float and etc.
     quint32 m_size = 0;                           // in bytes
     FieldSource m_source = FieldSource::Constant; // see m_sourceMap
     QDataStream::ByteOrder m_byteOrder = QDataStream::LittleEndian;
-    mutable QMutex m_mutex;
-
-signals:
 };
 
 #endif // PACKET_FIELD_H
