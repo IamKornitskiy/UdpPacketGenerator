@@ -6,6 +6,7 @@ function(setup_test_target TARGET)
     )
     target_link_libraries(${TARGET} PRIVATE
         Qt6::Core
+        Qt6::Concurrent
         Qt6::Test
     )
     set_target_properties(${TARGET} PROPERTIES WIN32_EXECUTABLE OFF)
@@ -24,3 +25,12 @@ add_executable(test_base_packet_field
 )
 setup_test_target(test_base_packet_field)
 add_test(NAME BasePacketField COMMAND test_base_packet_field)
+
+# ---- Test IntegerPacketField ----
+add_executable(test_integer_packet_field
+    tst_integer_packet_field.cpp
+    ../packet/base_packet_field.cpp
+    ../packet/integer_packet_field.cpp
+)
+setup_test_target(test_integer_packet_field)
+add_test(NAME IntegerPacketField COMMAND test_integer_packet_field)
