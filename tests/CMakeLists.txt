@@ -45,4 +45,14 @@ add_executable(test_packet_template
 setup_test_target(test_packet_template)
 add_test(NAME PacketTemplate COMMAND test_packet_template)
 
+# ---- Test PacketBuilder ----
+add_executable(test_packet_builder
+    tst_packet_builder.cpp
+    ../packet/base_packet_field.cpp
+    ../packet/integer_packet_field.cpp
+    ../packet/packet_builder.cpp
+)
+setup_test_target(test_packet_builder)
+add_test(NAME PacketBuilder COMMAND test_packet_builder)
+
 
