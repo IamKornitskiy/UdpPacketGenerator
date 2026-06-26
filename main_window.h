@@ -8,10 +8,9 @@
 #include <QPushButton>
 #include <QSpinBox>
 #include <QThread>
-#include "packet_template.h"
+#include "packet/packet_template.h"
 #include "titlebar.h"
 #include "traffic_generator.h"
-#include <memory>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -33,7 +32,6 @@ private slots:
     void onStop();
     void onPacketSent(int count);
     void onError(const QString &msg);
-    void onFieldChanged();
 
 private:
     Ui::MainWindow *ui;
@@ -44,10 +42,6 @@ private:
 
     void setRunning(bool running);
 
-    QHash<QString, QByteArray> collectConstantValues();
-    QByteArray integerToBytes(qint64 value, int size);
-    QByteArray floatToBytes(double value, const QString &type);
-
     PacketTemplate m_packetTemplate;
 
     QFormLayout *m_dynamicLayout;
@@ -56,7 +50,6 @@ private:
     QThread *m_workerThread;
     TrafficGenerator *m_generator;
     bool m_isRunning = false;
-    std::shared_ptr<PacketBuilder> m_packetBuilder;
 };
 
 #endif // MAIN_WINDOW_H

@@ -88,12 +88,9 @@ void TitleBar::setupUi()
     QIcon whiteClose = makeWhiteIcon(QStyle::SP_TitleBarCloseButton);
 
     m_minButton->setIcon(whiteMin);
-    m_maxButton->setIcon(whiteMax); // начальная иконка (не развёрнуто)
+    m_maxButton->setIcon(whiteMax);
     m_closeButton->setIcon(whiteClose);
 
-    // Сохраняем белые иконки для последующего переключения
-    // Можно запомнить их как члены класса или использовать лямбды.
-    // Проще сохранить в членах:
     m_iconMin = whiteMin;
     m_iconMax = whiteMax;
     m_iconNormal = whiteNorm;

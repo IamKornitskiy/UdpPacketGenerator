@@ -5,8 +5,7 @@
 #include <QObject>
 #include <QTimer>
 #include <QUdpSocket>
-#include "field_generator.h"
-#include <memory>
+#include "base_packet_field.h"
 
 class TrafficGenerator : public QObject
 {
@@ -20,12 +19,11 @@ public:
                    const QHostAddress &localAddr,
                    quint16 localPort,
                    int intervalMs,
-                   std::shared_ptr<PacketBuilder> builder);
+                   const std::vector<std::unique_ptr<BasePacketField>> &fields);
 
 public slots:
     void start();
     void stop();
-    void updateFields(const QHash<QString, QByteArray> &values);
     void setIntervalMs(int newIntervalMs);
 
 signals:
@@ -39,9 +37,9 @@ private:
     quint16 m_destPort = 0;
     QHostAddress m_localAddress;
     quint16 m_localPort = 0;
-    std::shared_ptr<PacketBuilder> m_builder;
     int m_sentCount = 0;
     int m_intervalMs = 1000;
+    const std::vector<std::unique_ptr<BasePacketField>> *m_fields{};
 };
 
 #endif // TRAFFIC_GENERATOR_H
