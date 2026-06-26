@@ -65,8 +65,8 @@ protected:
         if constexpr (std::is_same_v<T, QString>) {
             // for future reference: Strings are serialized as UTF-8, and byte order does not matter
             QByteArray data = value.toUtf8();
-            bytes = data.left(size);
-            bytes.resize(size); // adds zeros to the desired size
+            bytes = data.leftJustified(
+                size, '\0'); // гарантирует нули в конце // adds zeros to the desired size
         } else {
             // number types (int, float, double, uint64 and etc.)
             memcpy(bytes.data(), &value, size);
