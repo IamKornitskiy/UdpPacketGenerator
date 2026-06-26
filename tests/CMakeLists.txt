@@ -8,6 +8,8 @@ function(setup_test_target TARGET)
         Qt6::Core
         Qt6::Concurrent
         Qt6::Test
+        Qt6::Widgets
+        packet
     )
     set_target_properties(${TARGET} PROPERTIES WIN32_EXECUTABLE OFF)
 
@@ -21,7 +23,6 @@ endfunction()
 # ---- Test BasePacketField ----
 add_executable(test_base_packet_field
     tst_base_packet_field.cpp
-    ../packet/base_packet_field.cpp    
 )
 setup_test_target(test_base_packet_field)
 add_test(NAME BasePacketField COMMAND test_base_packet_field)
@@ -29,8 +30,6 @@ add_test(NAME BasePacketField COMMAND test_base_packet_field)
 # ---- Test IntegerPacketField ----
 add_executable(test_integer_packet_field
     tst_integer_packet_field.cpp
-    ../packet/base_packet_field.cpp
-    ../packet/integer_packet_field.cpp
 )
 setup_test_target(test_integer_packet_field)
 add_test(NAME IntegerPacketField COMMAND test_integer_packet_field)
@@ -38,9 +37,6 @@ add_test(NAME IntegerPacketField COMMAND test_integer_packet_field)
 # ---- Test PacketTemplate ----
 add_executable(test_packet_template
     tst_packet_template.cpp
-    ../packet/base_packet_field.cpp
-    ../packet/integer_packet_field.cpp
-    ../packet/packet_template.cpp
 )
 setup_test_target(test_packet_template)
 add_test(NAME PacketTemplate COMMAND test_packet_template)
@@ -48,11 +44,14 @@ add_test(NAME PacketTemplate COMMAND test_packet_template)
 # ---- Test PacketBuilder ----
 add_executable(test_packet_builder
     tst_packet_builder.cpp
-    ../packet/base_packet_field.cpp
-    ../packet/integer_packet_field.cpp
-    ../packet/packet_builder.cpp
 )
 setup_test_target(test_packet_builder)
 add_test(NAME PacketBuilder COMMAND test_packet_builder)
 
-
+# ---- Test FieldEditorFactory ----
+add_executable(test_field_editor_factory
+    tst_field_editor_factory.cpp
+    ../field_editor_factory.cpp
+)
+setup_test_target(test_field_editor_factory)
+add_test(NAME FieldEditorFactory COMMAND test_field_editor_factory)
