@@ -21,7 +21,7 @@ endfunction()
 # ---- Test BasePacketField ----
 add_executable(test_base_packet_field
     tst_base_packet_field.cpp
-    ../packet/base_packet_field.cpp
+    ../packet/base_packet_field.cpp    
 )
 setup_test_target(test_base_packet_field)
 add_test(NAME BasePacketField COMMAND test_base_packet_field)
@@ -34,3 +34,15 @@ add_executable(test_integer_packet_field
 )
 setup_test_target(test_integer_packet_field)
 add_test(NAME IntegerPacketField COMMAND test_integer_packet_field)
+
+# ---- Test PacketTemplate ----
+add_executable(test_packet_template
+    tst_packet_template.cpp
+    ../packet/base_packet_field.cpp
+    ../packet/integer_packet_field.cpp
+    ../packet/packet_template.cpp
+)
+setup_test_target(test_packet_template)
+add_test(NAME PacketTemplate COMMAND test_packet_template)
+
+
