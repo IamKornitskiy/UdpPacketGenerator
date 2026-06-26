@@ -1,0 +1,46 @@
+name: Tests
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["dev"]
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      QT_VERSION: 6.8.2
+      BUILD_TYPE: Release
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          modules: ''
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgl1-mesa-dev
+
+      - name: Configure CMake
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+            -DCMAKE_PREFIX_PATH=${{ env.QT_ROOT_DIR }} \
+            -DBUILD_TESTS=ON
+
+      - name: Build
+        run: cmake --build build --config ${{ env.BUILD_TYPE }} --parallel
+
+      - name: Run tests
+        working-directory: build
+        run: ctest --output-on-failure -C ${{ env.BUILD_TYPE }}
