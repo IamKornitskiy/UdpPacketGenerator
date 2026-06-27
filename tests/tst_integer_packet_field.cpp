@@ -66,7 +66,7 @@ private slots:
         QJsonObject full;
         full["name"] = "count";
         full["type"] = "int32";
-        full["value_source"] = "counter";
+        full["source"] = "counter";
         full["order"] = "be";
         full["min"] = 0;
         full["max"] = 1000;
@@ -159,7 +159,7 @@ private slots:
         QJsonObject obj;
         obj["name"] = "test";
         obj["type"] = "int8";
-        obj["value_source"] = "unknown";
+        obj["source"] = "unknown";
         obj["order"] = "unknown";
 
         QString error;
