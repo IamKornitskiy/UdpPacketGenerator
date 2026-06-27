@@ -39,10 +39,10 @@ void TitleBar::setupUi()
 
     // app icon
     m_iconLabel = new QLabel(this);
-    m_iconLabel->setFixedSize(20, 20);
+    m_iconLabel->setFixedSize(38, 38);
     m_iconLabel->setScaledContents(true);
-    QIcon defaultIcon = qApp->style()->standardIcon(QStyle::SP_ComputerIcon);
-    m_iconLabel->setPixmap(defaultIcon.pixmap(20, 20));
+    QIcon defaultIcon = QIcon("://style/logo.svg");
+    m_iconLabel->setPixmap(defaultIcon.pixmap(38, 38));
     layout->addWidget(m_iconLabel);
 
     m_titleLabel = new QLabel(QCoreApplication::applicationName().isEmpty()
@@ -88,12 +88,9 @@ void TitleBar::setupUi()
     QIcon whiteClose = makeWhiteIcon(QStyle::SP_TitleBarCloseButton);
 
     m_minButton->setIcon(whiteMin);
-    m_maxButton->setIcon(whiteMax); // начальная иконка (не развёрнуто)
+    m_maxButton->setIcon(whiteMax);
     m_closeButton->setIcon(whiteClose);
 
-    // Сохраняем белые иконки для последующего переключения
-    // Можно запомнить их как члены класса или использовать лямбды.
-    // Проще сохранить в членах:
     m_iconMin = whiteMin;
     m_iconMax = whiteMax;
     m_iconNormal = whiteNorm;

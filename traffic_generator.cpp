@@ -1,4 +1,5 @@
 #include "traffic_generator.h"
+#include "packet_builder.h"
 
 TrafficGenerator::TrafficGenerator(QObject *parent)
     : QObject(parent)
@@ -14,14 +15,14 @@ void TrafficGenerator::configure(const QHostAddress &destAddr,
                                  const QHostAddress &localAddr,
                                  quint16 localPort,
                                  int intervalMs,
-                                 std::shared_ptr<PacketBuilder> builder)
+                                 const std::vector<std::unique_ptr<BasePacketField>> &fields)
 {
-    this->m_destAddress = destAddr;
-    this->m_destPort = destPort;
-    this->m_localAddress = localAddr;
-    this->m_localPort = localPort;
-    this->m_intervalMs = intervalMs;
-    this->m_builder = builder;
+    m_destAddress = destAddr;
+    m_destPort = destPort;
+    m_localAddress = localAddr;
+    m_localPort = localPort;
+    m_intervalMs = intervalMs;
+    m_fields = &fields;
 }
 
 void TrafficGenerator::start()
@@ -42,9 +43,9 @@ void TrafficGenerator::start()
     m_timer = new QTimer(this);
     m_timer->setInterval(m_intervalMs);
     connect(m_timer, &QTimer::timeout, this, [this]() {
-        if (!m_builder)
+        if (!m_fields)
             return;
-        QByteArray packet = m_builder->buildPacket();
+        QByteArray packet = PacketBuilder::buildPacket(*m_fields);
         qint64 ret = m_socket->writeDatagram(packet, m_destAddress, m_destPort);
         if (ret == -1) {
             emit errorOccurred("Send error: " + m_socket->errorString());
@@ -68,15 +69,6 @@ void TrafficGenerator::stop()
         m_socket = nullptr;
     }
     m_sentCount = 0;
-}
-
-void TrafficGenerator::updateFields(const QHash<QString, QByteArray> &values)
-{
-    if (!m_builder)
-        return;
-    for (auto it = values.begin(); it != values.end(); ++it) {
-        m_builder->updateField(it.key(), it.value());
-    }
 }
 
 void TrafficGenerator::setIntervalMs(int newIntervalMs)
