@@ -27,7 +27,7 @@ To contribute a template:
 1. Place the `.json` file in the [`templates/`](templates/) folder.
 2. Make sure the template follows the [Template guide](templates/README.md).
 3. If applicable, add a short description to `templates/README.md` (and `templates/README_RU.md`) and/or a usage example.
-4. Submit a Pull Request targeting the `main` branch.
+4. Submit a Pull Request targeting the `dev` branch.
 
 ## Pull Request Process
 
@@ -35,7 +35,7 @@ To contribute a template:
 2. Make your changes, following the code style described below.
 3. Ensure the project compiles without errors (CMake, Qt 6.8+, C++17).
 4. If you add a new feature, consider adding tests or an example template.
-5. Open a Pull Request to `master` with a clear description of the changes.
+5. Open a Pull Request to `dev` with a clear description of the changes.
 6. Your PR will be reviewed, and changes may be requested.
 
 ## Code Style
