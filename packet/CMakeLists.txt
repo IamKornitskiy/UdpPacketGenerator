@@ -4,6 +4,7 @@ add_library(packet
     packet_builder.cpp
     packet_builder.h
     integer_packet_field.h integer_packet_field.cpp
+    float_packet_field.h float_packet_field.cpp
 )
 
 target_include_directories(packet PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

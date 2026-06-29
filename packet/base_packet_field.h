@@ -11,15 +11,17 @@
 
 enum class FieldSource { Input, Constant, Counter }; // see m_sourceMap
 // type mapping table → {min, max}
-const QHash<QString, std::pair<qint64, qint64>> kTypeBounds
-    = {{"uint8", {std::numeric_limits<qint8>::min(), std::numeric_limits<qint8>::max()}},
-       {"uint16", {std::numeric_limits<qint16>::min(), std::numeric_limits<qint16>::max()}},
-       {"uint32", {std::numeric_limits<qint32>::min(), std::numeric_limits<qint32>::max()}},
-       {"uint64", {std::numeric_limits<qint64>::min(), std::numeric_limits<qint64>::max()}},
-       {"int8", {std::numeric_limits<qint8>::min(), std::numeric_limits<qint8>::max()}},
-       {"int16", {std::numeric_limits<qint16>::min(), std::numeric_limits<qint16>::max()}},
-       {"int32", {std::numeric_limits<qint32>::min(), std::numeric_limits<qint32>::max()}},
-       {"int64", {std::numeric_limits<qint64>::min(), std::numeric_limits<qint64>::max()}}};
+const QHash<QString, std::pair<qint64, qint64>> kTypeBounds = {
+    {"uint8", {std::numeric_limits<qint8>::min(), std::numeric_limits<qint8>::max()}},
+    {"uint16", {std::numeric_limits<qint16>::min(), std::numeric_limits<qint16>::max()}},
+    {"uint32", {std::numeric_limits<qint32>::min(), std::numeric_limits<qint32>::max()}},
+    {"uint64", {std::numeric_limits<qint64>::min(), std::numeric_limits<qint64>::max()}},
+    {"int8", {std::numeric_limits<qint8>::min(), std::numeric_limits<qint8>::max()}},
+    {"int16", {std::numeric_limits<qint16>::min(), std::numeric_limits<qint16>::max()}},
+    {"int32", {std::numeric_limits<qint32>::min(), std::numeric_limits<qint32>::max()}},
+    {"int64", {std::numeric_limits<qint64>::min(), std::numeric_limits<qint64>::max()}},
+    {"float", {std::numeric_limits<float>::min(), std::numeric_limits<float>::max()}},
+};
 
 const QMap<QString, FieldSource> kSourceMap
     = {{"input", FieldSource::Input},       // for changing values
