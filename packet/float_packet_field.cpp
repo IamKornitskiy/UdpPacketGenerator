@@ -3,9 +3,9 @@
 FloatPacketField::FloatPacketField(const QString &name,
                                    const QString &type,
                                    quint32 size,
-                                   float min,
-                                   float max,
-                                   float initialValue,
+                                   double min,
+                                   double max,
+                                   double initialValue,
                                    quint8 decimals,
                                    FieldSource source,
                                    QDataStream::ByteOrder byteOrder)
@@ -97,12 +97,12 @@ std::unique_ptr<FloatPacketField> FloatPacketField::fromJson(const QJsonObject &
     return field;
 }
 
-float FloatPacketField::min() const
+double FloatPacketField::min() const
 {
     return m_min;
 }
 
-float FloatPacketField::max() const
+double FloatPacketField::max() const
 {
     return m_max;
 }
@@ -112,12 +112,12 @@ quint8 FloatPacketField::decimals() const
     return m_decimals;
 }
 
-float FloatPacketField::value() const
+double FloatPacketField::value() const
 {
     return m_value;
 }
 
-void FloatPacketField::setValue(float newValue)
+void FloatPacketField::setValue(double newValue)
 {
     m_value = newValue;
 }
