@@ -35,7 +35,7 @@ std::unique_ptr<FloatPacketField> FloatPacketField::fromJson(const QJsonObject &
     auto name = obj["name"].toString();
     auto type = obj["type"].toString();
     auto source = FieldSource::Constant;
-    auto size = 4;
+    auto size = kSizeOfFloatType.value(type);
 
     if (obj.contains("source")) {
         QString sourceName = obj["source"].toString();

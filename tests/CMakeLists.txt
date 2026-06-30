@@ -34,6 +34,13 @@ add_executable(test_integer_packet_field
 setup_test_target(test_integer_packet_field)
 add_test(NAME IntegerPacketField COMMAND test_integer_packet_field)
 
+# ---- Test FloatPacketField ----
+add_executable(test_float_packet_field
+    tst_float_packet_field.cpp
+)
+setup_test_target(test_float_packet_field)
+add_test(NAME FloatPacketField COMMAND test_float_packet_field)
+
 # ---- Test PacketTemplate ----
 add_executable(test_packet_template
     tst_packet_template.cpp

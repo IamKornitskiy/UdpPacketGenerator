@@ -27,7 +27,7 @@ std::unique_ptr<IntegerPacketField> IntegerPacketField::fromJson(const QJsonObje
     auto name = obj["name"].toString();
     auto type = obj["type"].toString();
     auto source = FieldSource::Constant;
-    auto size = kSizeOfType.value(type);
+    auto size = kSizeOfIntegerType.value(type);
 
     if (obj.contains("source")) {
         QString sourceName = obj["source"].toString();
