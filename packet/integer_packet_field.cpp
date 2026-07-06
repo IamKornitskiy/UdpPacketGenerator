@@ -1,5 +1,16 @@
 #include "integer_packet_field.h"
 
+// type mapping table → {min, max}
+const QHash<QString, std::pair<qint64, qint64>> kTypeIntegerBounds
+    = {{"uint8", {std::numeric_limits<qint8>::min(), std::numeric_limits<qint8>::max()}},
+       {"uint16", {std::numeric_limits<qint16>::min(), std::numeric_limits<qint16>::max()}},
+       {"uint32", {std::numeric_limits<qint32>::min(), std::numeric_limits<qint32>::max()}},
+       {"uint64", {std::numeric_limits<qint64>::min(), std::numeric_limits<qint64>::max()}},
+       {"int8", {std::numeric_limits<qint8>::min(), std::numeric_limits<qint8>::max()}},
+       {"int16", {std::numeric_limits<qint16>::min(), std::numeric_limits<qint16>::max()}},
+       {"int32", {std::numeric_limits<qint32>::min(), std::numeric_limits<qint32>::max()}},
+       {"int64", {std::numeric_limits<qint64>::min(), std::numeric_limits<qint64>::max()}}};
+
 IntegerPacketField::IntegerPacketField(const QString &name,
                                        const QString &type,
                                        quint32 size,
@@ -42,7 +53,7 @@ std::unique_ptr<IntegerPacketField> IntegerPacketField::fromJson(const QJsonObje
             byteOrder = QDataStream::BigEndian;
     }
 
-    auto defaultBounds = kTypeBounds.value(type);
+    auto defaultBounds = kTypeIntegerBounds.value(type);
     auto defMax = defaultBounds.second;
     auto defMin = defaultBounds.first;
     auto max = defMax;

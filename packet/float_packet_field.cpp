@@ -1,5 +1,9 @@
 #include "float_packet_field.h"
 
+const QHash<QString, std::pair<double, double>> kTypeFloatBounds
+    = {{"float32", {std::numeric_limits<float>::lowest(), std::numeric_limits<float>::max()}},
+       {"float64", {std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max()}}};
+
 FloatPacketField::FloatPacketField(const QString &name,
                                    const QString &type,
                                    quint32 size,
@@ -18,8 +22,12 @@ FloatPacketField::FloatPacketField(const QString &name,
 
 QByteArray FloatPacketField::bytes() const
 {
-    auto locker = lock();
-    return serializeValue(m_value, m_size);
+    if (m_type == "float32") {
+        return serializeValue(static_cast<float>(m_value), m_size);
+    } else if (m_type == "float64") {
+        return serializeValue(m_value, m_size);
+    }
+    return {};
 }
 
 std::unique_ptr<FloatPacketField> FloatPacketField::fromJson(const QJsonObject &obj,
@@ -50,7 +58,7 @@ std::unique_ptr<FloatPacketField> FloatPacketField::fromJson(const QJsonObject &
             byteOrder = QDataStream::BigEndian;
     }
 
-    auto defaultBounds = kTypeBounds.value(type);
+    auto defaultBounds = kTypeFloatBounds.value(type);
     auto defMax = defaultBounds.second;
     auto defMin = defaultBounds.first;
     auto max = defMax;

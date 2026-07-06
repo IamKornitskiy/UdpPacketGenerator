@@ -12,7 +12,7 @@ private slots:
     void testConstructor()
     {
         FloatPacketField field("constant",
-                               "float",
+                               "float32",
                                4,
                                -100.2,
                                100.4,
@@ -32,7 +32,7 @@ private slots:
 
     void testSetValueAndValue()
     {
-        FloatPacketField field("v", "float", 4, -1000, 1000);
+        FloatPacketField field("v", "float32", 4, -1000, 1000);
         field.setValue(123.1);
         QCOMPARE(field.value(), double(123.1));
         field.setValue(-1.2);
@@ -41,7 +41,7 @@ private slots:
 
     void testIncrementCounter()
     {
-        FloatPacketField field("cnt", "float", 4, 0, 1000, 10, 3, FieldSource::Counter);
+        FloatPacketField field("cnt", "float32", 4, 0, 1000, 10, 3, FieldSource::Counter);
         field.incrementCounter();
         QCOMPARE(field.value(), double(10));
         field.incrementCounter();
@@ -56,104 +56,111 @@ private slots:
         QTest::addColumn<double>("expectedMax");
         QTest::addColumn<FieldSource>("expectedSource");
         QTest::addColumn<QDataStream::ByteOrder>("expectedOrder");
+        QTest::addColumn<QString>("expectedType");
 
         QJsonObject minimal;
         minimal["name"] = "length";
-        minimal["type"] = "float";
-        QTest::newRow("minimal") << minimal << "length" << qint64(std::numeric_limits<float>::min())
-                                 << qint64(std::numeric_limits<float>::max())
-                                 << FieldSource::Constant << QDataStream::LittleEndian;
+        minimal["type"] = "float32";
+        QTest::newRow("minimal") << minimal << "length"
+                                 << double(std::numeric_limits<float>::lowest())
+                                 << double(std::numeric_limits<float>::max())
+                                 << FieldSource::Constant << QDataStream::LittleEndian << "float32";
 
         QJsonObject full;
         full["name"] = "const";
-        full["type"] = "double";
+        full["type"] = "float32";
         full["source"] = "constant";
         full["order"] = "be";
         full["min"] = -5;
         full["max"] = 1000.5;
-        QTest::newRow("full") << full << "count" << double(-5) << double(1000.5)
-                              << FieldSource::Counter << QDataStream::BigEndian;
+        QTest::newRow("full") << full << "const" << double(-5) << double(1000.5)
+                              << FieldSource::Constant << QDataStream::BigEndian << "float32";
     }
 
-    // void testFromJsonValid()
-    // {
-    //     QFETCH(QJsonObject, json);
-    //     QFETCH(QString, expectedName);
-    //     QFETCH(double, expectedMin);
-    //     QFETCH(double, expectedMax);
-    //     QFETCH(FieldSource, expectedSource);
-    //     QFETCH(QDataStream::ByteOrder, expectedOrder);
+    void testFromJsonValid()
+    {
+        QFETCH(QJsonObject, json);
+        QFETCH(QString, expectedName);
+        QFETCH(double, expectedMin);
+        QFETCH(double, expectedMax);
+        QFETCH(FieldSource, expectedSource);
+        QFETCH(QDataStream::ByteOrder, expectedOrder);
 
-    //     QString error;
-    //     auto field = FloatPacketField::fromJson(json, &error);
-    //     QVERIFY2(field != nullptr, qPrintable("fromJson failed: " + error));
-    //     QCOMPARE(field->name(), expectedName);
-    //     QCOMPARE(field->min(), expectedMin);
-    //     QCOMPARE(field->max(), expectedMax);
-    //     QCOMPARE(field->source(), expectedSource);
+        QString error;
+        auto field = FloatPacketField::fromJson(json, &error);
+        QVERIFY2(field != nullptr, qPrintable("fromJson failed: " + error));
+        QCOMPARE(field->name(), expectedName);
+        QCOMPARE(field->min(), expectedMin);
+        QCOMPARE(field->max(), expectedMax);
+        QCOMPARE(field->size(), 4);
+        QCOMPARE(field->source(), expectedSource);
 
-    //     field->setValue(0x0102);
-    //     QByteArray bytes = field->bytes();
-    //     if (expectedOrder == QDataStream::LittleEndian) {
-    //         QCOMPARE((quint8) bytes.at(0), 0x01);
-    //         QCOMPARE((quint8) bytes.at(1), 0x02);
-    //     } else {
-    //         QCOMPARE((quint8) bytes.at(0), 0x02);
-    //         QCOMPARE((quint8) bytes.at(1), 0x01);
-    //     }
-    // }
+        field->setValue(50.58304);
+        QByteArray bytes = field->bytes();
+        if (expectedOrder == QDataStream::LittleEndian) {
+            QCOMPARE((quint8) bytes.at(0), 0x42);
+            QCOMPARE((quint8) bytes.at(1), 0x4a);
+            QCOMPARE((quint8) bytes.at(2), 0x55);
+            QCOMPARE((quint8) bytes.at(3), 0x08);
+        } else {
+            QCOMPARE((quint8) bytes.at(0), 0x08);
+            QCOMPARE((quint8) bytes.at(1), 0x55);
+            QCOMPARE((quint8) bytes.at(2), 0x4a);
+            QCOMPARE((quint8) bytes.at(3), 0x42);
+        }
+    }
 
-    // void testFromJsonErrors_data() // for error
-    // {
-    //     QTest::addColumn<QJsonObject>("json");
-    //     QTest::addColumn<QString>("expectedErrorSubstr");
+    void testFromJsonErrors_data() // for error
+    {
+        QTest::addColumn<QJsonObject>("json");
+        QTest::addColumn<QString>("expectedErrorSubstr");
 
-    //     QJsonObject noName;
-    //     QTest::newRow("missing name") << noName << "Field missing 'name'";
+        QJsonObject noName;
+        QTest::newRow("missing name") << noName << "Field missing 'name'";
 
-    //     QJsonObject noType;
-    //     noType["name"] = "f";
-    //     QTest::newRow("missing type") << noType << "missing 'type'";
+        QJsonObject noType;
+        noType["name"] = "f";
+        QTest::newRow("missing type") << noType << "missing 'type'";
 
-    //     QJsonObject badMin;
-    //     badMin["name"] = "f";
-    //     badMin["type"] = "int8";
-    //     badMin["min"] = -200;
-    //     QTest::newRow("min out of bounds") << badMin << "less than min limit";
+        QJsonObject badMin;
+        badMin["name"] = "f";
+        badMin["type"] = "float32";
+        badMin["min"] = std::numeric_limits<double>::lowest();
+        QTest::newRow("min out of bounds") << badMin << "less than min limit";
 
-    //     QJsonObject badMax;
-    //     badMax["name"] = "f";
-    //     badMax["type"] = "int8";
-    //     badMax["max"] = 200;
-    //     QTest::newRow("max out of bounds") << badMax << "greater than max limit";
+        QJsonObject badMax;
+        badMax["name"] = "f";
+        badMax["type"] = "float32";
+        badMax["max"] = double(std::numeric_limits<double>::max());
+        QTest::newRow("max out of bounds") << badMax << "greater than max limit";
 
-    //     QJsonObject minEqMax;
-    //     minEqMax["name"] = "f";
-    //     minEqMax["type"] = "int8";
-    //     minEqMax["min"] = 50;
-    //     minEqMax["max"] = 50;
-    //     QTest::newRow("min == max") << minEqMax << "greater than or equal to";
+        QJsonObject minEqMax;
+        minEqMax["name"] = "f";
+        minEqMax["type"] = "double";
+        minEqMax["min"] = 50.1;
+        minEqMax["max"] = 50.1;
+        QTest::newRow("min == max") << minEqMax << "greater than or equal to";
 
-    //     QJsonObject minGtMax;
-    //     minGtMax["name"] = "f";
-    //     minGtMax["type"] = "int8";
-    //     minGtMax["min"] = 60;
-    //     minGtMax["max"] = 50;
-    //     QTest::newRow("min > max") << minGtMax << "greater than or equal to";
-    // }
+        QJsonObject minGtMax;
+        minGtMax["name"] = "f";
+        minGtMax["type"] = "float32";
+        minGtMax["min"] = 50.1;
+        minGtMax["max"] = 50.05;
+        QTest::newRow("min > max") << minGtMax << "greater than or equal to";
+    }
 
-    // void testFromJsonErrors()
-    // {
-    //     QFETCH(QJsonObject, json);
-    //     QFETCH(QString, expectedErrorSubstr);
+    void testFromJsonErrors()
+    {
+        QFETCH(QJsonObject, json);
+        QFETCH(QString, expectedErrorSubstr);
 
-    //     QString error;
-    //     auto field = FloatPacketField::fromJson(json, &error);
-    //     QVERIFY2(field == nullptr, "Expected null but got a valid field");
-    //     QVERIFY2(error.contains(expectedErrorSubstr),
-    //              qPrintable(
-    //                  QString("Error '%1' should contain '%2'").arg(error, expectedErrorSubstr)));
-    // }
+        QString error;
+        auto field = FloatPacketField::fromJson(json, &error);
+        QVERIFY2(field == nullptr, "Expected null but got a valid field");
+        QVERIFY2(error.contains(expectedErrorSubstr),
+                 qPrintable(
+                     QString("Error '%1' should contain '%2'").arg(error, expectedErrorSubstr)));
+    }
 
     // void testFromJsonInvalidSourceOrderIgnored()
     // {
