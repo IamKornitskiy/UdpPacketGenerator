@@ -91,6 +91,10 @@ std::unique_ptr<IntegerPacketField> IntegerPacketField::fromJson(const QJsonObje
 QByteArray IntegerPacketField::bytes() const
 {
     auto locker = lock();
+    if (m_type == "int16")
+        return serializeValue(static_cast<qint16>(m_value), m_size);
+    if (m_type == "int32")
+        return serializeValue(static_cast<qint32>(m_value), m_size);
     return serializeValue(m_value, m_size);
 }
 

@@ -98,15 +98,15 @@ private slots:
         field->setValue(50.58304);
         QByteArray bytes = field->bytes();
         if (expectedOrder == QDataStream::LittleEndian) {
-            QCOMPARE((quint8) bytes.at(0), 0x42);
-            QCOMPARE((quint8) bytes.at(1), 0x4a);
-            QCOMPARE((quint8) bytes.at(2), 0x55);
-            QCOMPARE((quint8) bytes.at(3), 0x08);
-        } else {
-            QCOMPARE((quint8) bytes.at(0), 0x08);
-            QCOMPARE((quint8) bytes.at(1), 0x55);
-            QCOMPARE((quint8) bytes.at(2), 0x4a);
             QCOMPARE((quint8) bytes.at(3), 0x42);
+            QCOMPARE((quint8) bytes.at(2), 0x4a);
+            QCOMPARE((quint8) bytes.at(1), 0x55);
+            QCOMPARE((quint8) bytes.at(0), 0x08);
+        } else {
+            QCOMPARE((quint8) bytes.at(3), 0x08);
+            QCOMPARE((quint8) bytes.at(2), 0x55);
+            QCOMPARE((quint8) bytes.at(1), 0x4a);
+            QCOMPARE((quint8) bytes.at(0), 0x42);
         }
     }
 
@@ -177,47 +177,80 @@ private slots:
         field->setValue(50.58304);
         QByteArray bytes = field->bytes();
         QCOMPARE(bytes.size(), 4);
-        QCOMPARE((quint8) bytes.at(0), 0x42);
-        QCOMPARE((quint8) bytes.at(1), 0x4a);
-        QCOMPARE((quint8) bytes.at(2), 0x55);
-        QCOMPARE((quint8) bytes.at(3), 0x08);
+        QCOMPARE((quint8) bytes.at(3), 0x42);
+        QCOMPARE((quint8) bytes.at(2), 0x4a);
+        QCOMPARE((quint8) bytes.at(1), 0x55);
+        QCOMPARE((quint8) bytes.at(0), 0x08);
     }
 
     void testBytesLittleEndian()
     {
-        FloatPacketField field("le",
-                               "float64",
-                               8,
-                               0,
-                               1000,
-                               0,
-                               3,
-                               FieldSource::Constant,
-                               QDataStream::LittleEndian);
+        // 64
+        FloatPacketField field64("le",
+                                 "float64",
+                                 8,
+                                 0,
+                                 1000,
+                                 0,
+                                 3,
+                                 FieldSource::Constant,
+                                 QDataStream::LittleEndian);
 
         union {
             double d;
             uint64_t u;
-        } val;
-        val.u = 0x0102030405060708;
-
-        field.setValue(val.d);
-        QByteArray bytes = field.bytes();
+        } val64;
+        val64.u = 0x0102030405060708;
+        field64.setValue(val64.d);
+        QByteArray bytes = field64.bytes();
         QCOMPARE(bytes.size(), 8);
-        QCOMPARE((quint8) bytes.at(0), 0x01);
-        QCOMPARE((quint8) bytes.at(1), 0x02);
-        QCOMPARE((quint8) bytes.at(2), 0x03);
-        QCOMPARE((quint8) bytes.at(3), 0x04);
-        QCOMPARE((quint8) bytes.at(4), 0x05);
-        QCOMPARE((quint8) bytes.at(5), 0x06);
-        QCOMPARE((quint8) bytes.at(6), 0x07);
-        QCOMPARE((quint8) bytes.at(7), 0x08);
+        QCOMPARE((quint8) bytes.at(7), 0x01);
+        QCOMPARE((quint8) bytes.at(6), 0x02);
+        QCOMPARE((quint8) bytes.at(5), 0x03);
+        QCOMPARE((quint8) bytes.at(4), 0x04);
+        QCOMPARE((quint8) bytes.at(3), 0x05);
+        QCOMPARE((quint8) bytes.at(2), 0x06);
+        QCOMPARE((quint8) bytes.at(1), 0x07);
+        QCOMPARE((quint8) bytes.at(0), 0x08);
+
+        // 32
+        FloatPacketField field32("le",
+                                 "float32",
+                                 4,
+                                 0,
+                                 1000,
+                                 0,
+                                 3,
+                                 FieldSource::Constant,
+                                 QDataStream::LittleEndian);
+
+        union {
+            float d;
+            uint32_t u;
+        } val32;
+        val32.u = 0x01020304;
+        field32.setValue(val32.d);
+        bytes.clear();
+        bytes = field32.bytes();
+        QCOMPARE(bytes.size(), 4);
+        QCOMPARE((quint8) bytes.at(3), 0x01);
+        QCOMPARE((quint8) bytes.at(2), 0x02);
+        QCOMPARE((quint8) bytes.at(1), 0x03);
+        QCOMPARE((quint8) bytes.at(0), 0x04);
     }
 
     void testBytesBigEndian()
     {
-        FloatPacketField
-            field("be", "float64", 8, 0, 1000, 0, 3, FieldSource::Constant, QDataStream::BigEndian);
+        // 64
+        FloatPacketField field64("be",
+                                 "float64",
+                                 8,
+                                 0,
+                                 1000,
+                                 0,
+                                 3,
+                                 FieldSource::Constant,
+                                 QDataStream::BigEndian);
 
         union {
             double d;
@@ -225,17 +258,42 @@ private slots:
         } val;
         val.u = 0x0102030405060708;
 
-        field.setValue(val.d);
-        QByteArray bytes = field.bytes();
+        field64.setValue(val.d);
+        QByteArray bytes = field64.bytes();
         QCOMPARE(bytes.size(), 8);
-        QCOMPARE((quint8) bytes.at(0), 0x08);
-        QCOMPARE((quint8) bytes.at(1), 0x07);
-        QCOMPARE((quint8) bytes.at(2), 0x06);
-        QCOMPARE((quint8) bytes.at(3), 0x05);
-        QCOMPARE((quint8) bytes.at(4), 0x04);
-        QCOMPARE((quint8) bytes.at(5), 0x03);
-        QCOMPARE((quint8) bytes.at(6), 0x02);
-        QCOMPARE((quint8) bytes.at(7), 0x01);
+        QCOMPARE((quint8) bytes.at(7), 0x08);
+        QCOMPARE((quint8) bytes.at(6), 0x07);
+        QCOMPARE((quint8) bytes.at(5), 0x06);
+        QCOMPARE((quint8) bytes.at(4), 0x05);
+        QCOMPARE((quint8) bytes.at(3), 0x04);
+        QCOMPARE((quint8) bytes.at(2), 0x03);
+        QCOMPARE((quint8) bytes.at(1), 0x02);
+        QCOMPARE((quint8) bytes.at(0), 0x01);
+
+        // 32
+        FloatPacketField field32("be",
+                                 "float32",
+                                 4,
+                                 0,
+                                 1000,
+                                 0,
+                                 3,
+                                 FieldSource::Constant,
+                                 QDataStream::BigEndian);
+
+        union {
+            float d;
+            uint32_t u;
+        } val32;
+        val32.u = 0x01020304;
+        field32.setValue(val32.d);
+        bytes.clear();
+        bytes = field32.bytes();
+        QCOMPARE(bytes.size(), 4);
+        QCOMPARE((quint8) bytes.at(3), 0x04);
+        QCOMPARE((quint8) bytes.at(2), 0x03);
+        QCOMPARE((quint8) bytes.at(1), 0x02);
+        QCOMPARE((quint8) bytes.at(0), 0x01);
     }
 
     void testThreadSafety()
@@ -244,7 +302,6 @@ private slots:
         QtConcurrent::run([&field]() {
             for (int i = 0; i < 100; ++i) {
                 field.setValue(i);
-                field.incrementCounter();
                 field.bytes();
                 field.value();
             }

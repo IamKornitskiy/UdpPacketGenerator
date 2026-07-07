@@ -61,7 +61,7 @@ protected:
             memcpy(bytes.data(), &value, size);
 
             // reverse the byte order, if required
-            if (m_byteOrder != QDataStream::BigEndian && size > 1) {
+            if (m_byteOrder == QDataStream::BigEndian && size > 1) {
                 std::reverse(bytes.begin(), bytes.end());
             }
         }
