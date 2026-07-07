@@ -1,8 +1,10 @@
+#include <QDoubleSpinBox>
 #include <QLabel>
 #include <QSignalSpy>
 #include <QSpinBox>
 #include <QtTest>
 #include "../field_editor_factory.h"
+#include "float_packet_field.h"
 #include "integer_packet_field.h"
 
 class TestFieldEditorFactory : public QObject
@@ -25,6 +27,26 @@ private slots:
 
         spinBox->setValue(77);
         QCOMPARE(field.value(), qint64(77));
+
+        delete editor;
+    }
+
+    // ---- Float + Input -> QDoubleSpinBox ----
+    void testFloatInputEditor()
+    {
+        FloatPacketField field("test", "float32", 2, -100, 100, 50, 4, FieldSource::Input);
+        QWidget *editor = FieldEditorFactory::createEditor(field);
+        QVERIFY(editor != nullptr);
+
+        QDoubleSpinBox *doubleSpinBox = qobject_cast<QDoubleSpinBox *>(editor);
+        QVERIFY(doubleSpinBox != nullptr);
+        QCOMPARE(doubleSpinBox->minimum(), -100);
+        QCOMPARE(doubleSpinBox->maximum(), 100);
+        QCOMPARE(doubleSpinBox->decimals(), 4);
+        QCOMPARE(doubleSpinBox->value(), 50);
+
+        doubleSpinBox->setValue(77);
+        QCOMPARE(field.value(), double(77));
 
         delete editor;
     }
