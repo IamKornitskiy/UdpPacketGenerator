@@ -135,8 +135,8 @@ private slots:
         QTest::newRow("max out of bounds") << badMax << "greater than max limit";
 
         QJsonObject minEqMax;
-        minEqMax["name"] = "f";
-        minEqMax["type"] = "double";
+        minEqMax["name"] = "equal";
+        minEqMax["type"] = "float64";
         minEqMax["min"] = 50.1;
         minEqMax["max"] = 50.1;
         QTest::newRow("min == max") << minEqMax << "greater than or equal to";
@@ -162,63 +162,94 @@ private slots:
                      QString("Error '%1' should contain '%2'").arg(error, expectedErrorSubstr)));
     }
 
-    // void testFromJsonInvalidSourceOrderIgnored()
-    // {
-    //     QJsonObject obj;
-    //     obj["name"] = "test";
-    //     obj["type"] = "int8";
-    //     obj["source"] = "unknown";
-    //     obj["order"] = "unknown";
+    void testFromJsonInvalidSourceOrderIgnored()
+    {
+        QJsonObject obj;
+        obj["name"] = "test";
+        obj["type"] = "float32";
+        obj["source"] = "unknown";
+        obj["order"] = "unknown";
 
-    //     QString error;
-    //     auto field = FloatPacketField::fromJson(obj, &error);
-    //     QVERIFY(field != nullptr);
-    //     QCOMPARE(field->source(), FieldSource::Constant); // default
-    //     // byteOrder default = LittleEndian
-    //     field->setValue(0x42);
-    //     QByteArray bytes = field->bytes();
-    //     QCOMPARE(bytes.size(), 1);
-    //     QCOMPARE((quint8) bytes.at(0), 0x42);
-    // }
+        QString error;
+        auto field = FloatPacketField::fromJson(obj, &error);
+        QVERIFY(field != nullptr);
+        QCOMPARE(field->source(), FieldSource::Constant); // default
+        field->setValue(50.58304);
+        QByteArray bytes = field->bytes();
+        QCOMPARE(bytes.size(), 4);
+        QCOMPARE((quint8) bytes.at(0), 0x42);
+        QCOMPARE((quint8) bytes.at(1), 0x4a);
+        QCOMPARE((quint8) bytes.at(2), 0x55);
+        QCOMPARE((quint8) bytes.at(3), 0x08);
+    }
 
-    // void testBytesLittleEndian()
-    // {
-    //     FloatPacketField
-    //         field("le", "int32", 4, 0, 1000, 0, FieldSource::Constant, QDataStream::LittleEndian);
-    //     field.setValue(0x01020304);
-    //     QByteArray bytes = field.bytes();
-    //     QCOMPARE(bytes.size(), 4);
-    //     QCOMPARE((quint8) bytes.at(0), 0x01);
-    //     QCOMPARE((quint8) bytes.at(1), 0x02);
-    //     QCOMPARE((quint8) bytes.at(2), 0x03);
-    //     QCOMPARE((quint8) bytes.at(3), 0x04);
-    // }
+    void testBytesLittleEndian()
+    {
+        FloatPacketField field("le",
+                               "float64",
+                               8,
+                               0,
+                               1000,
+                               0,
+                               3,
+                               FieldSource::Constant,
+                               QDataStream::LittleEndian);
 
-    // void testBytesBigEndian()
-    // {
-    //     FloatPacketField
-    //         field("be", "int32", 4, 0, 1000, 0, FieldSource::Constant, QDataStream::BigEndian);
-    //     field.setValue(0x01020304);
-    //     QByteArray bytes = field.bytes();
-    //     QCOMPARE(bytes.size(), 4);
-    //     QCOMPARE((quint8) bytes.at(0), 0x04);
-    //     QCOMPARE((quint8) bytes.at(1), 0x03);
-    //     QCOMPARE((quint8) bytes.at(2), 0x02);
-    //     QCOMPARE((quint8) bytes.at(3), 0x01);
-    // }
+        union {
+            double d;
+            uint64_t u;
+        } val;
+        val.u = 0x0102030405060708;
 
-    // void testThreadSafety()
-    // {
-    //     FloatPacketField field("ts", "int32", 4, 0, 1000);
-    //     QtConcurrent::run([&field]() {
-    //         for (int i = 0; i < 100; ++i) {
-    //             field.setValue(i);
-    //             field.incrementCounter();
-    //             field.bytes();
-    //             field.value();
-    //         }
-    //     }).waitForFinished();
-    // }
+        field.setValue(val.d);
+        QByteArray bytes = field.bytes();
+        QCOMPARE(bytes.size(), 8);
+        QCOMPARE((quint8) bytes.at(0), 0x01);
+        QCOMPARE((quint8) bytes.at(1), 0x02);
+        QCOMPARE((quint8) bytes.at(2), 0x03);
+        QCOMPARE((quint8) bytes.at(3), 0x04);
+        QCOMPARE((quint8) bytes.at(4), 0x05);
+        QCOMPARE((quint8) bytes.at(5), 0x06);
+        QCOMPARE((quint8) bytes.at(6), 0x07);
+        QCOMPARE((quint8) bytes.at(7), 0x08);
+    }
+
+    void testBytesBigEndian()
+    {
+        FloatPacketField
+            field("be", "float64", 8, 0, 1000, 0, 3, FieldSource::Constant, QDataStream::BigEndian);
+
+        union {
+            double d;
+            uint64_t u;
+        } val;
+        val.u = 0x0102030405060708;
+
+        field.setValue(val.d);
+        QByteArray bytes = field.bytes();
+        QCOMPARE(bytes.size(), 8);
+        QCOMPARE((quint8) bytes.at(0), 0x08);
+        QCOMPARE((quint8) bytes.at(1), 0x07);
+        QCOMPARE((quint8) bytes.at(2), 0x06);
+        QCOMPARE((quint8) bytes.at(3), 0x05);
+        QCOMPARE((quint8) bytes.at(4), 0x04);
+        QCOMPARE((quint8) bytes.at(5), 0x03);
+        QCOMPARE((quint8) bytes.at(6), 0x02);
+        QCOMPARE((quint8) bytes.at(7), 0x01);
+    }
+
+    void testThreadSafety()
+    {
+        FloatPacketField field("ts", "float32", 4, 0, 1000);
+        QtConcurrent::run([&field]() {
+            for (int i = 0; i < 100; ++i) {
+                field.setValue(i);
+                field.incrementCounter();
+                field.bytes();
+                field.value();
+            }
+        }).waitForFinished();
+    }
 };
 
 QTEST_MAIN(TestFloatPacketField)
