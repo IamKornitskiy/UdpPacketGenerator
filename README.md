@@ -16,7 +16,7 @@ Define packet fields with different types, set them as constants, counters, or u
 ## Features
 
 - **JSON-based packet structure** – fields, types, sizes, and value sources in one file
-- **Multiple value sources** – `constant`, `counter`, `reserved`, and `input` with configurable ranges
+- **Multiple value sources** – `constant`, `counter`, and `input` with configurable ranges
 
 ## Screenshot
 
