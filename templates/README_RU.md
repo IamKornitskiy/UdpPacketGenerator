@@ -10,15 +10,14 @@
 
 Общую информацию о проекте смотрите в [основном README](../README.md).
 
-## Источники значений (`value_source`)
+## Источники значений (`source`)
 
-Каждое поле должно указывать `value_source` — откуда берутся данные поля.
+Каждое поле должно указывать `source` — откуда берутся данные поля.
 
 | Источник | Описание |
 |----------|----------|
 | `constant` | Фиксированное hex-значение из JSON. Не редактируется в GUI. |
-| `counter` | Автоинкрементируемый счётчик. Стартует с `start_value` (по умолчанию 0). Little-endian. |
-| `reserved` | Фиксированная последовательность байт из JSON. Не редактируется в GUI. |
+| `counter` | Автоинкрементируемый счётчик. Стартует с `start_value` (по умолчанию 0). |
 | `input` | Редактируемое поле. Отображается как SpinBox (целые) или DoubleSpinBox (дробные). |
 
 ## Типы полей (`type`)
@@ -35,7 +34,6 @@
 | `int64` | 8 | None |
 | `float32` | 4 | DoubleSpinBox |
 | `float64` | 8 | DoubleSpinBox |
-| `bytes` | задаётся ключом `size` | – (используйте `constant` или `reserved`) |
 
 ## Справочник ключей
 
@@ -43,14 +41,11 @@
 |------|:----------:|---------------|----------|
 | `name` | да | всем | Уникальное имя поля |
 | `type` | да | всем | Тип данных поля (см. таблицу выше) |
-| `size` | только для `bytes` | `bytes` | Размер поля в байтах |
-| `value_source` | да | всем | `constant`, `counter`, `reserved` или `input` |
-| `default_value_hex` | для `constant`, `reserved` | `constant`, `reserved` | Hex-строка (например, `"AABB"`) |
+| `source` | да | всем | `constant`, `counter` или `input` |
 | `start_value` | для `counter` | `counter` | Начальное значение (по умолчанию 0) |
-| `minInt` | для `input` с целыми типами | `input` | Минимальное значение SpinBox |
-| `maxInt` | для `input` с целыми типами | `input` | Максимальное значение SpinBox |
-| `minDouble` | для `input` с дробными типами | `input` | Минимальное значение DoubleSpinBox |
-| `maxDouble` | для `input` с дробными типами | `input` | Максимальное значение DoubleSpinBox |
+| `min` | для `input` | `input` | Минимальное значение |
+| `max` | для `input` | `input` | Максимальное значение |
+| `decimals` | для `input` с дробными типами | `input` | Количество знаков после запятой в DoubleSpinBox (по умолчанию 3) |
 
 ## Examples
 
@@ -61,28 +56,25 @@
   "fields": [
     { "name": "sync",
       "type": "uint8",
-      "value_source": "constant", "default_value_hex": "AA" 
+      "source": "constant"
     },
     { "name": "counter",
       "type": "uint16",
-      "value_source": "counter",
+      "source": "counter",
       "start_value": 0 
-    },
-    { "name": "reserve",
-      "type": "bytes",
-      "size": 4,
-      "value_source": "reserved", "default_value_hex": "00000000" 
     },
     { "name": "voltage",
       "type": "float32", 
-      "value_source": "input",
-      "minDouble": 0.0, "maxDouble": 5.0, 
+      "source": "input",
+      "min": 0.0,
+      "max": 5.0, 
+      "decimals": 4
     },
     { "name": "mode",
-      "type": "uint8",
-      "value_source": "input",
-      "minInt": 0,
-      "maxInt": 3,
+      "type": "int32",
+      "source": "input",
+      "min": -3,
+      "max": 3,
     }
   ]
 }
