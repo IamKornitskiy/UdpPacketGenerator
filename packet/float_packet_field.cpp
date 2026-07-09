@@ -122,10 +122,12 @@ quint8 FloatPacketField::decimals() const
 
 double FloatPacketField::value() const
 {
+    auto locker = lock();
     return m_value;
 }
 
 void FloatPacketField::setValue(double newValue)
 {
+    auto locker = lock();
     m_value = newValue;
 }
