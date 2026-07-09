@@ -8,6 +8,7 @@ class StringPacketField : public BasePacketField
 public:
     explicit StringPacketField(const QString &name,
                                const QString &type,
+                               quint32 size,
                                FieldSource source = FieldSource::Constant,
                                const QString &initialValue = QString());
 
@@ -15,10 +16,13 @@ public:
     void incrementCounter() override {}; // not required
 
     QString value() const;
-    void setValue(const QString &newValue);
+    virtual void setValue(const QString &newValue);
+
+    // static function for checking the validity of JSON object data, and pre-constructor
+    static std::unique_ptr<StringPacketField> fromJson(const QJsonObject &obj,
+                                                       QString *outError = nullptr);
 
 protected:
-private:
     QString m_value{};
 };
 
