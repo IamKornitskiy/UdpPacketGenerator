@@ -176,8 +176,14 @@ private slots:
     void testBytesLittleEndian()
     {
         // 32
-        IntegerPacketField
-            field32("le", "int32", 4, 0, 1000, 0, FieldSource::Constant, QDataStream::LittleEndian);
+        IntegerPacketField field32("le",
+                                   "int32",
+                                   4,
+                                   0,
+                                   99999999,
+                                   0,
+                                   FieldSource::Constant,
+                                   QDataStream::LittleEndian);
         field32.setValue(0x01020304);
         QByteArray bytes = field32.bytes();
         QCOMPARE(bytes.size(), 4);
@@ -187,8 +193,14 @@ private slots:
         QCOMPARE((quint8) bytes.at(0), 0x04);
 
         // 16
-        IntegerPacketField
-            field16("le", "int16", 2, 0, 1000, 0, FieldSource::Constant, QDataStream::LittleEndian);
+        IntegerPacketField field16("le",
+                                   "int16",
+                                   2,
+                                   0,
+                                   99999999,
+                                   0,
+                                   FieldSource::Constant,
+                                   QDataStream::LittleEndian);
         field16.setValue(0x0102);
         bytes.clear();
         bytes = field16.bytes();
@@ -197,8 +209,14 @@ private slots:
         QCOMPARE((quint8) bytes.at(0), 0x02);
 
         // 8
-        IntegerPacketField
-            field8("le", "int8", 1, 0, 1000, 0, FieldSource::Constant, QDataStream::LittleEndian);
+        IntegerPacketField field8("le",
+                                  "int8",
+                                  1,
+                                  0,
+                                  99999999,
+                                  0,
+                                  FieldSource::Constant,
+                                  QDataStream::LittleEndian);
         field8.setValue(0x01);
         bytes.clear();
         bytes = field8.bytes();
@@ -210,7 +228,7 @@ private slots:
     {
         // 32
         IntegerPacketField
-            field32("le", "int32", 4, 0, 1000, 0, FieldSource::Constant, QDataStream::BigEndian);
+            field32("le", "int32", 4, 0, 99999999, 0, FieldSource::Constant, QDataStream::BigEndian);
         field32.setValue(0x01020304);
         QByteArray bytes = field32.bytes();
         QCOMPARE(bytes.size(), 4);
@@ -221,7 +239,7 @@ private slots:
 
         // 16
         IntegerPacketField
-            field16("le", "int16", 2, 0, 1000, 0, FieldSource::Constant, QDataStream::BigEndian);
+            field16("le", "int16", 2, 0, 99999999, 0, FieldSource::Constant, QDataStream::BigEndian);
         field16.setValue(0x0102);
         bytes.clear();
         bytes = field16.bytes();
@@ -231,7 +249,7 @@ private slots:
 
         // 8
         IntegerPacketField
-            field8("le", "int8", 1, 0, 1000, 0, FieldSource::Constant, QDataStream::BigEndian);
+            field8("le", "int8", 1, 0, 99999999, 0, FieldSource::Constant, QDataStream::BigEndian);
         field8.setValue(0x01);
         bytes.clear();
         bytes = field8.bytes();
