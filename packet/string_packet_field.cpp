@@ -57,6 +57,11 @@ std::unique_ptr<StringPacketField> StringPacketField::fromJson(const QJsonObject
         size = obj["size"].toInt();
     }
 
-    auto field = std::make_unique<StringPacketField>(name, type, size, source);
+    QString value{};
+    if (obj.contains("value")) {
+        value = obj["value"].toString();
+    }
+
+    auto field = std::make_unique<StringPacketField>(name, type, size, source, value);
     return field;
 }

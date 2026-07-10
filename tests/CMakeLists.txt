@@ -48,6 +48,13 @@ add_executable(test_string_packet_field
 setup_test_target(test_string_packet_field)
 add_test(NAME StringPacketField COMMAND test_string_packet_field)
 
+# ---- Test JsonPacketField ----
+add_executable(test_json_packet_field
+    tst_json_packet_field.cpp
+)
+setup_test_target(test_json_packet_field)
+add_test(NAME JsonPacketField COMMAND test_json_packet_field)
+
 # ---- Test PacketTemplate ----
 add_executable(test_packet_template
     tst_packet_template.cpp
