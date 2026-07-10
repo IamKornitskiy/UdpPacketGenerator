@@ -21,7 +21,7 @@ public:
     QString lastError() const;
 
 private:
-    QString m_Error{};
+    QString m_error{};
 };
 
 #endif // JSON_PACKET_FIELD_H

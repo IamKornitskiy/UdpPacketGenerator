@@ -10,7 +10,7 @@ class TestStringPacketField : public QObject
 private slots:
     void testConstructor()
     {
-        StringPacketField field("string", "string", 4, FieldSource::Input, "test");
+        StringPacketField field("string", "text", 4, FieldSource::Input, "test");
 
         QCOMPARE(field.name(), QString("string"));
         QCOMPARE(field.size(), quint32(4));
@@ -20,7 +20,7 @@ private slots:
 
     void testSetValueAndValue()
     {
-        StringPacketField field("string", "string", 0, FieldSource::Input);
+        StringPacketField field("string", "text", 0, FieldSource::Input);
         field.setValue("text");
         QCOMPARE(field.value(), QString("text"));
         field.setValue("new text");
@@ -29,7 +29,7 @@ private slots:
 
     void testBytes()
     {
-        StringPacketField fieldString("string", "string", 0, FieldSource::Input, "test");
+        StringPacketField fieldString("string", "text", 0, FieldSource::Input, "test");
         QString testString("Any Text"); // test english
         fieldString.setValue(testString);
         QByteArray bytes = fieldString.bytes();
@@ -72,7 +72,7 @@ private slots:
 
     void testZeroEnds()
     {
-        StringPacketField fieldString("string", "string", 6, FieldSource::Input, "Text");
+        StringPacketField fieldString("string", "text", 6, FieldSource::Input, "Text");
         QByteArray bytes = fieldString.bytes();
         QCOMPARE((quint8) bytes.at(0), 0x54);
         QCOMPARE((quint8) bytes.at(1), 0x65);
@@ -84,7 +84,7 @@ private slots:
 
     void testThreadSafety()
     {
-        StringPacketField field("string", "string", 0, FieldSource::Input, "");
+        StringPacketField field("string", "text", 0, FieldSource::Input, "");
         QtConcurrent::run([&field]() {
             for (int i = 0; i < 100; ++i) {
                 field.setValue(QString("%1").arg(i));

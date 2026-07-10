@@ -4,6 +4,8 @@
 #include <QJsonValue>
 #include "float_packet_field.h"
 #include "integer_packet_field.h"
+#include "json_packet_field.h"
+#include "string_packet_field.h"
 
 QString PacketTemplate::loadFromJson(const QByteArray &jsonData)
 {
@@ -51,7 +53,8 @@ std::unique_ptr<BasePacketField> PacketTemplate::createField(const QJsonObject &
             {"int32", IntegerPacketField::fromJson},
             {"float32", FloatPacketField::fromJson},
             {"float64", FloatPacketField::fromJson},
-            // {"json", JsonField::fromJson},
+            {"text", StringPacketField::fromJson},
+            {"json", JsonPacketField::fromJson}
             // ... etc.
         };
     auto it = factory.find(type);

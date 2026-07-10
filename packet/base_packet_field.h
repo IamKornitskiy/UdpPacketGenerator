@@ -28,6 +28,7 @@ public:
     QString name() const { return m_name; }
     quint32 size() const { return m_size; }
     FieldSource source() const { return m_source; }
+    QString type() const;
 
     static std::optional<QString> jsonIsValid(const QJsonObject &obj); // checks required fields
 

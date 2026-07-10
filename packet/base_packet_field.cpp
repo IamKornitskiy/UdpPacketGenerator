@@ -25,3 +25,8 @@ BasePacketField::BasePacketField(const QString &name,
     , m_source(source)
     , m_byteOrder(byteOrder)
 {}
+
+QString BasePacketField::type() const
+{
+    return m_type;
+}
