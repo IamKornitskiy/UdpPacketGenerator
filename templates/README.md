@@ -18,7 +18,7 @@ Each field must specify a `source` — where the field's data comes from.
 |--------|-------------|
 | `constant` | Fixed hex value from JSON. Not editable in GUI. |
 | `counter` | Auto-incrementing integer. Starts from `start_value` (default 0). |
-| `input` | User-editable field. Rendered as SpinBox (integers) or DoubleSpinBox (floats) in GUI. |
+| `input` | User-editable field. Rendered as SpinBox (integers), DoubleSpinBox (floats) in GUI and etc. |
 
 ## Field Types (`type`)
 
@@ -34,6 +34,8 @@ Each field must specify a `source` — where the field's data comes from.
 | `int64` | 8 | None |
 | `float32` | 4 | DoubleSpinBox |
 | `float64` | 8 | DoubleSpinBox |
+| `text` | special | Button -> Dialog |
+| `json` | special | Button -> Dialog |
 
 ## Key Reference
 
@@ -46,6 +48,8 @@ Each field must specify a `source` — where the field's data comes from.
 | `min` | for `input` | `input` | Minimum value |
 | `max` | for `input` | `input` | Maximum value |
 | `decimals` | fot `input` float type | `input` | Decimals of DoubleSpinBox (default 3) |
+| `value` | no | for `input` text type | Default value |
+| `size` | no | text types | Data size, if not specified or zero, then calculated automatically. Otherwise, padded with 0x00 |
 
 ## Examples
 
@@ -75,6 +79,12 @@ Each field must specify a `source` — where the field's data comes from.
       "source": "input",
       "min": -3,
       "max": 3,
+    },    
+    { "name": "name",
+      "type": "text", 
+      "source": "input",
+      "value": "Oleg",
+      "size": 6
     }
   ]
 }
