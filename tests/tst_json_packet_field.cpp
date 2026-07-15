@@ -94,8 +94,11 @@ private slots:
         QFETCH(QString, json);
         QFETCH(QString, expectedError);
 
-        QString error = JsonPacketField::isValid(json).value();
-        QVERIFY2(error.contains(expectedError), qPrintable(QString(expectedError)));
+        QString error = JsonPacketField::isValid(json).value().toUtf8();
+        QVERIFY2(error.contains(expectedError.toUtf8()),
+                 qPrintable(
+                     QString(expectedError)
+                         .toUtf8())); // there may be encoding issues, so it needs to be checked on different systems
     }
 };
 
