@@ -41,25 +41,16 @@ QWidget *FieldEditorFactory::createEditor(BasePacketField &field, QWidget *paren
             auto *textEditorButton = new QPushButton(parent);
             textEditorButton->setText("Edit");
 
-            QObject::connect(textEditorButton,
-                             &QPushButton::clicked,
-                             parent,
-                             [stringField, parent]() {
-                                 auto *editorDialog = new TextFieldEditorDialog(stringField->name(),
-                                                                                stringField->type(),
-                                                                                stringField->value(),
-                                                                                parent);
-                                 editorDialog->setAttribute(Qt::WA_DeleteOnClose);
+            QObject::connect(textEditorButton, &QPushButton::clicked, parent, [stringField, parent]() {
+                auto editorDialog = std::make_unique<TextFieldEditorDialog>(stringField->name(),
+                                                                            stringField->type(),
+                                                                            stringField->value(),
+                                                                            parent);
 
-                                 // QObject::connect(editorDialog,
-                                 //                  &TextFieldEditorDialog::sendNewText,
-                                 //                  stringField,
-                                 //                  [stringField](const QString &newText) {
-                                 //                      stringField->setValue(newText);
-                                 //                  });
-
-                                 editorDialog->show();
-                             });
+                if (editorDialog->exec() == QDialog::Accepted) {
+                    stringField->setValue(editorDialog->plainText());
+                }
+            });
 
             return textEditorButton;
         }

@@ -16,6 +16,9 @@ TextFieldEditorDialog::TextFieldEditorDialog(const QString &name,
 
     ui->head->setText(QString("Name: %1   |   Type: %2").arg(name, type));
     ui->plainTextEdit->setPlainText(text);
+
+    QObject::connect(ui->applyButton, &QPushButton::clicked, this, &TextFieldEditorDialog::accept);
+    QObject::connect(ui->closeButton, &QPushButton::clicked, this, &TextFieldEditorDialog::reject);
 }
 
 TextFieldEditorDialog::~TextFieldEditorDialog()
@@ -33,7 +36,7 @@ void TextFieldEditorDialog::on_plainTextEdit_textChanged()
     }
 }
 
-void TextFieldEditorDialog::on_applyButton_clicked()
+QString TextFieldEditorDialog::plainText() const
 {
-    emit sendNewText(ui->plainTextEdit->toPlainText());
+    return ui->plainTextEdit->toPlainText();
 }

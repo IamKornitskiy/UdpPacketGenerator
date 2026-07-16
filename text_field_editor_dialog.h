@@ -1,7 +1,6 @@
 #ifndef TEXT_FIELD_EDITOR_DIALOG_H
 #define TEXT_FIELD_EDITOR_DIALOG_H
 
-#include <QColor>
 #include <QDialog>
 
 namespace Ui {
@@ -19,17 +18,14 @@ public:
                                    QWidget *parent = nullptr);
     ~TextFieldEditorDialog();
 
+    QString plainText() const;
+
 private slots:
     void on_plainTextEdit_textChanged();
-
-    void on_applyButton_clicked();
 
 private:
     Ui::TextFieldEditorDialog *ui;
     QString m_type;
-
-signals:
-    void sendNewText(const QString &text);
 };
 
 #endif // TEXT_FIELD_EDITOR_DIALOG_H
