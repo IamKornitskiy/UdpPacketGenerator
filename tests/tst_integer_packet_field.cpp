@@ -194,7 +194,7 @@ private slots:
 
         // 16
         IntegerPacketField field16("le",
-                                   "int16",
+                                   "uint16",
                                    2,
                                    0,
                                    99999999,
