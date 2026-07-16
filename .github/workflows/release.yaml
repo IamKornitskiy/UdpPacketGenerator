@@ -118,9 +118,9 @@ jobs:
         if: matrix.platform == 'linux'
         working-directory: build
         run: |
-          if [ ! -f ../mainwindow.ui ]; then
-            echo "mainwindow.ui not found in repository, creating placeholder"
-            touch ../mainwindow.ui
+          if [ ! -f ../main_window.ui ]; then
+            echo "main_window.ui not found in repository, creating placeholder"
+            touch ../main_window.ui
           fi
           cpack -G DEB
           cpack -G RPM
