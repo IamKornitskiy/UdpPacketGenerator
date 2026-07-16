@@ -37,7 +37,7 @@ jobs:
         if: matrix.platform == 'linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgl1-mesa-dev libxkbcommon-x11-0 libxcb-cursor0 rpm patchelf fuse
+          sudo apt-get install -y libgl1-mesa-dev libxkbcommon-x11-0 libxcb-cursor0 rpm patchelf fuse dpkg-sig
 
       # ----- Конфигурация CMake -----
       - name: Configure CMake
@@ -124,6 +124,30 @@ jobs:
           fi
           cpack -G DEB
           cpack -G RPM
+
+      - name: Import GPG key
+        if: matrix.platform == 'linux'
+        run: |
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+          if [ -n "${{ secrets.GPG_PASSPHRASE }}" ]; then
+            echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 --sign-key ${{ secrets.GPG_KEY_ID }}
+          fi
+
+      - name: Sign DEB package
+        if: matrix.platform == 'linux'
+        working-directory: build
+        run: |
+          for deb in *.deb; do
+            dpkg-sig --sign builder -k ${{ secrets.GPG_KEY_ID }} "$deb"
+          done
+
+      - name: Sign RPM package
+        if: matrix.platform == 'linux'
+        working-directory: build
+        run: |
+          for rpm in *.rpm; do
+            rpm --addsign "$rpm" --define "_gpg_name ${{ secrets.GPG_KEY_ID }}"
+          done
 
       - name: Upload Linux artifacts
         if: matrix.platform == 'linux'
