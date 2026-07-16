@@ -1,0 +1,43 @@
+#ifndef FLOAT_PACKET_FIELD_H
+#define FLOAT_PACKET_FIELD_H
+
+#include "base_packet_field.h"
+
+const QMap<QString, quint32> kSizeOfFloatType = {{"float32", 4}, {"float64", 8}};
+
+class FloatPacketField : public BasePacketField
+{
+public:
+    explicit FloatPacketField(const QString &name,
+                              const QString &type,
+                              quint32 size,
+                              double min,
+                              double max,
+                              double initialValue = 0,
+                              quint8 decimals = 2,
+                              FieldSource source = FieldSource::Constant,
+                              QDataStream::ByteOrder byteOrder = QDataStream::LittleEndian);
+
+    QByteArray bytes() const override; // return value in bytes
+    void incrementCounter() override {};
+
+    // static function for checking the validity of JSON object data, and pre-constructor
+    static std::unique_ptr<FloatPacketField> fromJson(const QJsonObject &obj,
+                                                      QString *outError = nullptr);
+
+    double min() const;
+    double max() const;
+    quint8 decimals() const;
+
+    double value() const;
+    void setValue(double newValue);
+
+private:
+    double m_max; //  maximum value
+    double m_min; // minimum value
+    quint8 m_decimals = 2;
+
+    double m_value = 0;
+};
+
+#endif // FLOAT_PACKET_FIELD_H

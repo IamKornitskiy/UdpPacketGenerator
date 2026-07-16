@@ -65,7 +65,7 @@ private slots:
 
         QJsonObject full;
         full["name"] = "count";
-        full["type"] = "int32";
+        full["type"] = "int16";
         full["source"] = "counter";
         full["order"] = "be";
         full["min"] = 0;
@@ -94,11 +94,11 @@ private slots:
         field->setValue(0x0102);
         QByteArray bytes = field->bytes();
         if (expectedOrder == QDataStream::LittleEndian) {
-            QCOMPARE((quint8) bytes.at(0), 0x01);
-            QCOMPARE((quint8) bytes.at(1), 0x02);
-        } else {
-            QCOMPARE((quint8) bytes.at(0), 0x02);
             QCOMPARE((quint8) bytes.at(1), 0x01);
+            QCOMPARE((quint8) bytes.at(0), 0x02);
+        } else {
+            QCOMPARE((quint8) bytes.at(1), 0x02);
+            QCOMPARE((quint8) bytes.at(0), 0x01);
         }
     }
 
@@ -175,28 +175,86 @@ private slots:
 
     void testBytesLittleEndian()
     {
+        // 32
+        IntegerPacketField field32("le",
+                                   "int32",
+                                   4,
+                                   0,
+                                   99999999,
+                                   0,
+                                   FieldSource::Constant,
+                                   QDataStream::LittleEndian);
+        field32.setValue(0x01020304);
+        QByteArray bytes = field32.bytes();
+        QCOMPARE(bytes.size(), 4);
+        QCOMPARE((quint8) bytes.at(3), 0x01);
+        QCOMPARE((quint8) bytes.at(2), 0x02);
+        QCOMPARE((quint8) bytes.at(1), 0x03);
+        QCOMPARE((quint8) bytes.at(0), 0x04);
+
+        // 16
+        IntegerPacketField field16("le",
+                                   "uint16",
+                                   2,
+                                   0,
+                                   99999999,
+                                   0,
+                                   FieldSource::Constant,
+                                   QDataStream::LittleEndian);
+        field16.setValue(0x0102);
+        bytes.clear();
+        bytes = field16.bytes();
+        QCOMPARE(bytes.size(), 2);
+        QCOMPARE((quint8) bytes.at(1), 0x01);
+        QCOMPARE((quint8) bytes.at(0), 0x02);
+
+        // 8
+        IntegerPacketField field8("le",
+                                  "int8",
+                                  1,
+                                  0,
+                                  99999999,
+                                  0,
+                                  FieldSource::Constant,
+                                  QDataStream::LittleEndian);
+        field8.setValue(0x01);
+        bytes.clear();
+        bytes = field8.bytes();
+        QCOMPARE(bytes.size(), 1);
+        QCOMPARE((quint8) bytes.at(0), 0x01);
+    }
+
+    void testBytesBigEndian()
+    {
+        // 32
         IntegerPacketField
-            field("le", "int32", 4, 0, 1000, 0, FieldSource::Constant, QDataStream::LittleEndian);
-        field.setValue(0x01020304);
-        QByteArray bytes = field.bytes();
+            field32("le", "int32", 4, 0, 99999999, 0, FieldSource::Constant, QDataStream::BigEndian);
+        field32.setValue(0x01020304);
+        QByteArray bytes = field32.bytes();
         QCOMPARE(bytes.size(), 4);
         QCOMPARE((quint8) bytes.at(0), 0x01);
         QCOMPARE((quint8) bytes.at(1), 0x02);
         QCOMPARE((quint8) bytes.at(2), 0x03);
         QCOMPARE((quint8) bytes.at(3), 0x04);
-    }
 
-    void testBytesBigEndian()
-    {
+        // 16
         IntegerPacketField
-            field("be", "int32", 4, 0, 1000, 0, FieldSource::Constant, QDataStream::BigEndian);
-        field.setValue(0x01020304);
-        QByteArray bytes = field.bytes();
-        QCOMPARE(bytes.size(), 4);
-        QCOMPARE((quint8) bytes.at(0), 0x04);
-        QCOMPARE((quint8) bytes.at(1), 0x03);
-        QCOMPARE((quint8) bytes.at(2), 0x02);
-        QCOMPARE((quint8) bytes.at(3), 0x01);
+            field16("le", "int16", 2, 0, 99999999, 0, FieldSource::Constant, QDataStream::BigEndian);
+        field16.setValue(0x0102);
+        bytes.clear();
+        bytes = field16.bytes();
+        QCOMPARE(bytes.size(), 2);
+        QCOMPARE((quint8) bytes.at(0), 0x01);
+        QCOMPARE((quint8) bytes.at(1), 0x02);
+
+        // 8
+        IntegerPacketField
+            field8("le", "int8", 1, 0, 99999999, 0, FieldSource::Constant, QDataStream::BigEndian);
+        field8.setValue(0x01);
+        bytes.clear();
+        bytes = field8.bytes();
+        QCOMPARE(bytes.size(), 1);
+        QCOMPARE((quint8) bytes.at(0), 0x01);
     }
 
     void testThreadSafety()

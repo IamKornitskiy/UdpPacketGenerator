@@ -110,11 +110,10 @@ private slots:
         SerializeTestField field("uint32", 4, QDataStream::LittleEndian);
         QByteArray data = field.serializePublic(quint32(0x01020304), 4);
         QCOMPARE(data.size(), 4);
-        // Ожидаем: 0x01 0x02 0x03 0x04 (результат переворота системного Little Endian)
-        QCOMPARE(static_cast<quint8>(data[0]), quint8(0x01));
-        QCOMPARE(static_cast<quint8>(data[1]), quint8(0x02));
-        QCOMPARE(static_cast<quint8>(data[2]), quint8(0x03));
-        QCOMPARE(static_cast<quint8>(data[3]), quint8(0x04));
+        QCOMPARE(static_cast<quint8>(data[0]), quint8(0x04));
+        QCOMPARE(static_cast<quint8>(data[1]), quint8(0x03));
+        QCOMPARE(static_cast<quint8>(data[2]), quint8(0x02));
+        QCOMPARE(static_cast<quint8>(data[3]), quint8(0x01));
     }
 
     void testSerializeValueBigEndian()
@@ -124,10 +123,10 @@ private slots:
         QByteArray data = field.serializePublic(quint32(0x01020304), 4);
         QCOMPARE(data.size(), 4);
         // Ожидаем: 0x04 0x03 0x02 0x01 (как в памяти)
-        QCOMPARE(static_cast<quint8>(data[0]), quint8(0x04));
-        QCOMPARE(static_cast<quint8>(data[1]), quint8(0x03));
-        QCOMPARE(static_cast<quint8>(data[2]), quint8(0x02));
-        QCOMPARE(static_cast<quint8>(data[3]), quint8(0x01));
+        QCOMPARE(static_cast<quint8>(data[0]), quint8(0x01));
+        QCOMPARE(static_cast<quint8>(data[1]), quint8(0x02));
+        QCOMPARE(static_cast<quint8>(data[2]), quint8(0x03));
+        QCOMPARE(static_cast<quint8>(data[3]), quint8(0x04));
     }
 
     void testSerializeString()

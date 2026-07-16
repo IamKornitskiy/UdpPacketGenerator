@@ -10,16 +10,6 @@
 #include <QString>
 
 enum class FieldSource { Input, Constant, Counter }; // see m_sourceMap
-// type mapping table → {min, max}
-const QHash<QString, std::pair<qint64, qint64>> kTypeBounds
-    = {{"uint8", {std::numeric_limits<qint8>::min(), std::numeric_limits<qint8>::max()}},
-       {"uint16", {std::numeric_limits<qint16>::min(), std::numeric_limits<qint16>::max()}},
-       {"uint32", {std::numeric_limits<qint32>::min(), std::numeric_limits<qint32>::max()}},
-       {"uint64", {std::numeric_limits<qint64>::min(), std::numeric_limits<qint64>::max()}},
-       {"int8", {std::numeric_limits<qint8>::min(), std::numeric_limits<qint8>::max()}},
-       {"int16", {std::numeric_limits<qint16>::min(), std::numeric_limits<qint16>::max()}},
-       {"int32", {std::numeric_limits<qint32>::min(), std::numeric_limits<qint32>::max()}},
-       {"int64", {std::numeric_limits<qint64>::min(), std::numeric_limits<qint64>::max()}}};
 
 const QMap<QString, FieldSource> kSourceMap
     = {{"input", FieldSource::Input},       // for changing values
@@ -38,6 +28,7 @@ public:
     QString name() const { return m_name; }
     quint32 size() const { return m_size; }
     FieldSource source() const { return m_source; }
+    QString type() const;
 
     static std::optional<QString> jsonIsValid(const QJsonObject &obj); // checks required fields
 
@@ -65,14 +56,13 @@ protected:
         if constexpr (std::is_same_v<T, QString>) {
             // for future reference: Strings are serialized as UTF-8, and byte order does not matter
             QByteArray data = value.toUtf8();
-            bytes = data.leftJustified(
-                size, '\0'); // гарантирует нули в конце // adds zeros to the desired size
+            bytes = data.leftJustified(size, '\0'); // adds zeros to the desired size
         } else {
             // number types (int, float, double, uint64 and etc.)
             memcpy(bytes.data(), &value, size);
 
             // reverse the byte order, if required
-            if (m_byteOrder != QDataStream::BigEndian && size > 1) {
+            if (m_byteOrder == QDataStream::BigEndian && size > 1) {
                 std::reverse(bytes.begin(), bytes.end());
             }
         }

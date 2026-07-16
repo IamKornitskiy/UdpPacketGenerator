@@ -10,16 +10,15 @@ Examples can be found in this folder.
 
 For general project information, see the main [README](../README.md).
 
-## Value Sources (`value_source`)
+## Value Sources (`source`)
 
-Each field must specify a `value_source` — where the field's data comes from.
+Each field must specify a `source` — where the field's data comes from.
 
 | Source | Description |
 |--------|-------------|
 | `constant` | Fixed hex value from JSON. Not editable in GUI. |
-| `counter` | Auto-incrementing integer. Starts from `start_value` (default 0). Little-endian. |
-| `reserved` | Fixed byte sequence from JSON. Not editable in GUI. |
-| `input` | User-editable field. Rendered as SpinBox (integers) or DoubleSpinBox (floats) in GUI. |
+| `counter` | Auto-incrementing integer. Starts from `start_value` (default 0). |
+| `input` | User-editable field. Rendered as SpinBox (integers), DoubleSpinBox (floats) in GUI and etc. |
 
 ## Field Types (`type`)
 
@@ -35,7 +34,8 @@ Each field must specify a `value_source` — where the field's data comes from.
 | `int64` | 8 | None |
 | `float32` | 4 | DoubleSpinBox |
 | `float64` | 8 | DoubleSpinBox |
-| `bytes` | specified by `size` key | – (use `constant` or `reserved`) |
+| `text` | special | Button -> Dialog |
+| `json` | special | Button -> Dialog |
 
 ## Key Reference
 
@@ -43,14 +43,13 @@ Each field must specify a `value_source` — where the field's data comes from.
 |-----|:--------:|------------|-------------|
 | `name` | yes | all | Unique field identifier |
 | `type` | yes | all | Field data type (see table above) |
-| `size` | only for `bytes` | `bytes` | Field size in bytes |
-| `value_source` | yes | all | `constant`, `counter`, `reserved`, or `input` |
-| `default_value_hex` | for `constant`, `reserved` | `constant`, `reserved` | Hex string (e.g. `"AABB"`) |
+| `source` | yes | all | `constant`, `counter`, or `input` |
 | `start_value` | for `counter` | `counter` | Starting value (default 0) |
-| `minInt` | for `input` + integer types | `input` | Minimum SpinBox value |
-| `maxInt` | for `input` + integer types | `input` | Maximum SpinBox value |
-| `minDouble` | for `input` + float types | `input` | Minimum DoubleSpinBox value |
-| `maxDouble` | for `input` + float types | `input` | Maximum DoubleSpinBox value |
+| `min` | for `input` | `input` | Minimum value |
+| `max` | for `input` | `input` | Maximum value |
+| `decimals` | fot `input` float type | `input` | Decimals of DoubleSpinBox (default 3) |
+| `value` | no | for `input` text type | Default value |
+| `size` | no | text types | Data size, if not specified or zero, then calculated automatically. Otherwise, padded with 0x00 |
 
 ## Examples
 
@@ -61,28 +60,31 @@ Each field must specify a `value_source` — where the field's data comes from.
   "fields": [
     { "name": "sync",
       "type": "uint8",
-      "value_source": "constant", "default_value_hex": "AA" 
+      "source": "constant"
     },
     { "name": "counter",
       "type": "uint16",
-      "value_source": "counter",
+      "source": "counter",
       "start_value": 0 
-    },
-    { "name": "reserve",
-      "type": "bytes",
-      "size": 4,
-      "value_source": "reserved", "default_value_hex": "00000000" 
     },
     { "name": "voltage",
       "type": "float32", 
-      "value_source": "input",
-      "minDouble": 0.0, "maxDouble": 5.0, 
+      "source": "input",
+      "min": 0.0,
+      "max": 5.0, 
+      "decimals": 4
     },
     { "name": "mode",
-      "type": "uint8",
-      "value_source": "input",
-      "minInt": 0,
-      "maxInt": 3,
+      "type": "int32",
+      "source": "input",
+      "min": -3,
+      "max": 3,
+    },    
+    { "name": "name",
+      "type": "text", 
+      "source": "input",
+      "value": "Oleg",
+      "size": 6
     }
   ]
 }

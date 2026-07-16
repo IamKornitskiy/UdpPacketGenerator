@@ -31,8 +31,8 @@ private slots:
 
         QByteArray packet = PacketBuilder::buildPacket(fields);
         QCOMPARE(packet.size(), 2);
-        QCOMPARE((quint8) packet.at(0), 0x12);
-        QCOMPARE((quint8) packet.at(1), 0x34);
+        QCOMPARE((quint8) packet.at(1), 0x12);
+        QCOMPARE((quint8) packet.at(0), 0x34);
 
         auto intField = dynamic_cast<IntegerPacketField *>(fields[0].get());
         QVERIFY(intField);
@@ -55,8 +55,10 @@ private slots:
 
         QByteArray packet = PacketBuilder::buildPacket(fields);
         QCOMPARE(packet.size(), 4);
-        QCOMPARE((quint8) packet.at(0), 0x2A);
+        QCOMPARE((quint8) packet.at(3), 0x2A);
+        QCOMPARE((quint8) packet.at(2), 0x00);
         QCOMPARE((quint8) packet.at(1), 0x00);
+        QCOMPARE((quint8) packet.at(0), 0x00);
 
         auto intField = dynamic_cast<IntegerPacketField *>(fields[0].get());
         QVERIFY(intField);
@@ -80,8 +82,8 @@ private slots:
 
         QCOMPARE((quint8) packet.at(0), 0x0A);
 
-        QCOMPARE((quint8) packet.at(1), 0x64);
-        QCOMPARE((quint8) packet.at(2), 0x00);
+        QCOMPARE((quint8) packet.at(1), 0x00);
+        QCOMPARE((quint8) packet.at(2), 0x64);
 
         // reserved: 0xFF -> 0xFF
         QCOMPARE((quint8) packet.at(3), 0xFF);
