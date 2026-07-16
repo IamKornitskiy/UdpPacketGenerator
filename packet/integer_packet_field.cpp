@@ -101,12 +101,17 @@ QByteArray IntegerPacketField::bytes() const
 void IntegerPacketField::incrementCounter()
 {
     auto locker = lock();
-    m_value++;
+    if (m_value < m_max)
+        m_value++;
+    else
+        m_value = m_min;
 }
 void IntegerPacketField::setValue(qint64 newValue)
 {
-    auto locker = lock();
-    m_value = newValue;
+    if (newValue <= m_max && newValue >= m_min) {
+        auto locker = lock();
+        m_value = newValue;
+    }
 }
 
 qint64 IntegerPacketField::value() const

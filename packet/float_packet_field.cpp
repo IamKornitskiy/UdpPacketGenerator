@@ -128,6 +128,8 @@ double FloatPacketField::value() const
 
 void FloatPacketField::setValue(double newValue)
 {
-    auto locker = lock();
-    m_value = newValue;
+    if (newValue <= m_max && newValue >= m_min) {
+        auto locker = lock();
+        m_value = newValue;
+    }
 }

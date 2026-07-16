@@ -1,11 +1,13 @@
 #include <QDoubleSpinBox>
 #include <QLabel>
+#include <QPushButton>
 #include <QSignalSpy>
 #include <QSpinBox>
 #include <QtTest>
 #include "../field_editor_factory.h"
 #include "float_packet_field.h"
 #include "integer_packet_field.h"
+#include "string_packet_field.h"
 
 class TestFieldEditorFactory : public QObject
 {
@@ -72,6 +74,17 @@ private slots:
         QLabel *label = qobject_cast<QLabel *>(editor);
         QVERIFY(label != nullptr);
         QVERIFY(label->text().contains("Counter"));
+        delete editor;
+    }
+
+    // ---- Text -> QPushButton ----
+    void testTextEditor()
+    {
+        StringPacketField field("text", "text", 0, FieldSource::Input);
+        QWidget *editor = FieldEditorFactory::createEditor(field);
+        QVERIFY(editor != nullptr);
+        QPushButton *button = qobject_cast<QPushButton *>(editor);
+        QVERIFY(button != nullptr);
         delete editor;
     }
 

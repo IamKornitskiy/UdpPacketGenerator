@@ -1,4 +1,4 @@
-QMainWindow {
+QMainWindow, QDialog {
     background-color: #1e1e1e;
 }
 
@@ -40,12 +40,20 @@ QPushButton:disabled {
     color: #888888;
 }
 
-QLineEdit, QSpinBox, QDoubleSpinBox {
+QLineEdit, QSpinBox, QDoubleSpinBox, QPlainTextEdit {
     border: 1px solid #555555;
     border-radius: 4px;
     padding: 4px 8px;
     background-color: #333333;
     color: #dddddd;
+}
+
+QPlainTextEdit[error="true"] {
+    border: 1px solid #ff4444;   /* red */
+}
+
+QPlainTextEdit[error="false"] {
+    border: 1px solid #44ff44;   /* green */
 }
 
 QLineEdit:focus, QSpinBox:focus, QDoubleSpinBox:focus {
