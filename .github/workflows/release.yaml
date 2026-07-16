@@ -133,21 +133,40 @@ jobs:
             echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 --sign-key ${{ secrets.GPG_KEY_ID }}
           fi
 
+      - name: Configure GPG for non-interactive signing
+        if: matrix.platform == 'linux'
+        run: |
+          mkdir -p ~/.gnupg
+          echo "pinentry-mode loopback" > ~/.gnupg/gpg.conf
+          echo "allow-loopback-pinentry" > ~/.gnupg/gpg-agent.conf
+          gpgconf --reload gpg-agent
+
       - name: Sign DEB package
         if: matrix.platform == 'linux'
         working-directory: build
+        env:
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
           for deb in *.deb; do
-            dpkg-sig --sign builder -k ${{ secrets.GPG_KEY_ID }} "$deb"
+            echo "$GPG_PASSPHRASE" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 --detach-sign --armor -u "$GPG_KEY_ID" "$deb"
           done
 
       - name: Sign RPM package
         if: matrix.platform == 'linux'
         working-directory: build
+        env:
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
+          # Сохраняем пароль во временный файл
+          echo "$GPG_PASSPHRASE" > ~/.rpmpass
           for rpm in *.rpm; do
-            rpm --addsign "$rpm" --define "_gpg_name ${{ secrets.GPG_KEY_ID }}"
+            rpm --addsign "$rpm" \
+              --define "_gpg_name $GPG_KEY_ID" \
+              --define "_gpg_passphrase_file $HOME/.rpmpass"
           done
+          rm ~/.rpmpass
 
       - name: Upload Linux artifacts
         if: matrix.platform == 'linux'
