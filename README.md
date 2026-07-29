@@ -16,7 +16,36 @@ Define packet fields with different types, set them as constants, counters, or u
 ## Features
 
 - **JSON-based packet structure** – fields, types, sizes, and value sources in one file
-- **Multiple value sources** – `constant`, `counter`, and `input` with configurable ranges
+- **Rich field types** – integers, floats, strings, JSON, NMEA, reserved bytes, and counters
+- **Built-in validation** – JSON syntax are checked before sending
+- **Real-time editing** – modify input values on the fly; packets update immediately
+- **Cross-platform** – runs on Windows, Linux, and can be built for macOS
+
+## 🗺 Roadmap
+
+### ✅ Already implemented (v2.0.0)
+- [x] Integer fields (`uint8`–`uint32`, `int8`–`int32`) with configurable byte order
+- [x] Floating-point fields (`float32`, `float64`)
+- [x] String field (`string`) with UTF-8 support
+- [x] JSON field with automatic syntax validation
+- [x] Auto-incrementing counter (`counter`)
+- [x] Real-time value editing without stopping transmission
+- [x] Cross-platform build (Windows, Linux) with signed packages (deb, rpm, AppImage, zip)
+
+### 🚧 Under active development (v2.1.x)
+
+- [ ] **CSV field** – column count validation
+- [ ] **Visual error highlighting** in text editors for invalid data
+- [ ] **NMEA field** with checksum validation
+
+### 🔜 Planned (v2.2.x and beyond)
+- [ ] Packet duplication to multiple targets
+- [ ] Visual packet editor – drag-and-drop field creation in GUI
+- [ ] Save/load scenarios (field values)
+- [ ] Base64 field for text-safe binary data
+- [ ] Real-time traffic monitor (rate, counters, graph)
+- [ ] Additional encodings (Latin-1, UTF-16)
+- [ ] Plugin system for custom field types and validators
 
 ## Screenshot
 
