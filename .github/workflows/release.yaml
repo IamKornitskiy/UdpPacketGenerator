@@ -220,13 +220,36 @@ jobs:
           echo "| Linux portable | [![tar.gz](https://img.shields.io/badge/Portable-tar.gz-lightgrey?logo=linux)](${BASE}/UdpPacketGenerator-${VERSION}-linux-portable.tar.gz) |" >> body.md
           echo "| DEB | [![DEB](https://img.shields.io/badge/DEB-package-red?logo=debian)](${BASE}/udp-packet-generator-${VERSION#v}-Linux.deb) |" >> body.md
           echo "| RPM | [![RPM](https://img.shields.io/badge/RPM-package-red?logo=fedora)](${BASE}/udp-packet-generator-${VERSION#v}-Linux.rpm) |" >> body.md
-          echo -e "\n## Changes" >> body.md
-          cat CHANGELOG.md >> body.md
+          
+          if [ -s whatsnew.md ]; then
+            echo -e "\n## Changes" >> body.md
+            cat whatsnew.md >> body.md
+          else            
+            echo -e "\n## Changes" >> body.md
+            git cliff --config cliff.toml --latest --strip all -o CHANGELOG.md
+            cat CHANGELOG.md >> body.md
+          fi
 
       - name: Upload to release
         uses: softprops/action-gh-release@v2
         with:
           body_path: body.md
           files: artifacts/**/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ---- Очистка whatsnew.md после успешного релиза ----
+      - name: Clear whatsnew.md and commit
+        if: success()
+        run: |
+          echo "## What's new in this version" > whatsnew.md
+          echo "" >> whatsnew.md
+          echo "- ..." >> whatsnew.md
+          
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add whatsnew.md
+          git commit -m "chore: reset whatsnew.md after release" || echo "No changes to commit"
+          git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
