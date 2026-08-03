@@ -37,6 +37,7 @@ Define packet fields with different types, set them as constants, counters, or u
 - [ ] **CSV field** – column count validation
 - [ ] **Visual error highlighting** in text editors for invalid data
 - [ ] **NMEA field** with checksum validation
+- [ ] **Check for new version**
 
 ### 🔜 Planned (v2.2.x and beyond)
 - [ ] Packet duplication to multiple targets
