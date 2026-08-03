@@ -1,5 +1,6 @@
 #include "text_field_editor_dialog.h"
 #include <QStyle>
+#include "json_highlighter.h"
 #include "json_packet_field.h"
 #include "ui_text_field_editor_dialog.h"
 
@@ -17,8 +18,15 @@ TextFieldEditorDialog::TextFieldEditorDialog(const QString &name,
     ui->head->setText(QString("Name: %1   |   Type: %2").arg(name, type));
     ui->plainTextEdit->setPlainText(text);
 
+    ui->errorLabel->setStyleSheet("color: #ff4444; font-weight: bold;");
+    ui->errorLabel->setVisible(false);
+
     QObject::connect(ui->applyButton, &QPushButton::clicked, this, &TextFieldEditorDialog::accept);
     QObject::connect(ui->closeButton, &QPushButton::clicked, this, &TextFieldEditorDialog::reject);
+    QObject::connect(ui->plainTextEdit,
+                     &QPlainTextEdit::textChanged,
+                     this,
+                     &TextFieldEditorDialog::onTextChanged);
 }
 
 TextFieldEditorDialog::~TextFieldEditorDialog()
@@ -26,17 +34,60 @@ TextFieldEditorDialog::~TextFieldEditorDialog()
     delete ui;
 }
 
-void TextFieldEditorDialog::on_plainTextEdit_textChanged()
-{
-    if (m_type == "json") {
-        auto err = JsonPacketField::isValid(ui->plainTextEdit->toPlainText());
-        ui->plainTextEdit->setProperty("error", err.has_value());
-        ui->plainTextEdit->style()->unpolish(ui->plainTextEdit);
-        ui->plainTextEdit->style()->polish(ui->plainTextEdit);
-    }
-}
-
 QString TextFieldEditorDialog::plainText() const
 {
     return ui->plainTextEdit->toPlainText();
+}
+
+void TextFieldEditorDialog::setValidator(std::function<bool(const QString &, QString *)> validator)
+{
+    m_validator = std::move(validator);
+}
+
+void TextFieldEditorDialog::setHighlighter(QSyntaxHighlighter *highlighter)
+{
+    delete m_highlighter;
+    m_highlighter = highlighter;
+    if (m_highlighter) {
+        m_highlighter->setDocument(ui->plainTextEdit->document());
+    }
+}
+
+void TextFieldEditorDialog::onTextChanged()
+{
+    if (m_updating || !m_validator || !m_highlighter)
+        return;
+    m_updating = true;
+
+    QSignalBlocker blocker(ui->plainTextEdit);
+    QString text = ui->plainTextEdit->toPlainText();
+    QString errorMsg;
+    bool valid = m_validator(text, &errorMsg);
+
+    ui->plainTextEdit->setProperty("error", !valid);
+    ui->plainTextEdit->style()->unpolish(ui->plainTextEdit);
+    ui->plainTextEdit->style()->polish(ui->plainTextEdit);
+
+    if (auto *jsonHL = dynamic_cast<JsonHighlighter *>(m_highlighter)) {
+        if (!valid) {
+            // Получаем позицию ошибки из валидатора (валидатор должен возвращать структуру)
+            // Но текущий валидатор возвращает только bool и строку ошибки. Нужно доработать.
+            // Пока будем использовать статический метод JsonPacketField::isValid для получения offset.
+            auto validationError = JsonPacketField::isValid(text);
+            if (validationError.offset != -1) {
+                jsonHL->setError(validationError.line, validationError.message);
+                ui->errorLabel->setText(QString("Line %1, Col %2: %3")
+                                            .arg(validationError.line)
+                                            .arg(validationError.column)
+                                            .arg(validationError.message));
+                ui->errorLabel->setVisible(true);
+            }
+        } else {
+            jsonHL->setError(-1, QString());
+            ui->errorLabel->clear();
+            ui->errorLabel->setVisible(false);
+        }
+    }
+
+    m_updating = false;
 }

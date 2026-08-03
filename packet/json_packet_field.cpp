@@ -9,15 +9,29 @@ JsonPacketField::JsonPacketField(const QString &name,
     : StringPacketField(name, type, size, source, QString())
 {}
 
-std::optional<QString> JsonPacketField::isValid(const QString &value)
+JsonValidationError JsonPacketField::isValid(const QString &value)
 {
-    QString errorMsg;
     QJsonParseError parseError;
     QJsonDocument doc = QJsonDocument::fromJson(value.toUtf8(), &parseError);
     if (parseError.error != QJsonParseError::NoError) {
-        return parseError.errorString();
+        JsonValidationError error;
+        error.offset = parseError.offset;
+        error.message = parseError.errorString();
+
+        int line = 1, col = 1;
+        for (int i = 0; i < parseError.offset && i < value.length(); ++i) {
+            if (value.at(i) == '\n') {
+                ++line;
+                col = 1;
+            } else {
+                ++col;
+            }
+        }
+        error.line = line;
+        error.column = col;
+        return error;
     }
-    return std::nullopt;
+    return JsonValidationError{}; // offset == -1
 }
 
 std::unique_ptr<StringPacketField> JsonPacketField::fromJson(const QJsonObject &obj,

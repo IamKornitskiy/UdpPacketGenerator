@@ -34,6 +34,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         titlebar.h titlebar.cpp
         field_editor_factory.h field_editor_factory.cpp
         text_field_editor_dialog.h text_field_editor_dialog.cpp text_field_editor_dialog.ui
+        json_highlighter.h json_highlighter.cpp
     )
 endif()
 

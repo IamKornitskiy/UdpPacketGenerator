@@ -5,6 +5,7 @@
 #include <QSpinBox>
 #include "float_packet_field.h"
 #include "integer_packet_field.h"
+#include "json_highlighter.h"
 #include "json_packet_field.h"
 #include "string_packet_field.h"
 #include "text_field_editor_dialog.h"
@@ -37,6 +38,35 @@ QWidget *FieldEditorFactory::createEditor(BasePacketField &field, QWidget *paren
             return doubleSpinBox;
         }
 
+        if (auto *jsonField = dynamic_cast<JsonPacketField *>(&field)) {
+            auto *textEditorButton = new QPushButton(parent);
+            textEditorButton->setText("Edit");
+
+            QObject::connect(textEditorButton, &QPushButton::clicked, parent, [jsonField, parent]() {
+                auto editorDialog = std::make_unique<TextFieldEditorDialog>(jsonField->name(),
+                                                                            jsonField->type(),
+                                                                            jsonField->value(),
+                                                                            parent);
+
+                editorDialog->setHighlighter(new JsonHighlighter(nullptr));
+                editorDialog->setValidator([](const QString &text, QString *errorMsg) -> bool {
+                    auto error = JsonPacketField::isValid(text);
+                    if (error) {
+                        if (errorMsg)
+                            *errorMsg = error.value();
+                        return false;
+                    }
+                    return true;
+                });
+
+                if (editorDialog->exec() == QDialog::Accepted) {
+                    jsonField->setValue(editorDialog->plainText());
+                }
+            });
+
+            return textEditorButton;
+        }
+
         if (auto *stringField = dynamic_cast<StringPacketField *>(&field)) {
             auto *textEditorButton = new QPushButton(parent);
             textEditorButton->setText("Edit");
@@ -46,6 +76,7 @@ QWidget *FieldEditorFactory::createEditor(BasePacketField &field, QWidget *paren
                                                                             stringField->type(),
                                                                             stringField->value(),
                                                                             parent);
+
 
                 if (editorDialog->exec() == QDialog::Accepted) {
                     stringField->setValue(editorDialog->plainText());
