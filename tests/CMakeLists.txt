@@ -78,3 +78,6 @@ add_executable(test_field_editor_factory
 )
 setup_test_target(test_field_editor_factory)
 add_test(NAME FieldEditorFactory COMMAND test_field_editor_factory)
+
+# ---- Test JsonHighligher manual testing ----
+
