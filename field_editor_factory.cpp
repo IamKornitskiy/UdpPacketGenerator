@@ -7,6 +7,8 @@
 #include "integer_packet_field.h"
 #include "json_highlighter.h"
 #include "json_packet_field.h"
+#include "nmea_highlighter.h"
+#include "nmea_packet_field.h"
 #include "string_packet_field.h"
 #include "text_field_editor_dialog.h"
 
@@ -36,6 +38,30 @@ QWidget *FieldEditorFactory::createEditor(BasePacketField &field, QWidget *paren
                              [floatField](double newValue) { floatField->setValue(newValue); });
 
             return doubleSpinBox;
+        }
+
+        if (auto *nmeaField = dynamic_cast<NmeaPacketField *>(&field)) {
+            auto *editButton = new QPushButton(QObject::tr("Edit"), parent);
+            QObject::connect(editButton, &QPushButton::clicked, parent, [nmeaField, parent]() {
+                auto editorDialog = std::make_unique<TextFieldEditorDialog>(nmeaField->name(),
+                                                                            nmeaField->type(),
+                                                                            nmeaField->value(),
+                                                                            parent);
+                editorDialog->setHighlighter(new NmeaHighlighter(nullptr));
+                editorDialog->setValidator([](const QString &text, QString *errorMsg) -> bool {
+                    auto error = NmeaPacketField::isValid(text);
+                    if (error) {
+                        if (errorMsg)
+                            *errorMsg = error.message;
+                        return false;
+                    }
+                    return true;
+                });
+                if (editorDialog->exec() == QDialog::Accepted) {
+                    nmeaField->setValue(editorDialog->plainText());
+                }
+            });
+            return editButton;
         }
 
         if (auto *jsonField = dynamic_cast<JsonPacketField *>(&field)) {

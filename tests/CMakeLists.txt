@@ -75,6 +75,7 @@ add_executable(test_field_editor_factory
     ../field_editor_factory.cpp
     ../text_field_editor_dialog.cpp
     ../json_highlighter.cpp
+    ../nmea_highlighter.cpp
 )
 setup_test_target(test_field_editor_factory)
 add_test(NAME FieldEditorFactory COMMAND test_field_editor_factory)

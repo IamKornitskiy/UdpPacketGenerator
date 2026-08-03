@@ -6,7 +6,7 @@ JsonPacketField::JsonPacketField(const QString &name,
                                  quint32 size,
                                  FieldSource source,
                                  const QString &initialValue)
-    : StringPacketField(name, type, size, source, QString())
+    : StringPacketField(name, type, size, source, initialValue)
 {}
 
 JsonValidationError JsonPacketField::isValid(const QString &value)

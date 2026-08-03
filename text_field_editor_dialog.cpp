@@ -2,6 +2,8 @@
 #include <QStyle>
 #include "json_highlighter.h"
 #include "json_packet_field.h"
+#include "nmea_highlighter.h"
+#include "nmea_packet_field.h"
 #include "ui_text_field_editor_dialog.h"
 
 TextFieldEditorDialog::TextFieldEditorDialog(const QString &name,
@@ -68,11 +70,21 @@ void TextFieldEditorDialog::onTextChanged()
     ui->plainTextEdit->style()->unpolish(ui->plainTextEdit);
     ui->plainTextEdit->style()->polish(ui->plainTextEdit);
 
+    if (auto *nmeaHL = dynamic_cast<NmeaHighlighter *>(m_highlighter)) {
+        auto err = NmeaPacketField::isValid(text);
+        if (err) {
+            nmeaHL->setError(err.line, err.message);
+            ui->errorLabel->setText(
+                QString("⚠ Line %1, Col %2: %3").arg(err.line).arg(err.column).arg(err.message));
+            ui->errorLabel->setVisible(true);
+        } else {
+            nmeaHL->setError(-1, QString());
+            ui->errorLabel->setVisible(false);
+        }
+    }
+
     if (auto *jsonHL = dynamic_cast<JsonHighlighter *>(m_highlighter)) {
         if (!valid) {
-            // Получаем позицию ошибки из валидатора (валидатор должен возвращать структуру)
-            // Но текущий валидатор возвращает только bool и строку ошибки. Нужно доработать.
-            // Пока будем использовать статический метод JsonPacketField::isValid для получения offset.
             auto validationError = JsonPacketField::isValid(text);
             if (validationError.offset != -1) {
                 jsonHL->setError(validationError.line, validationError.message);
