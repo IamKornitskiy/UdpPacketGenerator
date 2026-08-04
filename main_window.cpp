@@ -203,7 +203,7 @@ void MainWindow::onVersionCheckComplete(bool newerAvailable, const QString &late
         msgBox.setInformativeText("Would you like to download it now?");
 
         QPushButton *downloadButton = msgBox.addButton("Download", QMessageBox::AcceptRole);
-        QPushButton *okButton = msgBox.addButton("OK", QMessageBox::RejectRole);
+        QPushButton *okButton = msgBox.addButton("Later", QMessageBox::RejectRole);
         msgBox.setDefaultButton(downloadButton);
 
         msgBox.exec();
