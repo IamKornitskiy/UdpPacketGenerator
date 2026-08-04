@@ -55,6 +55,13 @@ add_executable(test_json_packet_field
 setup_test_target(test_json_packet_field)
 add_test(NAME JsonPacketField COMMAND test_json_packet_field)
 
+# ---- Test NmeaPacketField ----
+add_executable(test_nmea_packet_field
+    tst_nmea_packet_field.cpp
+)
+setup_test_target(test_nmea_packet_field)
+add_test(NAME NmeaPacketField COMMAND test_nmea_packet_field)
+
 # ---- Test PacketTemplate ----
 add_executable(test_packet_template
     tst_packet_template.cpp

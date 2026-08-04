@@ -74,7 +74,7 @@ NmeaValidationError NmeaPacketField::isValid(const QString &text)
 
     if (afterStar.length() != 2 || !afterStar[0].isLetterOrNumber()
         || !afterStar[1].isLetterOrNumber()) {
-        result.offset = starPos + 1; // позиция после '*'
+        result.offset = starPos + 1; // after *
         result.message = "Checksum must be exactly two hex digits";
         int line = 1, col = 1;
         for (int i = 0; i < result.offset; ++i) {
