@@ -3,6 +3,8 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QSpinBox>
+#include "csv_highlighter.h"
+#include "csv_packet_field.h"
 #include "float_packet_field.h"
 #include "integer_packet_field.h"
 #include "json_highlighter.h"
@@ -87,6 +89,35 @@ QWidget *FieldEditorFactory::createEditor(BasePacketField &field, QWidget *paren
 
                 if (editorDialog->exec() == QDialog::Accepted) {
                     jsonField->setValue(editorDialog->plainText());
+                }
+            });
+
+            return textEditorButton;
+        }
+
+        if (auto *csvField = dynamic_cast<CsvPacketField *>(&field)) {
+            auto *textEditorButton = new QPushButton(parent);
+            textEditorButton->setText("Edit");
+
+            QObject::connect(textEditorButton, &QPushButton::clicked, parent, [csvField, parent]() {
+                auto editorDialog = std::make_unique<TextFieldEditorDialog>(csvField->name(),
+                                                                            csvField->type(),
+                                                                            csvField->value(),
+                                                                            parent);
+
+                editorDialog->setHighlighter(new CsvHighlighter(nullptr));
+                editorDialog->setValidator([](const QString &text, QString *errorMsg) -> bool {
+                    auto error = CsvPacketField::isValid(text);
+                    if (error) {
+                        if (errorMsg)
+                            *errorMsg = error.message;
+                        return false;
+                    }
+                    return true;
+                });
+
+                if (editorDialog->exec() == QDialog::Accepted) {
+                    csvField->setValue(editorDialog->plainText());
                 }
             });
 

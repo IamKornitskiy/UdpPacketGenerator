@@ -34,7 +34,7 @@ Define packet fields with different types, set them as constants, counters, or u
 
 ### 🚧 Under active development (v2.1.x)
 
-- [ ] **CSV field** – column count validation
+- [x] **CSV field** – column count validation
 - [x] **Visual error highlighting** in text editors for invalid data
 - [x] **NMEA field** with checksum validation
 - [ ] **Check for new version**

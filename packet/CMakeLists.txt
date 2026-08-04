@@ -8,6 +8,7 @@ add_library(packet
     string_packet_field.h string_packet_field.cpp
     json_packet_field.h json_packet_field.cpp
     nmea_packet_field.h nmea_packet_field.cpp
+    csv_packet_field.h csv_packet_field.cpp
 )
 
 target_include_directories(packet PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

@@ -36,6 +36,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         text_field_editor_dialog.h text_field_editor_dialog.cpp text_field_editor_dialog.ui
         json_highlighter.h json_highlighter.cpp
         nmea_highlighter.h nmea_highlighter.cpp
+        csv_highlighter.h csv_highlighter.cpp
     )
 endif()
 

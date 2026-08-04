@@ -4,7 +4,7 @@
 
 struct NmeaValidationError
 {
-    int offset = -1; // -1, если ошибки нет
+    int offset = -1; // -1 means no error
     QString message;
     int line = -1;
     int column = -1;

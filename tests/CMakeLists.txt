@@ -62,6 +62,13 @@ add_executable(test_nmea_packet_field
 setup_test_target(test_nmea_packet_field)
 add_test(NAME NmeaPacketField COMMAND test_nmea_packet_field)
 
+# ---- Test CsvPacketField ----
+add_executable(test_csv_packet_field
+    tst_csv_packet_field.cpp
+)
+setup_test_target(test_csv_packet_field)
+add_test(NAME CsvPacketField COMMAND test_csv_packet_field)
+
 # ---- Test PacketTemplate ----
 add_executable(test_packet_template
     tst_packet_template.cpp
@@ -83,6 +90,7 @@ add_executable(test_field_editor_factory
     ../text_field_editor_dialog.cpp
     ../json_highlighter.cpp
     ../nmea_highlighter.cpp
+    ../csv_highlighter.cpp
 )
 setup_test_target(test_field_editor_factory)
 add_test(NAME FieldEditorFactory COMMAND test_field_editor_factory)
