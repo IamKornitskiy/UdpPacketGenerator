@@ -47,7 +47,7 @@ void JsonHighlighter::highlightBlock(const QString &text)
         QTextCharFormat errorFmt;
         errorFmt.setUnderlineStyle(QTextCharFormat::WaveUnderline);
         errorFmt.setUnderlineColor(Qt::red);
-        errorFmt.setBackground(QColor(255, 0, 0, 40)); // полупрозрачный красный
+        errorFmt.setBackground(QColor(255, 0, 0, 40)); // semi-opacity red
         setFormat(0, text.length(), errorFmt);
         return;
     }
