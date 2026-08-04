@@ -34,8 +34,10 @@ Each field must specify a `source` — where the field's data comes from.
 | `int64` | 8 | None |
 | `float32` | 4 | DoubleSpinBox |
 | `float64` | 8 | DoubleSpinBox |
-| `text` | special | Button -> Dialog |
-| `json` | special | Button -> Dialog |
+| `text` | special | Button -> Text Editor Dialog |
+| `json` | special | Button -> JSON Editor Dialog (with syntax highlighting) |
+| `nmea` | special | Button -> NMEA Editor Dialog (with syntax highlighting) |
+| `csv` | special | Button -> CSV Editor Dialog (with syntax highlighting) |
 
 ## Key Reference
 
@@ -47,8 +49,8 @@ Each field must specify a `source` — where the field's data comes from.
 | `start_value` | for `counter` | `counter` | Starting value (default 0) |
 | `min` | for `input` | `input` | Minimum value |
 | `max` | for `input` | `input` | Maximum value |
-| `decimals` | fot `input` float type | `input` | Decimals of DoubleSpinBox (default 3) |
-| `value` | no | for `input` text type | Default value |
+| `decimals` | for `input` float type | `input` | Decimals of DoubleSpinBox (default 3) |
+| `value` | no | for `input` text types (text, json, nmea, csv) | Default value |
 | `size` | no | text types | Data size, if not specified or zero, then calculated automatically. Otherwise, padded with 0x00 |
 
 ## Examples
@@ -85,6 +87,16 @@ Each field must specify a `source` — where the field's data comes from.
       "source": "input",
       "value": "Oleg",
       "size": 6
+    },
+    { "name": "nmea_sentence",
+      "type": "nmea",
+      "source": "input",
+      "value": "$GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47"
+    },
+    { "name": "csv_data",
+      "type": "csv",
+      "source": "input",
+      "value": "1,2,3,4,5"
     }
   ]
 }

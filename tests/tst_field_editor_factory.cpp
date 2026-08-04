@@ -7,6 +7,7 @@
 #include "../field_editor_factory.h"
 #include "float_packet_field.h"
 #include "integer_packet_field.h"
+#include "json_packet_field.h"
 #include "string_packet_field.h"
 
 class TestFieldEditorFactory : public QObject
@@ -103,6 +104,16 @@ private slots:
         DummyField dummy;
         QWidget *editor = FieldEditorFactory::createEditor(dummy);
         QVERIFY(editor == nullptr);
+    }
+
+    void testJsonInputEditor()
+    {
+        JsonPacketField field("j", "json", 20, FieldSource::Input);
+        QWidget *editor = FieldEditorFactory::createEditor(field);
+        QPushButton *btn = qobject_cast<QPushButton *>(editor);
+        QVERIFY(btn);
+        QCOMPARE(btn->text(), "Edit");
+        delete editor;
     }
 };
 

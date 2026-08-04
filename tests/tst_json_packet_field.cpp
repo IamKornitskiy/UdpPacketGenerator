@@ -33,7 +33,7 @@ private slots:
                      "]"
                      "}");
 
-        QCOMPARE(JsonPacketField::isValid(json), std::nullopt);
+        QVERIFY(!JsonPacketField::isValid(json));
     }
 
     void testIsValidErrors_data()
