@@ -23,7 +23,7 @@ Define packet fields with different types, set them as constants, counters, or u
 
 ## 🗺 Roadmap
 
-### ✅ Already implemented (v2.0.0)
+### ✅ Already implemented (v2.1.x)
 - [x] Integer fields (`uint8`–`uint32`, `int8`–`int32`) with configurable byte order
 - [x] Floating-point fields (`float32`, `float64`)
 - [x] String field (`string`) with UTF-8 support
@@ -31,15 +31,16 @@ Define packet fields with different types, set them as constants, counters, or u
 - [x] Auto-incrementing counter (`counter`)
 - [x] Real-time value editing without stopping transmission
 - [x] Cross-platform build (Windows, Linux) with signed packages (deb, rpm, AppImage, zip)
-
-### 🚧 Under active development (v2.1.x)
-
 - [x] **CSV field** – column count validation
 - [x] **Visual error highlighting** in text editors for invalid data
 - [x] **NMEA field** with checksum validation
-- [ ] **Check for new version**
+- [x] **Check for new version**
 
-### 🔜 Planned (v2.2.x and beyond)
+### 🚧 Under active development (v2.2.x)
+
+
+
+### 🔜 Planned (v2.3.x and beyond)
 - [ ] Packet duplication to multiple targets
 - [ ] Visual packet editor – drag-and-drop field creation in GUI
 - [ ] Save/load scenarios (field values)
