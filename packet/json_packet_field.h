@@ -26,8 +26,8 @@ public:
     static JsonValidationError isValid(const QString &value);
 
     // static function for checking the validity of JSON object data, and pre-constructor
-    static std::unique_ptr<StringPacketField> fromJson(const QJsonObject &obj,
-                                                       QString *outError = nullptr);
+    static std::unique_ptr<JsonPacketField> fromJson(const QJsonObject &obj,
+                                                     QString *outError = nullptr);
 
     QString lastError() const;
 

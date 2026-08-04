@@ -34,8 +34,7 @@ JsonValidationError JsonPacketField::isValid(const QString &value)
     return JsonValidationError{}; // offset == -1
 }
 
-std::unique_ptr<StringPacketField> JsonPacketField::fromJson(const QJsonObject &obj,
-                                                             QString *outError)
+std::unique_ptr<JsonPacketField> JsonPacketField::fromJson(const QJsonObject &obj, QString *outError)
 {
     auto validationError = BasePacketField::jsonIsValid(obj);
     if (validationError) {
