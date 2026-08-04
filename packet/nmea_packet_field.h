@@ -24,4 +24,7 @@ public:
 
     static NmeaValidationError isValid(const QString &text);
     bool setValue(const QString &v, QString *errorMsg = nullptr);
+
+    static std::unique_ptr<NmeaPacketField> fromJson(const QJsonObject &obj,
+                                                     QString *outError = nullptr);
 };
