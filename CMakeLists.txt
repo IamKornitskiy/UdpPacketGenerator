@@ -18,6 +18,8 @@ set(PROJECT_SOURCES
         main.cpp
         main_window.cpp
         main_window.h
+        version_checker.cpp
+        version_checker.h
         main_window.ui
         style/light.qss
         style/dark.qss
