@@ -1,10 +1,13 @@
 #include "main_window.h"
+#include <QDesktopServices>
 #include <QFile>
 #include <QFileDialog>
 #include <QLabel>
 #include <QMessageBox>
 #include <QRegularExpression>
 #include <QUiLoader>
+#include <QTimer>
+#include <QUrl>
 #include "./ui_main_window.h"
 #include "field_editor_factory.h"
 
@@ -46,6 +49,16 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->btnStop, &QPushButton::clicked, this, &MainWindow::onStop);
 
     ui->sbInterval->setValue(1000);
+
+    // Initialize version checker
+    m_versionChecker = new VersionChecker(this);
+    connect(m_versionChecker, &VersionChecker::checkComplete,
+            this, &MainWindow::onVersionCheckComplete);
+
+    // Check for updates after a short delay (to not block UI startup)
+    QTimer::singleShot(1000, this, [this]() {
+        m_versionChecker->checkForUpdates();
+    });
 
     statusBar()->showMessage("Ready");
 }
@@ -170,6 +183,37 @@ void MainWindow::onPacketSent(int count)
 void MainWindow::onError(const QString &msg)
 {
     statusBar()->showMessage("Error: " + msg);
+}
+
+void MainWindow::onVersionCheckComplete(bool newerAvailable, const QString &latestVersion, const QString &error)
+{
+    if (!error.isEmpty()) {
+        // Silent fail: don't bother the user with network errors
+        qDebug() << "Version check failed:" << error;
+        return;
+    }
+
+    if (newerAvailable) {
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("Update Available");
+        msgBox.setText(QString("A new version of UDP Packet Generator is available!\n\n"
+                               "Current version: v%1\n"
+                               "Latest version: %2")
+                           .arg(APP_VERSION, latestVersion));
+        msgBox.setInformativeText("Would you like to download it now?");
+
+        QPushButton *downloadButton = msgBox.addButton("Download", QMessageBox::AcceptRole);
+        QPushButton *okButton = msgBox.addButton("OK", QMessageBox::RejectRole);
+        msgBox.setDefaultButton(downloadButton);
+
+        msgBox.exec();
+
+        if (msgBox.clickedButton() == downloadButton) {
+            QDesktopServices::openUrl(QUrl("https://github.com/IamKornitskiy/UdpPacketGenerator/releases"));
+        }
+    } else if (!latestVersion.isEmpty()) {
+        qDebug() << "You are using the latest version (" << latestVersion << ")";
+    }
 }
 
 void MainWindow::clearDynamicFields()
