@@ -37,13 +37,11 @@ Define packet fields with different types, set them as constants, counters, or u
 - [x] **Check for new version**
 
 ### 🚧 Under active development (v2.2.x)
-
-
+- [ ] Packet duplication to multiple targets
+- [ ] Save/load scenarios (field values)
 
 ### 🔜 Planned (v2.3.x and beyond)
-- [ ] Packet duplication to multiple targets
 - [ ] Visual packet editor – drag-and-drop field creation in GUI
-- [ ] Save/load scenarios (field values)
 - [ ] Base64 field for text-safe binary data
 - [ ] Real-time traffic monitor (rate, counters, graph)
 - [ ] Additional encodings (Latin-1, UTF-16)
