@@ -11,6 +11,7 @@
 #include "packet/packet_template.h"
 #include "titlebar.h"
 #include "traffic_generator.h"
+#include "version_checker.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -32,6 +33,7 @@ private slots:
     void onStop();
     void onPacketSent(int count);
     void onError(const QString &msg);
+    void onVersionCheckComplete(bool newerAvailable, const QString &latestVersion, const QString &error);
 
 private:
     Ui::MainWindow *ui;
@@ -50,6 +52,8 @@ private:
     QThread *m_workerThread;
     TrafficGenerator *m_generator;
     bool m_isRunning = false;
+
+    VersionChecker *m_versionChecker = nullptr;
 };
 
 #endif // MAIN_WINDOW_H

@@ -106,7 +106,7 @@ private slots:
 
     void testSerializeValueLittleEndian()
     {
-        // При LittleEndian код делает reverse -> фактически Big Endian
+        // With LittleEndian, code reverses -> effectively Big Endian
         SerializeTestField field("uint32", 4, QDataStream::LittleEndian);
         QByteArray data = field.serializePublic(quint32(0x01020304), 4);
         QCOMPARE(data.size(), 4);
@@ -118,11 +118,11 @@ private slots:
 
     void testSerializeValueBigEndian()
     {
-        // При BigEndian реверса нет -> остаётся системный Little Endian
+        // With BigEndian, no reverse -> remains system Little Endian
         SerializeTestField field("uint32", 4, QDataStream::BigEndian);
         QByteArray data = field.serializePublic(quint32(0x01020304), 4);
         QCOMPARE(data.size(), 4);
-        // Ожидаем: 0x04 0x03 0x02 0x01 (как в памяти)
+        // Expected: 0x04 0x03 0x02 0x01 (as in memory)
         QCOMPARE(static_cast<quint8>(data[0]), quint8(0x01));
         QCOMPARE(static_cast<quint8>(data[1]), quint8(0x02));
         QCOMPARE(static_cast<quint8>(data[2]), quint8(0x03));

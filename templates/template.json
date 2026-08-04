@@ -2,43 +2,48 @@
   "fields": [
     {
       "name": "sync",
-      "type": "uint16",
-      "value_source": "constant",
-      "default_value_hex": "1213"
+      "type": "uint8",
+      "source": "constant"
     },
     {
       "name": "counter",
       "type": "uint16",
-      "value_source": "counter",
+      "source": "counter",
       "start_value": 0
     },
     {
-      "name": "reserved",
-      "type": "bytes",
-      "size": 4,
-      "value_source": "reserved",
-      "default_value_hex": "11223344"
-    },
-    {
-      "name": "spin",
-      "type": "uint8",
-      "value_source": "input",
-      "maxInt": 10,
-      "minInt": -5
-    },
-    {
-      "name": "double spin",
+      "name": "voltage",
       "type": "float32",
-      "value_source": "input",
-      "maxDouble": 1.5,
-      "minDouble": -0.5
+      "source": "input",
+      "min": 0.0,
+      "max": 5.0,
+      "decimals": 4
     },
     {
-      "name": "payload",
-      "type": "bytes",
-      "size": 1,
-      "value_source": "constant",
-      "default_value_hex": "33"
+      "name": "mode",
+      "type": "int32",
+      "source": "input",
+      "min": -3,
+      "max": 3
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "source": "input",
+      "value": "Oleg",
+      "size": 6
+    },
+    {
+      "name": "nmea_sentence",
+      "type": "nmea",
+      "source": "input",
+      "value": "$GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47"
+    },
+    {
+      "name": "csv_data",
+      "type": "csv",
+      "source": "input",
+      "value": "1,2,3,4,5"
     }
   ]
 }

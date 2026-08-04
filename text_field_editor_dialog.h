@@ -2,6 +2,8 @@
 #define TEXT_FIELD_EDITOR_DIALOG_H
 
 #include <QDialog>
+#include <QLabel>
+#include <QSyntaxHighlighter>
 
 namespace Ui {
 class TextFieldEditorDialog;
@@ -19,13 +21,17 @@ public:
     ~TextFieldEditorDialog();
 
     QString plainText() const;
-
-private slots:
-    void on_plainTextEdit_textChanged();
+    void setValidator(std::function<bool(const QString &, QString *)> validator);
+    void setHighlighter(QSyntaxHighlighter *highlighter);
 
 private:
     Ui::TextFieldEditorDialog *ui;
     QString m_type;
+    bool m_updating = false;
+
+    std::function<bool(const QString &, QString *)> m_validator;
+    QSyntaxHighlighter *m_highlighter = nullptr;
+    void onTextChanged();
 };
 
 #endif // TEXT_FIELD_EDITOR_DIALOG_H

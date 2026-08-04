@@ -3,6 +3,17 @@
 
 #include "string_packet_field.h"
 
+struct JsonValidationError
+{
+    int offset = -1;
+    QString message;
+    int line = -1;
+    int column = -1;
+
+    explicit operator bool() const { return offset != -1; }
+    QString value() { return message; }
+};
+
 class JsonPacketField : public StringPacketField
 {
 public:
@@ -12,11 +23,11 @@ public:
                     FieldSource source = FieldSource::Constant,
                     const QString &initialValue = QString());
 
-    static std::optional<QString> isValid(const QString &value);
+    static JsonValidationError isValid(const QString &value);
 
     // static function for checking the validity of JSON object data, and pre-constructor
-    static std::unique_ptr<StringPacketField> fromJson(const QJsonObject &obj,
-                                                       QString *outError = nullptr);
+    static std::unique_ptr<JsonPacketField> fromJson(const QJsonObject &obj,
+                                                     QString *outError = nullptr);
 
     QString lastError() const;
 

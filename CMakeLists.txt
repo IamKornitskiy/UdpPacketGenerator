@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(UdpPacketGenerator VERSION 2.0.1 LANGUAGES CXX)
+project(UdpPacketGenerator VERSION 2.1.0 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -18,6 +18,8 @@ set(PROJECT_SOURCES
         main.cpp
         main_window.cpp
         main_window.h
+        version_checker.cpp
+        version_checker.h
         main_window.ui
         style/light.qss
         style/dark.qss
@@ -34,6 +36,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         titlebar.h titlebar.cpp
         field_editor_factory.h field_editor_factory.cpp
         text_field_editor_dialog.h text_field_editor_dialog.cpp text_field_editor_dialog.ui
+        json_highlighter.h json_highlighter.cpp
+        nmea_highlighter.h nmea_highlighter.cpp
+        csv_highlighter.h csv_highlighter.cpp
     )
 endif()
 

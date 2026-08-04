@@ -34,8 +34,10 @@
 | `int64` | 8 | None |
 | `float32` | 4 | DoubleSpinBox |
 | `float64` | 8 | DoubleSpinBox |
-| `text` | special | Button -> Dialog |
-| `json` | special | Button -> Dialog |
+| `text` | special | Button -> Текстовый редактор |
+| `json` | special | Button -> Редактор JSON (с подсветкой синтаксиса) |
+| `nmea` | special | Button -> Редактор NMEA (с подсветкой синтаксиса) |
+| `csv` | special | Button -> Редактор CSV (с подсветкой синтаксиса) |
 
 ## Справочник ключей
 
@@ -48,12 +50,12 @@
 | `min` | для `input` | `input` | Минимальное значение |
 | `max` | для `input` | `input` | Максимальное значение |
 | `decimals` | для `input` с дробными типами | `input` | Количество знаков после запятой в DoubleSpinBox (по умолчанию 3) |
-| `value` | нет | `input` с текстовыми типами | Значение по умолчанию |
+| `value` | нет | для `input` текстовых типов (text, json, nmea, csv) | Значение по умолчанию |
 | `size` | нет | текстовым типам | Размер данных, если не указан или ноль, тогда вычисляется автоматически. В ином случае дополняется 0x00 |
 
-## Examples
+## Примеры
 
-### Simple packet with constant and counter
+### Простой пакет с константой и счётчиком
 
 ```json
 {
@@ -85,6 +87,16 @@
       "source": "input",
       "value": "Oleg",
       "size": 6
+    },
+    { "name": "nmea_sentence",
+      "type": "nmea",
+      "source": "input",
+      "value": "$GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47"
+    },
+    { "name": "csv_data",
+      "type": "csv",
+      "source": "input",
+      "value": "1,2,3,4,5"
     }
   ]
 }
