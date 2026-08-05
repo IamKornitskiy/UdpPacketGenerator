@@ -5,11 +5,15 @@
 #include <QPainter>
 #include <QStyle>
 #include <QWindow>
+#include <QFile>
+#include <QTextStream>
 
 TitleBar::TitleBar(QWidget *parent)
     : QWidget(parent)
+    , m_darkTheme(true)
 {
     setupUi();
+    setupMenuBar();
     updateMaximizeIcon(false);
 
     if (QWidget *win = window()) {
@@ -17,12 +21,12 @@ TitleBar::TitleBar(QWidget *parent)
     }
 }
 
-static QIcon makeWhiteIcon(QStyle::StandardPixmap standardIcon)
+QIcon TitleBar::makeIcon(QStyle::StandardPixmap standardIcon, const QColor &color)
 {
     QPixmap pix = qApp->style()->standardIcon(standardIcon).pixmap(16, 16);
     QPainter painter(&pix);
     painter.setCompositionMode(QPainter::CompositionMode_SourceIn);
-    painter.fillRect(pix.rect(), Qt::white);
+    painter.fillRect(pix.rect(), color);
     painter.end();
     return QIcon(pix);
 }
@@ -50,7 +54,12 @@ void TitleBar::setupUi()
                                   : QCoreApplication::applicationName(),
                               this);
     m_titleLabel->setObjectName(QStringLiteral("titleLabel"));
+    m_titleLabel->setStyleSheet("font-weight: bold; font-size: 14px;");
     layout->addWidget(m_titleLabel);
+
+    m_menuBar = new QMenuBar(this);
+    m_menuBar->setObjectName(QStringLiteral("titleMenuBar"));
+    layout->addWidget(m_menuBar);
 
     layout->addStretch();
 
@@ -73,7 +82,7 @@ void TitleBar::setupUi()
     connect(m_maxButton, &QPushButton::clicked, this, &TitleBar::onMaximizeRestore);
     layout->addWidget(m_maxButton);
 
-    m_closeButton = new QPushButton(this); // ✕
+    m_closeButton = new QPushButton(this);
     m_closeButton->setObjectName(QStringLiteral("closeButton"));
     m_closeButton->setIcon(s->standardIcon(QStyle::SP_TitleBarCloseButton));
     m_closeButton->setIconSize(QSize(16, 16));
@@ -82,19 +91,71 @@ void TitleBar::setupUi()
     connect(m_closeButton, &QPushButton::clicked, this, &TitleBar::onClose);
     layout->addWidget(m_closeButton);
 
-    QIcon whiteMin = makeWhiteIcon(QStyle::SP_TitleBarMinButton);
-    QIcon whiteMax = makeWhiteIcon(QStyle::SP_TitleBarMaxButton);
-    QIcon whiteNorm = makeWhiteIcon(QStyle::SP_TitleBarNormalButton);
-    QIcon whiteClose = makeWhiteIcon(QStyle::SP_TitleBarCloseButton);
+    updateIcons();
+}
 
-    m_minButton->setIcon(whiteMin);
-    m_maxButton->setIcon(whiteMax);
-    m_closeButton->setIcon(whiteClose);
+void TitleBar::setupMenuBar()
+{
+    // File menu
+    QMenu *fileMenu = m_menuBar->addMenu("&File");
+    QAction *openAction = new QAction("&Open Template...", this);
+    openAction->setShortcut(QKeySequence::Open);
+    connect(openAction, &QAction::triggered, this, &TitleBar::onOpen);
+    fileMenu->addAction(openAction);
 
-    m_iconMin = whiteMin;
-    m_iconMax = whiteMax;
-    m_iconNormal = whiteNorm;
-    m_iconClose = whiteClose;
+    fileMenu->addSeparator();
+
+    QAction *exitAction = new QAction("E&xit", this);
+    exitAction->setShortcut(QKeySequence::Quit);
+    connect(exitAction, &QAction::triggered, this, &TitleBar::onExit);
+    fileMenu->addAction(exitAction);
+
+    // View menu
+    QMenu *viewMenu = m_menuBar->addMenu("&View");
+    QAction *themeAction = new QAction("Toggle &Theme", this);
+    themeAction->setCheckable(true);
+    themeAction->setChecked(true); // dark theme by default
+    connect(themeAction, &QAction::triggered, this, &TitleBar::onThemeToggle);
+    viewMenu->addAction(themeAction);
+
+    // Help menu
+    QMenu *helpMenu = m_menuBar->addMenu("&Help");
+    QAction *aboutAction = new QAction("&About", this);
+    connect(aboutAction, &QAction::triggered, this, &TitleBar::onAbout);
+    helpMenu->addAction(aboutAction);
+}
+
+void TitleBar::onThemeToggle()
+{
+    m_darkTheme = !m_darkTheme;
+
+    // Breeze
+    QString styleFile = m_darkTheme ? ":/style/breeze_dark.qss" : ":/style/breeze_light.qss";
+    QFile file(styleFile);
+    if (file.open(QFile::ReadOnly)) {
+        QString styleSheet = QTextStream(&file).readAll();
+        qApp->setStyleSheet(styleSheet);
+        file.close();
+    }
+
+    updateIcons();
+
+    emit themeToggled();
+}
+
+void TitleBar::onAbout()
+{
+    emit aboutRequested();
+}
+
+void TitleBar::onOpen()
+{
+    emit openRequested();
+}
+
+void TitleBar::onExit()
+{
+    emit exitRequested();
 }
 
 void TitleBar::applyDefaultStyle()
@@ -187,4 +248,17 @@ void TitleBar::updateMaximizeIcon(bool maximized)
         m_maxButton->setIcon(m_iconNormal);
     else
         m_maxButton->setIcon(m_iconMax);
+}
+
+void TitleBar::updateIcons()
+{
+    QColor color = m_darkTheme ? QColor(0xcc, 0xcc, 0xcc) : QColor(0x55, 0x55, 0x55);
+    m_iconMin = makeIcon(QStyle::SP_TitleBarMinButton, color);
+    m_iconMax = makeIcon(QStyle::SP_TitleBarMaxButton, color);
+    m_iconNormal = makeIcon(QStyle::SP_TitleBarNormalButton, color);
+    m_iconClose = makeIcon(QStyle::SP_TitleBarCloseButton, color);
+
+    m_minButton->setIcon(m_iconMin);
+    m_maxButton->setIcon(m_iconMax);
+    m_closeButton->setIcon(m_iconClose);
 }

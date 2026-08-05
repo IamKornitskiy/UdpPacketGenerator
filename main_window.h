@@ -34,6 +34,8 @@ private slots:
     void onPacketSent(int count);
     void onError(const QString &msg);
     void onVersionCheckComplete(bool newerAvailable, const QString &latestVersion, const QString &error);
+    void onAbout();
+    void onThemeToggled();
 
 private:
     Ui::MainWindow *ui;

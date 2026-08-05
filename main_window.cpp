@@ -10,6 +10,7 @@
 #include <QUrl>
 #include "./ui_main_window.h"
 #include "field_editor_factory.h"
+#include "custom_statusbar.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -28,6 +29,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_titleBar = new TitleBar(this);
     vLayout->addWidget(m_titleBar);
+
+    connect(m_titleBar, &TitleBar::openRequested, this, &MainWindow::onLoadJson);
+    connect(m_titleBar, &TitleBar::exitRequested, this, &QWidget::close);
+    connect(m_titleBar, &TitleBar::aboutRequested, this, &MainWindow::onAbout);
+    connect(m_titleBar, &TitleBar::themeToggled, this, &MainWindow::onThemeToggled);
 
     // Main content from UI
     if (oldCentral) {
@@ -61,6 +67,9 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     statusBar()->showMessage("Ready");
+    CustomStatusBar *customStatusBar = new CustomStatusBar(this);
+    setStatusBar(customStatusBar);
+    customStatusBar->setStatusReady();
 }
 
 MainWindow::~MainWindow()
@@ -103,7 +112,12 @@ void MainWindow::onLoadJson()
 
     ui->btnStart->setEnabled(true);
     ui->btnStop->setEnabled(false);
-    statusBar()->showMessage("Loaded " + fileName);
+    CustomStatusBar *customBar = qobject_cast<CustomStatusBar*>(statusBar());
+    if (customBar) {
+        customBar->setStatus("Loaded " + fileName, false);
+    } else {
+        statusBar()->showMessage("Loaded " + fileName);
+    }
 }
 
 void MainWindow::onStart()
@@ -150,7 +164,12 @@ void MainWindow::onStart()
     m_isRunning = true;
     ui->btnStart->setEnabled(false);
     ui->btnStop->setEnabled(true);
-    statusBar()->showMessage("Running...");
+    CustomStatusBar *customBar = qobject_cast<CustomStatusBar*>(statusBar());
+    if (customBar) {
+        customBar->setStatusRunning();
+    } else {
+        statusBar()->showMessage("Running...");
+    }
 }
 
 void MainWindow::onStop()
@@ -172,17 +191,51 @@ void MainWindow::onStop()
     m_isRunning = false;
     ui->btnStart->setEnabled(true);
     ui->btnStop->setEnabled(false);
-    statusBar()->showMessage("Stopped");
+    CustomStatusBar *customBar = qobject_cast<CustomStatusBar*>(statusBar());
+    if (customBar) {
+        customBar->setStatusStopped();
+    } else {
+        statusBar()->showMessage("Stopped");
+    }
 }
 
 void MainWindow::onPacketSent(int count)
 {
-    statusBar()->showMessage("Packets sent: " + QString::number(count));
+    CustomStatusBar *customBar = qobject_cast<CustomStatusBar*>(statusBar());
+    if (customBar) {
+        customBar->setStatus("Packets sent: " + QString::number(count), false);
+    } else {
+        statusBar()->showMessage("Packets sent: " + QString::number(count));
+    }
 }
 
 void MainWindow::onError(const QString &msg)
 {
-    statusBar()->showMessage("Error: " + msg);
+    CustomStatusBar *customBar = qobject_cast<CustomStatusBar*>(statusBar());
+    if (customBar) {
+        customBar->setStatusError(msg);
+    } else {
+        statusBar()->showMessage("Error: " + msg);
+    }
+}
+
+void MainWindow::onAbout()
+{
+    QMessageBox::about(this, "About UDP Packet Generator",
+                       QString("<h2>UDP Packet Generator v%1</h2>"
+                               "<p>A flexible UDP packet generator configured through JSON templates.</p>"
+                               "<p>Built with Qt6 and C++17.</p>"
+                               "<p>© 2025-2026 Oleg Kornitskiy</p>"
+                               "<p><a href='https://github.com/IamKornitskiy/UdpPacketGenerator'>GitHub</a></p>")
+                           .arg(APP_VERSION));
+}
+
+void MainWindow::onThemeToggled()
+{
+    CustomStatusBar *customBar = qobject_cast<CustomStatusBar*>(statusBar());
+    if (customBar) {
+        customBar->setStatus("Theme toggled", false);
+    }
 }
 
 void MainWindow::onVersionCheckComplete(bool newerAvailable, const QString &latestVersion, const QString &error)
