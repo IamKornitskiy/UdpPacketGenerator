@@ -37,6 +37,12 @@
          </item>
          <item>
           <widget class="QPushButton" name="btnLoadJson">
+           <property name="minimumSize">
+            <size>
+             <width>92</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
             <string>Load</string>
            </property>
@@ -192,8 +198,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>320</width>
-            <height>479</height>
+            <width>374</width>
+            <height>522</height>
            </rect>
           </property>
          </widget>
@@ -210,7 +216,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>26</height>
+     <height>18</height>
     </rect>
    </property>
   </widget>

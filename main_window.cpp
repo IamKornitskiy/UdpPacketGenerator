@@ -30,6 +30,11 @@ MainWindow::MainWindow(QWidget *parent)
     m_titleBar = new TitleBar(this);
     vLayout->addWidget(m_titleBar);
 
+    connect(m_titleBar, &TitleBar::openRequested, this, &MainWindow::onLoadJson);
+    connect(m_titleBar, &TitleBar::exitRequested, this, &QWidget::close);
+    connect(m_titleBar, &TitleBar::aboutRequested, this, &MainWindow::onAbout);
+    connect(m_titleBar, &TitleBar::themeToggled, this, &MainWindow::onThemeToggled);
+
     // Main content from UI
     if (oldCentral) {
         oldCentral->setParent(container);
@@ -211,6 +216,25 @@ void MainWindow::onError(const QString &msg)
         customBar->setStatusError(msg);
     } else {
         statusBar()->showMessage("Error: " + msg);
+    }
+}
+
+void MainWindow::onAbout()
+{
+    QMessageBox::about(this, "About UDP Packet Generator",
+                       QString("<h2>UDP Packet Generator v%1</h2>"
+                               "<p>A flexible UDP packet generator configured through JSON templates.</p>"
+                               "<p>Built with Qt6 and C++17.</p>"
+                               "<p>© 2025-2026 Oleg Kornitskiy</p>"
+                               "<p><a href='https://github.com/IamKornitskiy/UdpPacketGenerator'>GitHub</a></p>")
+                           .arg(APP_VERSION));
+}
+
+void MainWindow::onThemeToggled()
+{
+    CustomStatusBar *customBar = qobject_cast<CustomStatusBar*>(statusBar());
+    if (customBar) {
+        customBar->setStatus("Theme toggled", false);
     }
 }
 
