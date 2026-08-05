@@ -10,6 +10,7 @@
 #include <QUrl>
 #include "./ui_main_window.h"
 #include "field_editor_factory.h"
+#include "custom_statusbar.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -61,6 +62,9 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     statusBar()->showMessage("Ready");
+    CustomStatusBar *customStatusBar = new CustomStatusBar(this);
+    setStatusBar(customStatusBar);
+    customStatusBar->setStatusReady();
 }
 
 MainWindow::~MainWindow()
@@ -103,7 +107,12 @@ void MainWindow::onLoadJson()
 
     ui->btnStart->setEnabled(true);
     ui->btnStop->setEnabled(false);
-    statusBar()->showMessage("Loaded " + fileName);
+    CustomStatusBar *customBar = qobject_cast<CustomStatusBar*>(statusBar());
+    if (customBar) {
+        customBar->setStatus("Loaded " + fileName, false);
+    } else {
+        statusBar()->showMessage("Loaded " + fileName);
+    }
 }
 
 void MainWindow::onStart()
@@ -150,7 +159,12 @@ void MainWindow::onStart()
     m_isRunning = true;
     ui->btnStart->setEnabled(false);
     ui->btnStop->setEnabled(true);
-    statusBar()->showMessage("Running...");
+    CustomStatusBar *customBar = qobject_cast<CustomStatusBar*>(statusBar());
+    if (customBar) {
+        customBar->setStatusRunning();
+    } else {
+        statusBar()->showMessage("Running...");
+    }
 }
 
 void MainWindow::onStop()
@@ -172,17 +186,32 @@ void MainWindow::onStop()
     m_isRunning = false;
     ui->btnStart->setEnabled(true);
     ui->btnStop->setEnabled(false);
-    statusBar()->showMessage("Stopped");
+    CustomStatusBar *customBar = qobject_cast<CustomStatusBar*>(statusBar());
+    if (customBar) {
+        customBar->setStatusStopped();
+    } else {
+        statusBar()->showMessage("Stopped");
+    }
 }
 
 void MainWindow::onPacketSent(int count)
 {
-    statusBar()->showMessage("Packets sent: " + QString::number(count));
+    CustomStatusBar *customBar = qobject_cast<CustomStatusBar*>(statusBar());
+    if (customBar) {
+        customBar->setStatus("Packets sent: " + QString::number(count), false);
+    } else {
+        statusBar()->showMessage("Packets sent: " + QString::number(count));
+    }
 }
 
 void MainWindow::onError(const QString &msg)
 {
-    statusBar()->showMessage("Error: " + msg);
+    CustomStatusBar *customBar = qobject_cast<CustomStatusBar*>(statusBar());
+    if (customBar) {
+        customBar->setStatusError(msg);
+    } else {
+        statusBar()->showMessage("Error: " + msg);
+    }
 }
 
 void MainWindow::onVersionCheckComplete(bool newerAvailable, const QString &latestVersion, const QString &error)

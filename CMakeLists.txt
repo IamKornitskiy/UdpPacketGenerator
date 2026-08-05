@@ -40,6 +40,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         nmea_highlighter.h nmea_highlighter.cpp
         csv_highlighter.h csv_highlighter.cpp
         custom_button.h custom_button.cpp
+        custom_statusbar.h custom_statusbar.cpp
     )
 endif()
 
