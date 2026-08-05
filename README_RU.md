@@ -1,6 +1,7 @@
 ## [En](README.md) Ru
 
-# UDP Packet Generator [![GitHub release](https://img.shields.io/github/v/release/IamKornitskiy/UdpPacketGenerator)](https://github.com/IamKornitskiy/UdpPacketGenerator/releases) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# UDP Packet Generator 
+[![GitHub release](https://img.shields.io/github/v/release/IamKornitskiy/UdpPacketGenerator)](https://github.com/IamKornitskiy/UdpPacketGenerator/releases) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Qt 6.8+](https://img.shields.io/badge/Qt-6.8%2B-lightgray?logo=Qt&logoColor=white&labelColor=brightgreen
 )](https://www.qt.io/)
 
@@ -11,15 +12,8 @@
 UDP Packet Generator создаёт и отправляет пользовательские UDP-пакеты по JSON-шаблону.  
 Поля пакета могут быть разных типов — константы, счётчики или редактируемые значения.
 
-## Возможности
-
-- **JSON-шаблон пакета** – поля, типы, размеры и источники значений в одном файле
-- **Богатый набор типов полей** – целые числа, числа с плавающей точкой, строки, JSON, NMEA, зарезервированные байты и счётчики
-- **Встроенная валидация** – синтаксис JSON проверяется перед отправкой
-- **Редактирование на лету** – изменение значений мгновенно отражается на отправляемых пакетах
-- **Кроссплатформенность** – работает на Windows, Linux и может быть собран для macOS
-
-## 🗺 Дорожная карта
+<details>
+<summary><b>🗺 Дорожная карта</b></summary>
 
 ### ✅ Уже реализовано (v2.1.x)
 - [x] Целочисленные поля (`uint8`–`uint32`, `int8`–`int32`) с настраиваемым порядком байт
@@ -44,6 +38,7 @@ UDP Packet Generator создаёт и отправляет пользовате
 - [ ] Мониторинг трафика в реальном времени (скорость, счётчики, график)
 - [ ] Дополнительные кодировки (Latin-1, UTF-16)
 - [ ] Плагинная система для пользовательских типов полей и валидаторов
+</details>
 
 ## Скриншот
 

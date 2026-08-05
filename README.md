@@ -1,6 +1,7 @@
 ## En [Ru](README_RU.md)
 
-# UDP Packet Generator [![GitHub release](https://img.shields.io/github/v/release/IamKornitskiy/UdpPacketGenerator)](https://github.com/IamKornitskiy/UdpPacketGenerator/releases) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# UDP Packet Generator 
+[![GitHub release](https://img.shields.io/github/v/release/IamKornitskiy/UdpPacketGenerator)](https://github.com/IamKornitskiy/UdpPacketGenerator/releases) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Qt 6.8+](https://img.shields.io/badge/Qt-6.8%2B-lightgray?logo=Qt&logoColor=white&labelColor=brightgreen
 )](https://www.qt.io/)
 
@@ -12,16 +13,8 @@ A flexible UDP packet generator configured entirely through JSON templates.
 
 UDP Packet Generator creates and sends custom UDP packets based on a JSON template.  
 Define packet fields with different types, set them as constants, counters, or user inputs.
-
-## Features
-
-- **JSON-based packet structure** – fields, types, sizes, and value sources in one file
-- **Rich field types** – integers, floats, strings, JSON, NMEA, reserved bytes, and counters
-- **Built-in validation** – JSON syntax are checked before sending
-- **Real-time editing** – modify input values on the fly; packets update immediately
-- **Cross-platform** – runs on Windows, Linux, and can be built for macOS
-
-## 🗺 Roadmap
+<details>
+<summary><b>🗺 Roadmap</b></summary>
 
 ### ✅ Already implemented (v2.1.x)
 - [x] Integer fields (`uint8`–`uint32`, `int8`–`int32`) with configurable byte order
@@ -46,6 +39,7 @@ Define packet fields with different types, set them as constants, counters, or u
 - [ ] Real-time traffic monitor (rate, counters, graph)
 - [ ] Additional encodings (Latin-1, UTF-16)
 - [ ] Plugin system for custom field types and validators
+</details>
 
 ## Screenshot
 
