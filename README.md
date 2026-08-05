@@ -1,6 +1,6 @@
 ## En [Ru](README_RU.md)
 
-# UDP Packet Generator [![GitHub release](https://img.shields.io/github/v/release/IamKornitskiy/UdpPacketGenerator)](https://github.com/IamKornitskiy/UdpPacketGenerator/releases) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+# UDP Packet Generator [![GitHub release](https://img.shields.io/github/v/release/IamKornitskiy/UdpPacketGenerator)](https://github.com/IamKornitskiy/UdpPacketGenerator/releases) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Qt 6.8+](https://img.shields.io/badge/Qt-6.8%2B-lightgray?logo=Qt&logoColor=white&labelColor=brightgreen
 )](https://www.qt.io/)
 
@@ -85,4 +85,4 @@ If you create a JSON template for a well-known protocol or packet, feel free to 
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0 – see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
