@@ -2,6 +2,8 @@
     <qresource prefix="/">
         <file>style/dark.qss</file>
         <file>style/light.qss</file>
+        <file>style/breeze_light.qss</file>
+        <file>style/breeze_dark.qss</file>
         <file>style/logo.svg</file>
     </qresource>
 </RCC>
