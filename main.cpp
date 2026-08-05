@@ -13,6 +13,8 @@ int main(int argc, char *argv[])
         styleFile.close();
     }
 
+    a.setWindowIcon(QIcon("://style/logo.svg"));
+
     MainWindow w;
     w.show();
     return a.exec();
