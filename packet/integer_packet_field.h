@@ -3,8 +3,6 @@
 
 #include "base_packet_field.h"
 
-const QMap<QString, quint32> kSizeOfIntegerType = {{"int8", 1}, {"int16", 2}, {"int32", 4}};
-
 class IntegerPacketField : public BasePacketField
 {
 public:
