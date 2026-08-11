@@ -12,6 +12,7 @@
 #include "titlebar.h"
 #include "traffic_generator.h"
 #include "version_checker.h"
+#include "theme_manager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -35,7 +36,7 @@ private slots:
     void onError(const QString &msg);
     void onVersionCheckComplete(bool newerAvailable, const QString &latestVersion, const QString &error);
     void onAbout();
-    void onThemeToggled();
+    void onThemeSelected(const QString &themeKey);
 
 private:
     Ui::MainWindow *ui;
@@ -56,6 +57,7 @@ private:
     bool m_isRunning = false;
 
     VersionChecker *m_versionChecker = nullptr;
+    ThemeManager *m_themeManager = nullptr;
 };
 
 #endif // MAIN_WINDOW_H

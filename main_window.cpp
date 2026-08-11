@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_titleBar, &TitleBar::openRequested, this, &MainWindow::onLoadJson);
     connect(m_titleBar, &TitleBar::exitRequested, this, &QWidget::close);
     connect(m_titleBar, &TitleBar::aboutRequested, this, &MainWindow::onAbout);
-    connect(m_titleBar, &TitleBar::themeToggled, this, &MainWindow::onThemeToggled);
+    connect(m_titleBar, &TitleBar::themeSelected, this, &MainWindow::onThemeSelected);
 
     // Main content from UI
     if (oldCentral) {
@@ -70,6 +70,25 @@ MainWindow::MainWindow(QWidget *parent)
     CustomStatusBar *customStatusBar = new CustomStatusBar(this);
     setStatusBar(customStatusBar);
     customStatusBar->setStatusReady();
+
+    // Initialize ThemeManager
+    m_themeManager = new ThemeManager(qApp, this);
+
+    // Auto-update theme menu when theme changes
+    connect(m_themeManager, &ThemeManager::themeChanged, this, [this]() {
+        auto [names, keys] = m_themeManager->themeNamesAndKeys();
+        m_titleBar->populateThemesMenu(names, keys, m_themeManager->currentThemeKey());
+    });
+
+    // Apply the saved theme
+    QString currentThemeKey = m_themeManager->currentThemeKey();
+    if (!currentThemeKey.isEmpty()) {
+        m_themeManager->applyTheme(currentThemeKey);
+    }
+
+    // Populate theme menu
+    auto [names, keys] = m_themeManager->themeNamesAndKeys();
+    m_titleBar->populateThemesMenu(names, keys, m_themeManager->currentThemeKey());
 }
 
 MainWindow::~MainWindow()
@@ -230,11 +249,27 @@ void MainWindow::onAbout()
                            .arg(APP_VERSION));
 }
 
-void MainWindow::onThemeToggled()
+void MainWindow::onThemeSelected(const QString &themeKey)
 {
-    CustomStatusBar *customBar = qobject_cast<CustomStatusBar*>(statusBar());
-    if (customBar) {
-        customBar->setStatus("Theme toggled", false);
+    if (!m_themeManager) {
+        return;
+    }
+
+    if (m_themeManager->applyTheme(themeKey)) {
+        // Find theme name for status bar
+        QList<ThemeManager::ThemeInfo> themes = m_themeManager->availableThemes();
+        QString themeName = themeKey;
+        for (const ThemeManager::ThemeInfo &info : themes) {
+            if (info.key == themeKey) {
+                themeName = info.name;
+                break;
+            }
+        }
+
+        CustomStatusBar *customBar = qobject_cast<CustomStatusBar*>(statusBar());
+        if (customBar) {
+            customBar->setStatus("Theme: " + themeName, false);
+        }
     }
 }
 
