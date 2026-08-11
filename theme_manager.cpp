@@ -25,6 +25,10 @@ QList<ThemeManager::ThemeInfo> ThemeManager::availableThemes() const
     QList<ThemeInfo> themes;
 
     for (const QString &style : systemStyles()) {
+        // Exclude Windows-specific themes
+        if (style.contains("windows", Qt::CaseInsensitive)) {
+            continue;
+        }
         themes.append({style, style, ThemeType::System});
     }
 
