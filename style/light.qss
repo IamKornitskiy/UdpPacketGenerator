@@ -1,116 +1,205 @@
-QMainWindow {
-    background-color: #f5f5f5;
+/* ============================================================================
+   Breeze Light Theme for UDP Packet Generator
+   Inspired by KDE Plasma Breeze theme
+   ============================================================================ */
+
+/* ---- Global ---- */
+QMainWindow, QDialog {
+    background-color: #eff0f1;
 }
 
+/* ---- Group Box ---- */
 QGroupBox {
     font-weight: bold;
-    border: 1px solid #d0d0d0;
-    border-radius: 8px;
+    border: 1px solid #b8b9ba;
+    border-radius: 6px;
     margin-top: 12px;
     padding-top: 14px;
     padding-bottom: 8px;
-    background-color: #ffffff;
+    background-color: #fcfcfc;
 }
 
 QGroupBox:hover {
-    border-color: #b0b0b0;
+    border-color: #9a9b9c;
 }
+
 QGroupBox::title {
     subcontrol-origin: margin;
     left: 10px;
     padding: 0 6px;
-    color: #333;
+    color: #31363b;
 }
 
+/* ---- Push Buttons (Breeze style) ---- */
 QPushButton {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #0078d4, stop:1 #106ebe);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 20px;
-    font-weight: bold;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #f6f7f8, stop:0.5 #e3e5e7, stop:1 #d6d8db);
+    color: #31363b;
+    border: 1px solid #b8b9ba;
+    border-radius: 5px;
+    padding: 6px 18px;
+    font-weight: normal;
     font-size: 13px;
 }
 
 QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #106ebe, stop:1 #1a7fc4);
-    padding: 8px 22px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #fafbfc, stop:0.5 #e8eaec, stop:1 #d6d8db);
+    border-color: #9a9b9c;
 }
 
 QPushButton:pressed {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #005a9e, stop:1 #0078d4);
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #d6d8db, stop:0.5 #c8cacd, stop:1 #b8b9ba);
 }
 
 QPushButton:disabled {
-    background: #d0d0d0;
-    color: #999999;
+    background: #e3e5e7;
+    color: #9a9b9c;
+    border-color: #c8cacd;
 }
 
+/* Primary action button (Start, Load) */
+QPushButton[primary="true"] {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #3daee9, stop:0.5 #2a9ad9, stop:1 #1f89c7);
+    color: white;
+    border-color: #1f89c7;
+}
+
+QPushButton[primary="true"]:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #5fbff2, stop:0.5 #3daee9, stop:1 #2a9ad9);
+    border-color: #2a9ad9;
+}
+
+QPushButton[primary="true"]:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #1f89c7, stop:0.5 #1a78b0, stop:1 #15679a);
+    border-color: #15679a;
+}
+
+QPushButton[primary="true"]:disabled {
+    background: #a0b8c8;
+    color: #d0d8e0;
+    border-color: #90a8b8;
+}
+
+/* Danger button (Stop) */
+QPushButton[danger="true"] {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #f07a7a, stop:0.5 #e15a5a, stop:1 #cc3f3f);
+    color: white;
+    border-color: #cc3f3f;
+}
+
+QPushButton[danger="true"]:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #f59a9a, stop:0.5 #f07a7a, stop:1 #e15a5a);
+    border-color: #e15a5a;
+}
+
+QPushButton[danger="true"]:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #cc3f3f, stop:0.5 #b83333, stop:1 #a02828);
+    border-color: #a02828;
+}
+
+QPushButton[danger="true"]:disabled {
+    background: #d0a0a0;
+    color: #f0d8d8;
+    border-color: #c09090;
+}
+
+/* ---- Input Fields ---- */
 QLineEdit, QSpinBox, QDoubleSpinBox, QPlainTextEdit {
-    border: 1px solid #c0c0c0;
-    border-radius: 6px;
+    border: 1px solid #b8b9ba;
+    border-radius: 5px;
     padding: 6px 10px;
     background-color: #ffffff;
-    color: #333333;
+    color: #31363b;
     font-size: 13px;
 }
 
 QLineEdit:hover, QSpinBox:hover, QDoubleSpinBox:hover, QPlainTextEdit:hover {
-    border-color: #a0a0a0;
+    border-color: #9a9b9c;
     background-color: #fafafa;
 }
+
 QLineEdit:focus, QSpinBox:focus, QDoubleSpinBox:focus, QPlainTextEdit:focus {
-    border-color: #3498db;
-    background-color: #f0f8ff;
+    border-color: #3daee9;
+    background-color: #f5faff;
 }
 
+/* ---- Scroll Bars ---- */
 QScrollBar:vertical {
-    background: #f5f5f5;
+    background: #eff0f1;
     width: 8px;
     border-radius: 4px;
 }
 
 QScrollBar::handle:vertical {
-    background: #c8c8c8;
+    background: #b8b9ba;
     border-radius: 4px;
     min-height: 20px;
 }
 
 QScrollBar::handle:vertical:hover {
-    background: #a8a8a8;
+    background: #9a9b9c;
 }
 
 QScrollBar::handle:vertical:pressed {
-    background: #888888;
+    background: #7a7b7c;
 }
 
+/* ---- Status Bar ---- */
 QStatusBar {
-    background: #e8e8e8;
-    color: #333333;
-    border-top: 1px solid #d0d0d0;
+    background: #eff0f1;
+    color: #31363b;
+    border-top: 1px solid #d0d1d2;
     padding: 4px 8px;
 }
 
 #statusIndicator {
-    background: #b0b0b0;
+    background: #b8b9ba;
     border-radius: 6px;
-    border: 1px solid #c0c0c0;
+    border: 1px solid #c8cacd;
 }
 
 #statusText {
-    color: #333333;
+    color: #31363b;
     font-size: 13px;
     background: transparent;
 }
 
+
+
+/* ---- Scroll Area ---- */
+QScrollArea {
+    background: transparent;
+    border: none;
+}
+
+QScrollArea > QWidget > QWidget {
+    background: transparent;
+}
+
+/* ---- Labels ---- */
+QLabel {
+    color: #31363b;
+    background: transparent;
+}
+
+/* ---- Title Bar (Breeze style) ---- */
 #titleBar {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #f5f5f5, stop:1 #e8e8e8);
-    border-bottom: 1px solid #d0d0d0;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #f6f7f8, stop:1 #e3e5e7);
+    border-bottom: 2px solid #b8b9ba;
     padding: 4px 8px;
 }
 
 #titleBar QLabel {
-    color: #333333;
+    color: #31363b;
     font-size: 14px;
     font-weight: bold;
 }
@@ -119,66 +208,69 @@ QStatusBar {
     background: transparent;
     border: none;
     border-radius: 4px;
-    color: #333333;
+    color: #31363b;
     padding: 4px 8px;
     font-size: 13px;
 }
 
 #titleBar QPushButton:hover {
-    background-color: #d8d8d8;
+    background-color: #d6d8db;
     color: #000000;
 }
 
 #titleBar QPushButton:pressed {
-    background-color: #c0c0c0;
+    background-color: #c8cacd;
 }
 
 #titleBar #closeButton:hover {
-    background-color: #E81123;
+    background-color: #da4453;
     color: white;
 }
 
 #titleBar #closeButton:pressed {
-    background-color: #BF0F1A;
+    background-color: #bf3a47;
 }
 
-/* Menu bar styles */
+/* ---- Menu Bar (Breeze Light style) ---- */
 #titleMenuBar {
     background: transparent;
-    color: #333333;
+    color: #31363b;
     font-size: 13px;
     padding-top: 6px;
     padding-bottom: 4px;
     border: none;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+    /*border-bottom: 1px solid rgba(0,0,0,0.1);*/
 }
 
 #titleMenuBar::item {
     background: transparent;
     padding: 4px 8px;
-    border-radius: 4px;
+    border-radius: 3px;
     margin: 0px;
 }
 
 #titleMenuBar::item:selected {
-    background: #d8d8d8;
+    background: #d6d8db;
+    border-radius: 3px;
     color: #000000;
 }
 
 #titleMenuBar QMenu {
     background: #fcfcfc;
     border: 1px solid #b8b9ba;
-    border-radius: 6px;
-    padding: 4px 0px;
+    border-radius: 4px;
+    padding: 2px 2px;
 }
 
 #titleMenuBar QMenu::item {
     padding: 6px 24px;
-    color: #333333;
+    border-radius: 3px;
+    color: #31363b;
 }
 
 #titleMenuBar QMenu::item:selected {
-    background: #d8d8d8;
+    background: #d6d8db;
+    border-radius: 3px;
     color: #000000;
 }
 

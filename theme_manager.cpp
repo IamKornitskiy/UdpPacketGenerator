@@ -1,14 +1,14 @@
 #include "theme_manager.h"
 #include <QApplication>
-#include <QStyleFactory>
-#include <QFile>
 #include <QDebug>
+#include <QFile>
+#include <QStyleFactory>
 
 namespace {
-const QMap<QString, QString> kThemeList = {{"dark", ":/style/dark.qss"},
-                                           {"light", ":/style/light.qss"},
-                                           {"breeze_dark", ":/style/breeze_dark.qss"},
-                                           {"breeze_light", ":/style/breeze_light.qss"}};
+const QMap<QString, QString> kThemeList = {{"Dark", ":/style/dark.qss"},
+                                           {"Light", ":/style/light.qss"},
+                                           {"Dark blue", ":/style/dark_blue.qss"},
+                                           {"Light blue", ":/style/light_blue.qss"}};
 }
 
 ThemeManager::ThemeManager(QApplication *app, QObject *parent)

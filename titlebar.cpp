@@ -41,12 +41,18 @@ void TitleBar::setupUi()
     layout->setSpacing(8);
 
     // app icon
-    m_iconLabel = new QLabel(this);
-    m_iconLabel->setFixedSize(38, 38);
-    m_iconLabel->setScaledContents(true);
-    QIcon defaultIcon = QIcon("://style/logo.svg");
-    m_iconLabel->setPixmap(defaultIcon.pixmap(38, 38));
-    layout->addWidget(m_iconLabel);
+    // m_iconLabel = new QLabel(this);
+    // m_iconLabel->setFixedSize(38, 38);
+    // m_iconLabel->setScaledContents(true);
+    // QIcon defaultIcon = QIcon("://style/logo.svg");
+    // m_iconLabel->setPixmap(defaultIcon.pixmap(38, 38));
+    // layout->addWidget(m_iconLabel);
+
+    m_menuBar = new QMenuBar(this);
+    m_menuBar->setObjectName(QStringLiteral("titleMenuBar"));
+    layout->addWidget(m_menuBar);
+
+    layout->addStretch();
 
     m_titleLabel = new QLabel(QCoreApplication::applicationName().isEmpty()
                                   ? QStringLiteral("UDP Packet Generator")
@@ -55,10 +61,6 @@ void TitleBar::setupUi()
     m_titleLabel->setObjectName(QStringLiteral("titleLabel"));
     m_titleLabel->setStyleSheet("font-weight: bold; font-size: 14px;");
     layout->addWidget(m_titleLabel);
-
-    m_menuBar = new QMenuBar(this);
-    m_menuBar->setObjectName(QStringLiteral("titleMenuBar"));
-    layout->addWidget(m_menuBar);
 
     layout->addStretch();
 
