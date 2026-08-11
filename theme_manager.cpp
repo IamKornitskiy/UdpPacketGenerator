@@ -1,14 +1,14 @@
 #include "theme_manager.h"
 #include <QApplication>
-#include <QStyleFactory>
-#include <QFile>
 #include <QDebug>
+#include <QFile>
+#include <QStyleFactory>
 
 namespace {
-const QMap<QString, QString> kThemeList = {{"dark", ":/style/dark.qss"},
-                                           {"light", ":/style/light.qss"},
-                                           {"breeze_dark", ":/style/breeze_dark.qss"},
-                                           {"breeze_light", ":/style/breeze_light.qss"}};
+const QMap<QString, QString> kThemeList = {{"Dark", ":/style/dark.qss"},
+                                           {"Light", ":/style/light.qss"},
+                                           {"Dark blue", ":/style/dark_blue.qss"},
+                                           {"Light blue", ":/style/light_blue.qss"}};
 }
 
 ThemeManager::ThemeManager(QApplication *app, QObject *parent)
@@ -82,7 +82,8 @@ bool ThemeManager::applyTheme(const QString &key)
 
 bool ThemeManager::applySystemStyle(const QString &key)
 {
-    if (!m_app) return false;
+    if (!m_app)
+        return false;
 
     m_app->setStyleSheet(QString());
 
@@ -96,7 +97,8 @@ bool ThemeManager::applySystemStyle(const QString &key)
 
 bool ThemeManager::applyCustomTheme(const QString &key)
 {
-    if (!m_app) return false;
+    if (!m_app)
+        return false;
 
     QString path = kThemeList.value(key);
     QFile file(path);
@@ -113,7 +115,7 @@ bool ThemeManager::applyCustomTheme(const QString &key)
 void ThemeManager::loadFromSettings()
 {
     QString themeName = m_settings->currentTheme();
-    
+
     if (systemStyles().contains(themeName)) {
         m_currentThemeKey = themeName;
         m_currentThemeType = ThemeType::System;
