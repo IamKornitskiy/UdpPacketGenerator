@@ -1,15 +1,15 @@
 ## En [Ru](README_RU.md)
 
 <h1 align="center">UDP Packet Generator</h1>
+<div align="center">
+    <a href="https://github.com/IamKornitskiy/UdpPacketGenerator/releases"><img src="https://img.shields.io/github/v/release/IamKornitskiy/UdpPacketGenerator" alt="Lastrelease"/></a>
+    <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"/></a>
+    <a href="https://www.qt.io/"><img src="https://img.shields.io/badge/Qt-6.8%2B-lightgray?logo=Qt&logoColor=white&labelColor=brightgreen" alt="Qt 6.8+"/></a>
+</div>
 <p align="center">
-  <img src="screenshots/UdpPacketGenerator.gif" width="600" alt="Demo"/>
-  <br>A flexible UDP packet generator configured entirely through JSON templates.</br>
+    <img src="screenshots/UdpPacketGenerator.gif" width="600" alt="Demo"/>
+    <br><b>A flexible UDP packet generator configured entirely through JSON templates.</b></br>
 </p>
-
-
-[![GitHub release](https://img.shields.io/github/v/release/IamKornitskiy/UdpPacketGenerator)](https://github.com/IamKornitskiy/UdpPacketGenerator/releases) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Qt 6.8+](https://img.shields.io/badge/Qt-6.8%2B-lightgray?logo=Qt&logoColor=white&labelColor=brightgreen
-)](https://www.qt.io/)
 
 ## About
 
