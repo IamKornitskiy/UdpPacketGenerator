@@ -3,6 +3,7 @@ function(setup_test_target TARGET)
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_BINARY_DIR}
         ../packet
+        ../settings
     )
     target_link_libraries(${TARGET} PRIVATE
         Qt6::Core
@@ -95,5 +96,25 @@ add_executable(test_field_editor_factory
 setup_test_target(test_field_editor_factory)
 add_test(NAME FieldEditorFactory COMMAND test_field_editor_factory)
 
-# ---- Test JsonHighligher manual testing ----
+# ---- Test ThemeSettingsManager ----
+add_executable(test_theme_settings_manager
+    tst_theme_settings_manager.cpp
+    ../settings/theme_settings_manager.cpp
+    ../settings/abstract_settings_manager.cpp
+)
+setup_test_target(test_theme_settings_manager)
+add_test(NAME ThemeSettingsManager COMMAND test_theme_settings_manager)
+
+# ---- Test ThemeManager ----
+add_executable(test_theme_manager
+    tst_theme_manager.cpp
+    ../theme_manager.cpp
+    ../settings/theme_settings_manager.cpp
+    ../settings/abstract_settings_manager.cpp
+    ../resources.qrc
+)
+setup_test_target(test_theme_manager)
+add_test(NAME ThemeManager COMMAND test_theme_manager)
+
+
 
