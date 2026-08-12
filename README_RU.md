@@ -2,9 +2,14 @@
 
 <h1 align="center">UDP Packet Generator</h1>
 <div align="center">
-    <a href="https://github.com/IamKornitskiy/UdpPacketGenerator/releases"><img src="https://img.shields.io/github/v/release/IamKornitskiy/UdpPacketGenerator" alt="Lastrelease"/></a>
-    <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"/></a>
-    <a href="https://www.qt.io/"><img src="https://img.shields.io/badge/Qt-6.8%2B-lightgray?logo=Qt&logoColor=white&labelColor=brightgreen" alt="Qt 6.8+"/></a>
+    <a href="https://github.com/IamKornitskiy/UdpPacketGenerator/releases"><img src="https://img.shields.io/github/v/release/IamKornitskiy/UdpPacketGenerator" alt="Latest Release"/></a>
+    <a href="https://github.com/IamKornitskiy/UdpPacketGenerator/releases"><img src="https://img.shields.io/github/downloads/IamKornitskiy/UdpPacketGenerator/total" alt="Downloads"/></a>
+    <a href="https://github.com/IamKornitskiy/UdpPacketGenerator/stargazers"><img src="https://img.shields.io/github/stars/IamKornitskiy/UdpPacketGenerator" alt="Stars"/></a>
+    <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License"/></a>
+    <a href="https://www.qt.io/"><img src="https://img.shields.io/badge/Qt-6.8%2B-lightgray?logo=Qt&logoColor=white&labelColor=brightgreen" alt="Qt"/></a>
+    <a href="#"><img src="https://img.shields.io/badge/C%2B%2B-17-blue.svg?logo=c%2B%2B" alt="C++ Standard"/></a>
+    <a href="https://github.com/IamKornitskiy/UdpPacketGenerator/actions/workflows/test.yaml"><img src="https://github.com/IamKornitskiy/UdpPacketGenerator/actions/workflows/test.yaml/badge.svg" alt="CI"/></a>
+    <a href="#"><img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-lightgrey" alt="Platform"/></a>
 </div>
 <p align="center">
     <img src="screenshots/UdpPacketGenerator.gif" width="600" alt="Demo"/>
@@ -13,11 +18,59 @@
 
 ## О проекте
 
+**Инструмент для разработчиков сетевых протоколов, тестировщиков и инженеров.**  
+> Настраивайте генерацию UDP-пакетов через простые JSON-шаблоны без перекомпиляции.
+
 UDP Packet Generator создаёт и отправляет пользовательские UDP-пакеты по JSON-шаблону.  
 Поля пакета могут быть разных типов — константы, счётчики или редактируемые значения.
 
+### ✨ Почему UDP Packet Generator?
+
+- **🚀 Активно развивающийся проект** — регулярные релизы, чёткий roadmap, обратная связь от сообщества 
+- **📦 Готовые JSON-шаблоны** — в папке [`templates/`](templates/) уже есть примеры для быстрого старта
+- **⚡ Без программирования** — определяйте пакеты в JSON, перекомпиляция не требуется
+- **🔄 Редактирование в реальном времени** — меняйте значения во время отправки
+- **🔧 Готовые типы полей** — NMEA, CSV, JSON, счётчики и другие — со встроенной проверкой
+- **💻 Кроссплатформенность** — Windows и Linux с подписанными пакетами (deb, rpm, AppImage, zip)
+
+## 📝 Пример JSON-шаблона
+
+Минимальный пример шаблона пакета:
+
+```json
+{
+  "fields": [
+    { "name": "id", "type": "uint32", "value": 1 },
+    { "name": "temperature", "type": "float32", "value": 23.5 },
+    { "name": "status", "type": "string", "value": "OK" }
+  ]
+}
+```
+
+Этот шаблон определяет пакет с тремя полями:
+- `id` — 32-битное целое без знака
+- `temperature` — 32-битное число с плавающей точкой
+- `status` — строка в кодировке UTF-8
+
+Вы также можете использовать поля типа `"input"` для редактирования значений в GUI или `"counter"` для автоматического инкремента.
+
+Больше примеров и подробное руководство по созданию шаблонов — в папке [`templates/`](templates/).
+
+Если вы создали JSON-шаблон популярного протокола или пакета — отправляйте pull request, я с удовольствием добавлю его в коллекцию.
+
+## 💡 Варианты использования
+
+**Кому пригодится UDP Packet Generator?**
+
+- **Тестирование сетевых протоколов** — эмулируйте клиентов и серверы без написания кода
+- **Нагрузочное тестирование** — генерируйте поток пакетов с заданным интервалом
+- **Разработка встроенных систем** — отправляйте телеметрию, NMEA или JSON на устройства
+- **Обучение** — изучайте структуру UDP-пакетов и сетевые протоколы на практике
+
+## 🗺 Дорожная карта
+
 <details>
-<summary><b>🗺 Дорожная карта</b></summary>
+<summary><b>Нажмите, чтобы развернуть</b></summary>
 
 ### ✅ Уже реализовано (v2.1.x)
 - [x] Целочисленные поля (`uint8`–`uint32`, `int8`–`int32`) с настраиваемым порядком байт
@@ -44,8 +97,10 @@ UDP Packet Generator создаёт и отправляет пользовате
 - [ ] Плагинная система для пользовательских типов полей и валидаторов
 </details>
 
+## 📸 Скриншоты
+
 <details>
-<summary><b>Скриншоты</b></summary>
+<summary><b>Нажмите, чтобы посмотреть</b></summary>
 <table>
     <tr>
         <td><img src="screenshots/dark.png" alt="Dark theme"></td>
@@ -83,12 +138,17 @@ cmake --build .
 5. **Выберите интервал** – период отправки в миллисекундах.
 6. **Запустите** – нажмите `Start`, начнётся отправка пакетов.
 
-## JSON-шаблон
+## ❓ Поддержка и вопросы
 
-Структура пакета описывается в JSON-файле.  
-Примеры и подробное руководство по созданию шаблонов смотрите в [`templates/`](templates/).
+- **Сообщения об ошибках и запросы функций** — создайте [issue на GitHub](https://github.com/IamKornitskiy/UdpPacketGenerator/issues)
+- **Обсуждения** — используйте [GitHub Discussions](https://github.com/IamKornitskiy/UdpPacketGenerator/discussions) для вопросов и идей
+- **Документация** — смотрите папку [`templates/`](templates/) и файл [`whatsnew.md`](whatsnew.md) с обновлениями
 
-Если вы создали JSON-шаблон популярного протокола или пакета — отправляйте pull request, я с удовольствием добавлю его в коллекцию.
+## 🙌 Вклад в проект
+
+Приветствуются любые вклады! Пожалуйста, прочитайте [CONTRIBUTING_RU.md](CONTRIBUTING_RU.md) перед началом работы.
+
+⭐ **Поставьте звезду репозиторию**, если он вам полезен — это поможет другим узнать о проекте!
 
 ## Лицензия
 
