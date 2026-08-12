@@ -82,7 +82,8 @@ bool ThemeManager::applyTheme(const QString &key)
 
 bool ThemeManager::applySystemStyle(const QString &key)
 {
-    if (!m_app) return false;
+    if (!m_app)
+        return false;
 
     m_app->setStyleSheet(QString());
 
@@ -96,7 +97,8 @@ bool ThemeManager::applySystemStyle(const QString &key)
 
 bool ThemeManager::applyCustomTheme(const QString &key)
 {
-    if (!m_app) return false;
+    if (!m_app)
+        return false;
 
     QString path = kThemeList.value(key);
     QFile file(path);
@@ -113,7 +115,7 @@ bool ThemeManager::applyCustomTheme(const QString &key)
 void ThemeManager::loadFromSettings()
 {
     QString themeName = m_settings->currentTheme();
-    
+
     if (systemStyles().contains(themeName)) {
         m_currentThemeKey = themeName;
         m_currentThemeType = ThemeType::System;
