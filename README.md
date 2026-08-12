@@ -1,13 +1,15 @@
 ## En [Ru](README_RU.md)
 
-# UDP Packet Generator 
+<h1 align="center">UDP Packet Generator</h1>
+<p align="center">
+  <img src="screenshots/UdpPacketGenerator.gif" width="600" alt="Demo"/>
+  <br>A flexible UDP packet generator configured entirely through JSON templates.</br>
+</p>
+
+
 [![GitHub release](https://img.shields.io/github/v/release/IamKornitskiy/UdpPacketGenerator)](https://github.com/IamKornitskiy/UdpPacketGenerator/releases) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Qt 6.8+](https://img.shields.io/badge/Qt-6.8%2B-lightgray?logo=Qt&logoColor=white&labelColor=brightgreen
 )](https://www.qt.io/)
-
-
-
-A flexible UDP packet generator configured entirely through JSON templates.
 
 ## About
 
@@ -41,9 +43,19 @@ Define packet fields with different types, set them as constants, counters, or u
 - [ ] Plugin system for custom field types and validators
 </details>
 
-## Screenshot
-
-![Main Window](screenshots/mainWindow.jpg)
+<details>
+<summary><b>Screenshots</b></summary>
+<table>
+    <tr>
+        <td><img src="screenshots/dark.png" alt="Dark theme"></td>
+        <td><img src="screenshots/light.png" alt="Light theme"></td>
+    </tr>
+    <tr>
+        <td><img src="screenshots/dark_blue.png" alt="Dark-blue theme"></td>
+        <td><img src="screenshots/light_blue.png" alt="Light-blue theme"></td>
+    </tr>
+</table>
+</details>
 
 ## Build
 
