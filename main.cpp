@@ -1,18 +1,15 @@
 #include "main_window.h"
 
 #include <QApplication>
-#include <QFile>
+#include <QIcon>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    QFile styleFile("://style/dark.qss");
-    if (styleFile.open(QFile::ReadOnly)) {
-        a.setStyleSheet(styleFile.readAll());
-        styleFile.close();
-    }
-
+    QApplication::setOrganizationName("UPG");
+    QApplication::setOrganizationDomain("org");
+    QApplication::setApplicationName("UdpPacketGenerator");
     a.setWindowIcon(QIcon("://style/logo.svg"));
 
     MainWindow w;

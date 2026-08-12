@@ -13,6 +13,7 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network Gui UiTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network Core Gui UiTools Test Concurrent)
 
 add_subdirectory(packet)
+add_subdirectory(settings)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -41,11 +42,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         csv_highlighter.h csv_highlighter.cpp
         custom_button.h custom_button.cpp
         custom_statusbar.h custom_statusbar.cpp
+        theme_manager.h theme_manager.cpp
     )
 endif()
 
 target_compile_definitions(UdpPacketGenerator PRIVATE APP_VERSION="${PROJECT_VERSION}")
-target_link_libraries(UdpPacketGenerator PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Network Qt6::UiTools packet)
+target_link_libraries(UdpPacketGenerator PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Network Qt6::UiTools packet settings)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

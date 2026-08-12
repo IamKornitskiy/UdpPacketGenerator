@@ -44,7 +44,7 @@ QWidget *FieldEditorFactory::createEditor(BasePacketField &field, QWidget *paren
 
         if (auto *nmeaField = dynamic_cast<NmeaPacketField *>(&field)) {
             auto *editButton = new QPushButton(QObject::tr("Edit"), parent);
-            QObject::connect(editButton, &QPushButton::clicked, parent, [nmeaField, parent]() {
+            QObject::connect(editButton, &QPushButton::clicked, editButton, [nmeaField, parent]() {
                 auto editorDialog = std::make_unique<TextFieldEditorDialog>(nmeaField->name(),
                                                                             nmeaField->type(),
                                                                             nmeaField->value(),
@@ -70,7 +70,7 @@ QWidget *FieldEditorFactory::createEditor(BasePacketField &field, QWidget *paren
             auto *textEditorButton = new QPushButton(parent);
             textEditorButton->setText("Edit");
 
-            QObject::connect(textEditorButton, &QPushButton::clicked, parent, [jsonField, parent]() {
+            QObject::connect(textEditorButton, &QPushButton::clicked, textEditorButton, [jsonField, parent]() {
                 auto editorDialog = std::make_unique<TextFieldEditorDialog>(jsonField->name(),
                                                                             jsonField->type(),
                                                                             jsonField->value(),
@@ -99,7 +99,7 @@ QWidget *FieldEditorFactory::createEditor(BasePacketField &field, QWidget *paren
             auto *textEditorButton = new QPushButton(parent);
             textEditorButton->setText("Edit");
 
-            QObject::connect(textEditorButton, &QPushButton::clicked, parent, [csvField, parent]() {
+            QObject::connect(textEditorButton, &QPushButton::clicked, textEditorButton, [csvField, parent]() {
                 auto editorDialog = std::make_unique<TextFieldEditorDialog>(csvField->name(),
                                                                             csvField->type(),
                                                                             csvField->value(),
@@ -128,7 +128,7 @@ QWidget *FieldEditorFactory::createEditor(BasePacketField &field, QWidget *paren
             auto *textEditorButton = new QPushButton(parent);
             textEditorButton->setText("Edit");
 
-            QObject::connect(textEditorButton, &QPushButton::clicked, parent, [stringField, parent]() {
+            QObject::connect(textEditorButton, &QPushButton::clicked, textEditorButton, [stringField, parent]() {
                 auto editorDialog = std::make_unique<TextFieldEditorDialog>(stringField->name(),
                                                                             stringField->type(),
                                                                             stringField->value(),

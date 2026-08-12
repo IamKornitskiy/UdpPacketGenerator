@@ -3,8 +3,6 @@
 
 #include "base_packet_field.h"
 
-const QMap<QString, quint32> kSizeOfFloatType = {{"float32", 4}, {"float64", 8}};
-
 class FloatPacketField : public BasePacketField
 {
 public:

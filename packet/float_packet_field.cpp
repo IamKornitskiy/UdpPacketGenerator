@@ -1,8 +1,11 @@
 #include "float_packet_field.h"
-
+namespace {
 const QHash<QString, std::pair<double, double>> kTypeFloatBounds
     = {{"float32", {std::numeric_limits<float>::lowest(), std::numeric_limits<float>::max()}},
        {"float64", {std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max()}}};
+
+const QMap<QString, quint32> kSizeOfFloatType = {{"float32", 4}, {"float64", 8}};
+} // namespace
 
 FloatPacketField::FloatPacketField(const QString &name,
                                    const QString &type,

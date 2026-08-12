@@ -1,16 +1,15 @@
 #include "titlebar.h"
 #include <QApplication>
 #include <QEvent>
+#include <QFile>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QStyle>
-#include <QWindow>
-#include <QFile>
 #include <QTextStream>
+#include <QWindow>
 
 TitleBar::TitleBar(QWidget *parent)
     : QWidget(parent)
-    , m_darkTheme(true)
 {
     setupUi();
     setupMenuBar();
@@ -42,12 +41,18 @@ void TitleBar::setupUi()
     layout->setSpacing(8);
 
     // app icon
-    m_iconLabel = new QLabel(this);
-    m_iconLabel->setFixedSize(38, 38);
-    m_iconLabel->setScaledContents(true);
-    QIcon defaultIcon = QIcon("://style/logo.svg");
-    m_iconLabel->setPixmap(defaultIcon.pixmap(38, 38));
-    layout->addWidget(m_iconLabel);
+    // m_iconLabel = new QLabel(this);
+    // m_iconLabel->setFixedSize(38, 38);
+    // m_iconLabel->setScaledContents(true);
+    // QIcon defaultIcon = QIcon("://style/logo.svg");
+    // m_iconLabel->setPixmap(defaultIcon.pixmap(38, 38));
+    // layout->addWidget(m_iconLabel);
+
+    m_menuBar = new QMenuBar(this);
+    m_menuBar->setObjectName(QStringLiteral("titleMenuBar"));
+    layout->addWidget(m_menuBar);
+
+    layout->addStretch();
 
     m_titleLabel = new QLabel(QCoreApplication::applicationName().isEmpty()
                                   ? QStringLiteral("UDP Packet Generator")
@@ -56,10 +61,6 @@ void TitleBar::setupUi()
     m_titleLabel->setObjectName(QStringLiteral("titleLabel"));
     m_titleLabel->setStyleSheet("font-weight: bold; font-size: 14px;");
     layout->addWidget(m_titleLabel);
-
-    m_menuBar = new QMenuBar(this);
-    m_menuBar->setObjectName(QStringLiteral("titleMenuBar"));
-    layout->addWidget(m_menuBar);
 
     layout->addStretch();
 
@@ -112,11 +113,7 @@ void TitleBar::setupMenuBar()
 
     // View menu
     QMenu *viewMenu = m_menuBar->addMenu("&View");
-    QAction *themeAction = new QAction("Toggle &Theme", this);
-    themeAction->setCheckable(true);
-    themeAction->setChecked(true); // dark theme by default
-    connect(themeAction, &QAction::triggered, this, &TitleBar::onThemeToggle);
-    viewMenu->addAction(themeAction);
+    m_themesMenu = viewMenu->addMenu("&Themes");
 
     // Help menu
     QMenu *helpMenu = m_menuBar->addMenu("&Help");
@@ -125,22 +122,23 @@ void TitleBar::setupMenuBar()
     helpMenu->addAction(aboutAction);
 }
 
-void TitleBar::onThemeToggle()
+void TitleBar::populateThemesMenu(const QStringList &themeNames, const QStringList &themeKeys, const QString &currentThemeKey)
 {
-    m_darkTheme = !m_darkTheme;
+    if (!m_themesMenu || themeNames.size() != themeKeys.size())
+        return;
 
-    // Breeze
-    QString styleFile = m_darkTheme ? ":/style/breeze_dark.qss" : ":/style/breeze_light.qss";
-    QFile file(styleFile);
-    if (file.open(QFile::ReadOnly)) {
-        QString styleSheet = QTextStream(&file).readAll();
-        qApp->setStyleSheet(styleSheet);
-        file.close();
+    m_themesMenu->clear();
+
+    for (int i = 0; i < themeNames.size(); ++i) {
+        QAction *action = new QAction(themeNames[i], this);
+        action->setData(themeKeys[i]);
+        action->setCheckable(true);
+        action->setChecked(themeKeys[i] == currentThemeKey);
+        connect(action, &QAction::triggered, this, [this, key = themeKeys[i]]() {
+            emit themeSelected(key);
+        });
+        m_themesMenu->addAction(action);
     }
-
-    updateIcons();
-
-    emit themeToggled();
 }
 
 void TitleBar::onAbout()
@@ -158,44 +156,9 @@ void TitleBar::onExit()
     emit exitRequested();
 }
 
-void TitleBar::applyDefaultStyle()
-{
-    setStyleSheet(R"(
-        #titleBar {
-            background-color: #f0f0f0;
-            border-bottom: 1px solid #c0c0c0;
-        }
-        QPushButton {
-            background: transparent;
-            border: none;
-            border-radius: 4px;
-            color: #333333;
-            padding: 0px;
-        }
-        QPushButton:hover {
-            background-color: #e0e0e0;
-        }
-        QPushButton:pressed {
-            background-color: #c0c0c0;
-        }
-        #closeButton:hover {
-            background-color: #E81123;
-            color: white;
-        }
-        #closeButton:pressed {
-            background-color: #BF0F1A;
-        }
-    )");
-}
-
 void TitleBar::setTitle(const QString &title)
 {
     m_titleLabel->setText(title);
-}
-
-void TitleBar::setIcon(const QIcon &icon)
-{
-    m_iconLabel->setPixmap(icon.pixmap(20, 20));
 }
 
 bool TitleBar::eventFilter(QObject *watched, QEvent *event)
@@ -252,7 +215,7 @@ void TitleBar::updateMaximizeIcon(bool maximized)
 
 void TitleBar::updateIcons()
 {
-    QColor color = m_darkTheme ? QColor(0xcc, 0xcc, 0xcc) : QColor(0x55, 0x55, 0x55);
+    QColor color = QColor(0x88, 0x88, 0x88);
     m_iconMin = makeIcon(QStyle::SP_TitleBarMinButton, color);
     m_iconMax = makeIcon(QStyle::SP_TitleBarMaxButton, color);
     m_iconNormal = makeIcon(QStyle::SP_TitleBarNormalButton, color);

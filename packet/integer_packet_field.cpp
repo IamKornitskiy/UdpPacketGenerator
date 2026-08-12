@@ -1,5 +1,7 @@
 #include "integer_packet_field.h"
 
+namespace {
+
 // type mapping table → {min, max}
 const QHash<QString, std::pair<qint64, qint64>> kTypeIntegerBounds
     = {{"uint8", {std::numeric_limits<quint8>::min(), std::numeric_limits<quint8>::max()}},
@@ -10,6 +12,9 @@ const QHash<QString, std::pair<qint64, qint64>> kTypeIntegerBounds
        {"int16", {std::numeric_limits<qint16>::min(), std::numeric_limits<qint16>::max()}},
        {"int32", {std::numeric_limits<qint32>::min(), std::numeric_limits<qint32>::max()}},
        {"int64", {std::numeric_limits<qint64>::min(), std::numeric_limits<qint64>::max()}}};
+
+const QMap<QString, quint32> kSizeOfIntegerType = {{"int8", 1}, {"int16", 2}, {"int32", 4}};
+} // namespace
 
 IntegerPacketField::IntegerPacketField(const QString &name,
                                        const QString &type,
