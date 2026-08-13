@@ -18,32 +18,34 @@ private slots:
 
     void testIsNewerVersion()
     {
+        VersionChecker checker;
+        
         // Same version
-        QVERIFY(!VersionChecker::isNewerVersion("v2.0.0", "v2.0.0"));
-        QVERIFY(!VersionChecker::isNewerVersion("2.0.0", "2.0.0"));
+        QVERIFY(!checker.isNewerVersion("v2.0.0", "v2.0.0"));
+        QVERIFY(!checker.isNewerVersion("2.0.0", "2.0.0"));
 
         // Newer version
-        QVERIFY(VersionChecker::isNewerVersion("v2.0.0", "v2.0.1"));
-        QVERIFY(VersionChecker::isNewerVersion("2.0.0", "2.0.1"));
-        QVERIFY(VersionChecker::isNewerVersion("v2.0.0", "v2.1.0"));
-        QVERIFY(VersionChecker::isNewerVersion("v2.0.0", "v3.0.0"));
+        QVERIFY(checker.isNewerVersion("v2.0.0", "v2.0.1"));
+        QVERIFY(checker.isNewerVersion("2.0.0", "2.0.1"));
+        QVERIFY(checker.isNewerVersion("v2.0.0", "v2.1.0"));
+        QVERIFY(checker.isNewerVersion("v2.0.0", "v3.0.0"));
 
         // Older version
-        QVERIFY(!VersionChecker::isNewerVersion("v2.0.1", "v2.0.0"));
-        QVERIFY(!VersionChecker::isNewerVersion("v3.0.0", "v2.0.0"));
+        QVERIFY(!checker.isNewerVersion("v2.0.1", "v2.0.0"));
+        QVERIFY(!checker.isNewerVersion("v3.0.0", "v2.0.0"));
 
         // Different lengths
-        QVERIFY(VersionChecker::isNewerVersion("v2.0.0", "v2.0.0.1"));
-        QVERIFY(!VersionChecker::isNewerVersion("v2.0.0.1", "v2.0.0"));
+        QVERIFY(checker.isNewerVersion("v2.0.0", "v2.0.0.1"));
+        QVERIFY(!checker.isNewerVersion("v2.0.0.1", "v2.0.0"));
 
         // With 'v' prefix variations
-        QVERIFY(VersionChecker::isNewerVersion("v2.0.0", "2.0.1"));
-        QVERIFY(VersionChecker::isNewerVersion("2.0.0", "v2.0.1"));
+        QVERIFY(checker.isNewerVersion("v2.0.0", "2.0.1"));
+        QVERIFY(checker.isNewerVersion("2.0.0", "v2.0.1"));
 
         // Empty / invalid
-        QVERIFY(!VersionChecker::isNewerVersion("", ""));
-        QVERIFY(!VersionChecker::isNewerVersion("v2.0.0", ""));
-        QVERIFY(VersionChecker::isNewerVersion("", "v2.0.0")); // empty considered old
+        QVERIFY(!checker.isNewerVersion("", ""));
+        QVERIFY(!checker.isNewerVersion("v2.0.0", ""));
+        QVERIFY(checker.isNewerVersion("", "v2.0.0")); // empty considered old
     }
 
     void testCheckForUpdates()
@@ -83,6 +85,63 @@ private slots:
 
         QTRY_VERIFY_WITH_TIMEOUT(spyComplete.count() == 1, 5000);
         QVERIFY(!checker.isChecking());
+    }
+
+    void testParseLatestVersionFromJson()
+    {
+        VersionChecker checker;
+        
+        // Valid JSON with stable release
+        QByteArray validJson = R"([
+            {"tag_name": "v1.0.0", "prerelease": false, "draft": false},
+            {"tag_name": "v2.0.0", "prerelease": false, "draft": false}
+        ])";
+        QCOMPARE(checker.parseLatestVersionFromJson(validJson), QString("v1.0.0"));
+
+        // Prerelease should be skipped
+        QByteArray prereleaseJson = R"([
+            {"tag_name": "v1.0.0-rc1", "prerelease": true, "draft": false},
+            {"tag_name": "v2.0.0", "prerelease": false, "draft": false}
+        ])";
+        QCOMPARE(checker.parseLatestVersionFromJson(prereleaseJson), QString("v2.0.0"));
+
+        // Draft should be skipped
+        QByteArray draftJson = R"([
+            {"tag_name": "v1.0.0-draft", "prerelease": false, "draft": true},
+            {"tag_name": "v2.0.0", "prerelease": false, "draft": false}
+        ])";
+        QCOMPARE(checker.parseLatestVersionFromJson(draftJson), QString("v2.0.0"));
+
+        // All prerelease/draft -> empty
+        QByteArray allPrereleaseJson = R"([
+            {"tag_name": "v1.0.0-rc1", "prerelease": true, "draft": false},
+            {"tag_name": "v2.0.0-rc2", "prerelease": true, "draft": false}
+        ])";
+        QVERIFY(checker.parseLatestVersionFromJson(allPrereleaseJson).isEmpty());
+
+        // Empty array
+        QByteArray emptyJson = R"([])";
+        QVERIFY(checker.parseLatestVersionFromJson(emptyJson).isEmpty());
+
+        // Invalid JSON
+        QByteArray invalidJson = "{invalid json}";
+        QVERIFY(checker.parseLatestVersionFromJson(invalidJson).isEmpty());
+
+        // Not an array (object)
+        QByteArray objectJson = R"({"tag_name": "v1.0.0"})";
+        QVERIFY(checker.parseLatestVersionFromJson(objectJson).isEmpty());
+
+        // Missing tag_name
+        QByteArray missingTagJson = R"([
+            {"prerelease": false, "draft": false}
+        ])";
+        QVERIFY(checker.parseLatestVersionFromJson(missingTagJson).isEmpty());
+
+        // Empty tag_name
+        QByteArray emptyTagJson = R"([
+            {"tag_name": "", "prerelease": false, "draft": false}
+        ])";
+        QVERIFY(checker.parseLatestVersionFromJson(emptyTagJson).isEmpty());
     }
 };
 

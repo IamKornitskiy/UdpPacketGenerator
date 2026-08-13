@@ -31,6 +31,30 @@ void VersionChecker::checkForUpdates()
     m_networkManager->get(request);
 }
 
+QString VersionChecker::parseLatestVersionFromJson(const QByteArray &json)
+{
+    QJsonDocument doc = QJsonDocument::fromJson(json);
+    if (doc.isNull() || !doc.isArray()) {
+        return QString();
+    }
+
+    QJsonArray releases = doc.array();
+    for (const QJsonValue &val : releases) {
+        QJsonObject release = val.toObject();
+        bool isPrerelease = release["prerelease"].toBool(false);
+        bool isDraft = release["draft"].toBool(false);
+
+        if (!isPrerelease && !isDraft) {
+            QString tag = release["tag_name"].toString();
+            if (!tag.isEmpty()) {
+                return tag;
+            }
+        }
+    }
+
+    return QString();
+}
+
 void VersionChecker::onReplyFinished(QNetworkReply *reply)
 {
     m_isChecking = false;
@@ -43,32 +67,14 @@ void VersionChecker::onReplyFinished(QNetworkReply *reply)
         error = QString("Network error: %1").arg(reply->errorString());
     } else {
         QByteArray data = reply->readAll();
-        QJsonDocument doc = QJsonDocument::fromJson(data);
+        latestVersion = parseLatestVersionFromJson(data);
 
-        if (doc.isNull() || !doc.isArray()) {
-            error = "Invalid JSON response from GitHub";
+        if (latestVersion.isEmpty()) {
+            error = "No stable releases found";
         } else {
-            QJsonArray releases = doc.array();
-
-            // Find the first non-prerelease, non-draft release
-            for (const QJsonValue &val : releases) {
-                QJsonObject release = val.toObject();
-                bool isPrerelease = release["prerelease"].toBool(false);
-                bool isDraft = release["draft"].toBool(false);
-
-                if (!isPrerelease && !isDraft) {
-                    latestVersion = release["tag_name"].toString();
-                    break;
-                }
-            }
-
-            if (latestVersion.isEmpty()) {
-                error = "No stable releases found";
-            } else {
-                m_latestVersion = latestVersion;
-                m_hasNewVersion = isNewerVersion(APP_VERSION, latestVersion);
-                newerAvailable = m_hasNewVersion;
-            }
+            m_latestVersion = latestVersion;
+            m_hasNewVersion = isNewerVersion(APP_VERSION, latestVersion);
+            newerAvailable = m_hasNewVersion;
         }
     }
 
