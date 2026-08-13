@@ -128,4 +128,15 @@ setup_test_target(test_traffic_generator)
 target_link_libraries(test_traffic_generator PRIVATE Qt6::Network)
 add_test(NAME TrafficGenerator COMMAND test_traffic_generator)
 
+# ---- Test VersionChecker ----
+add_executable(test_version_checker
+    tst_version_checker.cpp
+    ../version_checker.cpp
+)
+setup_test_target(test_version_checker)
+target_link_libraries(test_version_checker PRIVATE Qt6::Network)
+target_compile_definitions(test_version_checker PRIVATE APP_VERSION="${PROJECT_VERSION}")
+add_test(NAME VersionChecker COMMAND test_version_checker)
+
+
 
