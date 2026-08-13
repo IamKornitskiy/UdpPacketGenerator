@@ -22,8 +22,6 @@ set(PROJECT_SOURCES
         version_checker.cpp
         version_checker.h
         main_window.ui
-        style/light.qss
-        style/dark.qss
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
