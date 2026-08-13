@@ -24,6 +24,10 @@ public:
     // Returns true if a newer version is available
     bool hasNewVersion() const { return m_hasNewVersion; }
 
+    // Compare semantic versions (e.g., "v2.0.1" vs "v2.1.0")
+    // Static public method for testing and general use
+    static bool isNewerVersion(const QString &current, const QString &latest);
+
 signals:
     // Emitted when check is complete
     // newerAvailable: true if a newer version exists
@@ -39,7 +43,4 @@ private:
     QString m_latestVersion;
     bool m_hasNewVersion = false;
     bool m_isChecking = false;
-
-    // Compare semantic versions (e.g., "v2.0.1" vs "v2.1.0")
-    bool isNewerVersion(const QString &current, const QString &latest);
 };

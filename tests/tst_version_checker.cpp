@@ -1,8 +1,4 @@
-// Temporarily allow access to private members for testing
-#define private public
 #include "../version_checker.h"
-#undef private
-
 #include <QSignalSpy>
 #include <QtTest>
 #include <QNetworkReply>
@@ -22,33 +18,32 @@ private slots:
 
     void testIsNewerVersion()
     {
-        VersionChecker checker;
         // Same version
-        QVERIFY(!checker.isNewerVersion("v2.0.0", "v2.0.0"));
-        QVERIFY(!checker.isNewerVersion("2.0.0", "2.0.0"));
+        QVERIFY(!VersionChecker::isNewerVersion("v2.0.0", "v2.0.0"));
+        QVERIFY(!VersionChecker::isNewerVersion("2.0.0", "2.0.0"));
 
         // Newer version
-        QVERIFY(checker.isNewerVersion("v2.0.0", "v2.0.1"));
-        QVERIFY(checker.isNewerVersion("2.0.0", "2.0.1"));
-        QVERIFY(checker.isNewerVersion("v2.0.0", "v2.1.0"));
-        QVERIFY(checker.isNewerVersion("v2.0.0", "v3.0.0"));
+        QVERIFY(VersionChecker::isNewerVersion("v2.0.0", "v2.0.1"));
+        QVERIFY(VersionChecker::isNewerVersion("2.0.0", "2.0.1"));
+        QVERIFY(VersionChecker::isNewerVersion("v2.0.0", "v2.1.0"));
+        QVERIFY(VersionChecker::isNewerVersion("v2.0.0", "v3.0.0"));
 
         // Older version
-        QVERIFY(!checker.isNewerVersion("v2.0.1", "v2.0.0"));
-        QVERIFY(!checker.isNewerVersion("v3.0.0", "v2.0.0"));
+        QVERIFY(!VersionChecker::isNewerVersion("v2.0.1", "v2.0.0"));
+        QVERIFY(!VersionChecker::isNewerVersion("v3.0.0", "v2.0.0"));
 
         // Different lengths
-        QVERIFY(checker.isNewerVersion("v2.0.0", "v2.0.0.1"));
-        QVERIFY(!checker.isNewerVersion("v2.0.0.1", "v2.0.0"));
+        QVERIFY(VersionChecker::isNewerVersion("v2.0.0", "v2.0.0.1"));
+        QVERIFY(!VersionChecker::isNewerVersion("v2.0.0.1", "v2.0.0"));
 
         // With 'v' prefix variations
-        QVERIFY(checker.isNewerVersion("v2.0.0", "2.0.1"));
-        QVERIFY(checker.isNewerVersion("2.0.0", "v2.0.1"));
+        QVERIFY(VersionChecker::isNewerVersion("v2.0.0", "2.0.1"));
+        QVERIFY(VersionChecker::isNewerVersion("2.0.0", "v2.0.1"));
 
         // Empty / invalid
-        QVERIFY(!checker.isNewerVersion("", ""));
-        QVERIFY(!checker.isNewerVersion("v2.0.0", ""));
-        QVERIFY(checker.isNewerVersion("", "v2.0.0"));
+        QVERIFY(!VersionChecker::isNewerVersion("", ""));
+        QVERIFY(!VersionChecker::isNewerVersion("v2.0.0", ""));
+        QVERIFY(VersionChecker::isNewerVersion("", "v2.0.0")); // empty considered old
     }
 
     void testCheckForUpdates()
