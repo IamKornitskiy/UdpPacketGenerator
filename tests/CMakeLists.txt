@@ -116,5 +116,16 @@ add_executable(test_theme_manager
 setup_test_target(test_theme_manager)
 add_test(NAME ThemeManager COMMAND test_theme_manager)
 
+# ---- Test TrafficGenerator ----
+add_executable(test_traffic_generator
+    tst_traffic_generator.cpp
+    ../traffic_generator.cpp
+    ../packet/packet_builder.cpp
+    ../packet/integer_packet_field.cpp
+    ../packet/base_packet_field.cpp
+)
+setup_test_target(test_traffic_generator)
+target_link_libraries(test_traffic_generator PRIVATE Qt6::Network)
+add_test(NAME TrafficGenerator COMMAND test_traffic_generator)
 
 
