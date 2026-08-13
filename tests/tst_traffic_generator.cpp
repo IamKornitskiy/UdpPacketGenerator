@@ -189,13 +189,14 @@ private slots:
 
     void testErrorSignalWhenBindFails()
     {
-        // Use an invalid local address to force bind failure
+        // Use a guaranteed invalid local address to force bind failure on all platforms
         TrafficGenerator generator;
         std::vector<std::unique_ptr<BasePacketField>> fields;
 
-        // Try to bind to an invalid address (255.255.255.255 is not a valid local address)
+        // 192.0.2.0 is TEST-NET-1, reserved for documentation and examples by IANA.
+        // It is not a valid local address on any real system, so bind() will always fail.
         generator.configure(QHostAddress("127.0.0.1"), 12345,
-                           QHostAddress("255.255.255.255"), 12347, 100, fields);
+                           QHostAddress("192.0.2.0"), 12347, 100, fields);
 
         QSignalSpy spyError(&generator, &TrafficGenerator::errorOccurred);
 
@@ -207,10 +208,8 @@ private slots:
         // Stop generator to clean up
         generator.stop();
 
-        // Verify error
-        if (spyError.count() == 0) {
-            QSKIP("Bind error not triggered on this platform");
-        }
+        // Verify error was emitted
+        QVERIFY2(spyError.count() > 0, "Error signal was not emitted");
         QString errorMsg = spyError.takeFirst().at(0).toString();
         QVERIFY(errorMsg.contains("Failed to bind"));
     }
