@@ -1,5 +1,5 @@
 [changelog]
-remote = "https://github.com/IamKornitskiy/UdpPacketGenerator.git"
+remote = "https://github.com/UdpPacketGenerator/UdpPacketGenerator.git"
 header = ""
 body = """
 {% if version %}

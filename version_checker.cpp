@@ -6,7 +6,7 @@
 
 // GitHub API URL for releases of this repo
 static const QString k_GITHUB_API_URL
-    = "https://api.github.com/repos/IamKornitskiy/UdpPacketGenerator/releases";
+    = "https://api.github.com/repos/UdpPacketGenerator/UdpPacketGenerator/releases";
 
 VersionChecker::VersionChecker(QObject *parent)
     : QObject(parent)
