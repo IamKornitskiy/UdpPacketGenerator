@@ -245,7 +245,7 @@ void MainWindow::onAbout()
                                "<p>A flexible UDP packet generator configured through JSON templates.</p>"
                                "<p>Built with Qt6 and C++17.</p>"
                                "<p>© 2025-2026 Oleg Kornitskiy</p>"
-                               "<p><a href='https://github.com/IamKornitskiy/UdpPacketGenerator'>GitHub</a></p>")
+                               "<p><a href='https://github.com/UdpPacketGenerator/UdpPacketGenerator'>GitHub</a></p>")
                            .arg(APP_VERSION));
 }
 
@@ -297,7 +297,7 @@ void MainWindow::onVersionCheckComplete(bool newerAvailable, const QString &late
         msgBox.exec();
 
         if (msgBox.clickedButton() == downloadButton) {
-            QDesktopServices::openUrl(QUrl("https://github.com/IamKornitskiy/UdpPacketGenerator/releases"));
+            QDesktopServices::openUrl(QUrl("https://github.com/UdpPacketGenerator/UdpPacketGenerator/releases"));
         }
     } else if (!latestVersion.isEmpty()) {
         qDebug() << "You are using the latest version (" << latestVersion << ")";

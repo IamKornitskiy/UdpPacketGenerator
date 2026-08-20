@@ -7,7 +7,7 @@
 
 ## Сообщения об ошибках
 
-Если вы обнаружили ошибку, пожалуйста, [создайте issue](https://github.com/IamKornitskiy/UdpPacketGenerator/issues/new) и укажите:
+Если вы обнаружили ошибку, пожалуйста, [создайте issue](https://github.com/UdpPacketGenerator/UdpPacketGenerator/issues/new) и укажите:
 
 - версию приложения (или тег релиза)
 - операционную систему
@@ -69,5 +69,5 @@
 
 ## Общение
 
-Вопросы и обсуждения можно вести в issues или в [Discussions](https://github.com/IamKornitskiy/UdpPacketGenerator/discussions).  
+Вопросы и обсуждения можно вести в issues или в [Discussions](https://github.com/UdpPacketGenerator/UdpPacketGenerator/discussions).  
 Pull Request'ы, документация и шаблоны – все виды участия приветствуются!
