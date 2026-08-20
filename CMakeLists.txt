@@ -100,12 +100,12 @@ set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.28),
     libxkbcommon-x11-0,
     libxcb-cursor06")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Oleg Kornitskiy <iam@kornitskiy.ru>")
-set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/IamKornitskiy/UdpPacketGenerator")
+set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/UdpPacketGenerator/UdpPacketGenerator")
 set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
 
 set(CPACK_RPM_PACKAGE_REQUIRES "qt6-qtbase >= 6.8.2, qt6-qttools >= 6.8.2, libxkbcommon, xcb-util-cursor, libglvnd-glx")
 set(CPACK_RPM_PACKAGE_LICENSE "GPL-3.0")
 set(CPACK_RPM_PACKAGE_GROUP "Development/Tools")
-set(CPACK_RPM_PACKAGE_URL "https://github.com/IamKornitskiy/UdpPacketGenerator")
+set(CPACK_RPM_PACKAGE_URL "https://github.com/UdpPacketGenerator/UdpPacketGenerator")
 
 include(CPack)
