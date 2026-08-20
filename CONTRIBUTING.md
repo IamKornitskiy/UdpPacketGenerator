@@ -7,7 +7,7 @@ Here you will find guidelines for reporting bugs, suggesting features, and submi
 
 ## Bug Reports
 
-If you encounter a bug, please [open an issue](https://github.com/IamKornitskiy/UdpPacketGenerator/issues/new) and include:
+If you encounter a bug, please [open an issue](https://github.com/UdpPacketGenerator/UdpPacketGenerator/issues/new) and include:
 
 - application version (or release tag)
 - operating system
@@ -69,5 +69,5 @@ By contributing, you agree that your code will be distributed under the same lic
 
 ## Communication
 
-Questions and discussions can take place in issues or in [Discussions](https://github.com/IamKornitskiy/UdpPacketGenerator/discussions).  
+Questions and discussions can take place in issues or in [Discussions](https://github.com/UdpPacketGenerator/UdpPacketGenerator/discussions).  
 Pull Requests, documentation, and templates – all contributions are gratefully received!
