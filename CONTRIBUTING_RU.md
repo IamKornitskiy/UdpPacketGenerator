@@ -31,12 +31,34 @@
 
 ## Процесс Pull Request
 
-1. **Сделайте форк** репозитория и создайте ветку с осмысленным названием (`fix-crash-empty-payload`, `feature/ascii-support`).
+1. **Сделайте форк** репозитория и создайте ветку от `dev` с осмысленным названием (`fix-crash-empty-payload`, `feature/ascii-support`).
 2. Внесите изменения, следуя стилю кода, описанному ниже.
 3. Убедитесь, что проект компилируется без ошибок (CMake, Qt 6.8+, C++17).
 4. Если вы добавляете новую функциональность, по возможности добавьте тесты или пример шаблона.
 5. Откройте Pull Request в `dev` с чётким описанием изменений.
 6. Ваш PR будет рассмотрен, могут быть запрошены правки.
+
+git checkout dev
+git pull origin dev
+git checkout -b fix-crash-empty-payload   # или feature/your-feature-name
+
+>⚠️ Важно: Все изменения должны базироваться на ветке dev, а не на main. main зарезервирована для стабильных релизов и не принимает новые фичи напрямую.
+
+```mermaid
+gitGraph
+    commit id: "initial"
+    branch dev
+    checkout dev
+    commit id: "dev start"
+    branch feature/ascii-support
+    checkout feature/ascii-support
+    commit id: "add ascii"
+    commit id: "fix tests"
+    checkout dev
+    merge feature/ascii-support id: "merge feature"
+    checkout main
+    merge dev id: "release v2.3.0" tag: "v2.3.0"
+```
 
 ## Стиль кода
 
@@ -64,7 +86,7 @@
 
 ## Лицензия
 
-Проект распространяется под лицензией [GNU General Public License v3.0](LICENSE).  
+Проект распространяется под лицензией [MIT License](LICENSE).  
 Предоставляя свой код, вы соглашаетесь с его распространением на тех же условиях.
 
 ## Общение
