@@ -1,4 +1,5 @@
 #include "string_packet_field.h"
+#include <memory>
 
 StringPacketField::StringPacketField(const QString &name,
                                      const QString &type,

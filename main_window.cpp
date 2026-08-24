@@ -17,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->leDestAddress->setValidator(nullptr);
+    ui->leDestAddress->setInputMask(QString());
 
     setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
 
@@ -150,12 +152,13 @@ void MainWindow::onStart()
         return;
     }
 
-    QHostAddress destAddr;
-    destAddr.setAddress(ui->leDestAddress->text());
-    if (destAddr.isNull()) {
-        QMessageBox::warning(this, "Error", "Invalid destination IP address.");
+    // Modification 1: Retrieve the raw comma-separated string from the UI
+    QString destAddrsStr = ui->leDestAddress->text().trimmed();
+    if (destAddrsStr.isEmpty()) {
+        QMessageBox::warning(this, "Error", "Please enter at least one destination IP address.");
         return;
     }
+    
     quint16 destPort = static_cast<quint16>(ui->sbDestPort->value());
 
     m_generator = new TrafficGenerator();
@@ -164,13 +167,14 @@ void MainWindow::onStart()
 
     connect(m_generator, &TrafficGenerator::packetSent, this, &MainWindow::onPacketSent);
     connect(m_generator, &TrafficGenerator::errorOccurred, this, &MainWindow::onError);
-    connect(ui->sbInterval, &QSpinBox::valueChanged, m_generator, &TrafficGenerator::setIntervalMs);
+    connect(ui->sbInterval, QOverload<int>::of(&QSpinBox::valueChanged), m_generator, &TrafficGenerator::setIntervalMs);
 
     QHostAddress localAddr("0.0.0.0");
     quint16 localPort = ui->sbSrcPort->value();
     int intervalMs = ui->sbInterval->value();
 
-    m_generator->configure(destAddr,
+    // Modification 2: Pass the raw string directly to our updated configure method
+    m_generator->configure(destAddrsStr,
                            destPort,
                            localAddr,
                            localPort,

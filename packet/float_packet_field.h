@@ -1,5 +1,6 @@
 #ifndef FLOAT_PACKET_FIELD_H
 #define FLOAT_PACKET_FIELD_H
+#include <memory>
 
 #include "base_packet_field.h"
 

@@ -2,6 +2,7 @@
 #define JSON_PACKET_FIELD_H
 
 #include "string_packet_field.h"
+#include <memory>
 
 struct JsonValidationError
 {

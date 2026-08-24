@@ -6,10 +6,10 @@ function(setup_test_target TARGET)
         ../settings
     )
     target_link_libraries(${TARGET} PRIVATE
-        Qt6::Core
-        Qt6::Concurrent
-        Qt6::Test
-        Qt6::Widgets
+        Qt${QT_VERSION_MAJOR}::Core
+        Qt${QT_VERSION_MAJOR}::Concurrent
+        Qt${QT_VERSION_MAJOR}::Test
+        Qt${QT_VERSION_MAJOR}::Widgets
         packet
     )
     set_target_properties(${TARGET} PROPERTIES WIN32_EXECUTABLE OFF)

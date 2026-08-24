@@ -8,6 +8,8 @@
 #include "json_packet_field.h"
 #include "nmea_packet_field.h"
 #include "string_packet_field.h"
+#include <memory>
+#include <QSet>
 
 QString PacketTemplate::loadFromJson(const QByteArray &jsonData)
 {

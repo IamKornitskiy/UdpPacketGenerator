@@ -1,4 +1,5 @@
 #include "csv_packet_field.h"
+#include <memory>
 #include <QRegularExpression>
 #include <QStringList>
 

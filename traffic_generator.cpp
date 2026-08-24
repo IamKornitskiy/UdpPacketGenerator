@@ -1,5 +1,7 @@
 #include "traffic_generator.h"
 #include "packet_builder.h"
+#include <memory>
+#include <QStringList> // Include for string list processing
 
 TrafficGenerator::TrafficGenerator(QObject *parent)
     : QObject(parent)
@@ -10,14 +12,28 @@ TrafficGenerator::~TrafficGenerator()
     stop();
 }
 
-void TrafficGenerator::configure(const QHostAddress &destAddr,
+// Modification 1: Accept a comma-separated QString instead of a single QHostAddress
+void TrafficGenerator::configure(const QString &destAddrsStr, 
                                  quint16 destPort,
                                  const QHostAddress &localAddr,
                                  quint16 localPort,
                                  int intervalMs,
                                  const std::vector<std::unique_ptr<BasePacketField>> &fields)
 {
-    m_destAddress = destAddr;
+    // Modification 2: Parse the comma-separated IP list
+    m_destAddresses.clear();
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    QStringList ipList = destAddrsStr.split(",", Qt::SkipEmptyParts);
+#else
+    QStringList ipList = destAddrsStr.split(",", QString::SkipEmptyParts);
+#endif
+    for (const QString &ipStr : ipList) {
+        QHostAddress ip(ipStr.trimmed());
+        if (!ip.isNull()) {
+            m_destAddresses.append(ip);
+        }
+    }
+
     m_destPort = destPort;
     m_localAddress = localAddr;
     m_localPort = localPort;
@@ -45,11 +61,18 @@ void TrafficGenerator::start()
     connect(m_timer, &QTimer::timeout, this, [this]() {
         if (!m_fields)
             return;
+        
         QByteArray packet = PacketBuilder::buildPacket(*m_fields);
-        qint64 ret = m_socket->writeDatagram(packet, m_destAddress, m_destPort);
-        if (ret == -1) {
-            emit errorOccurred("Send error: " + m_socket->errorString());
+        
+        // Modification 3: Iterate through all parsed target IPs for broadcasting
+        for (const auto &destAddr : m_destAddresses) {
+            qint64 ret = m_socket->writeDatagram(packet, destAddr, m_destPort);
+            if (ret == -1) {
+                // Log error if sending to a specific IP fails, but do not block other transmissions
+                emit errorOccurred("Send error to " + destAddr.toString() + ": " + m_socket->errorString());
+            }
         }
+        
         m_sentCount++;
         emit packetSent(m_sentCount);
     });

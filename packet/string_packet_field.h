@@ -2,6 +2,7 @@
 #define STRING_PACKET_FIELD_H
 
 #include "base_packet_field.h"
+#include <memory>
 
 class StringPacketField : public BasePacketField
 {

@@ -6,6 +6,7 @@
 #include <QTimer>
 #include <QUdpSocket>
 #include "base_packet_field.h"
+#include <memory>
 
 class TrafficGenerator : public QObject
 {
@@ -14,7 +15,7 @@ public:
     explicit TrafficGenerator(QObject *parent = nullptr);
     ~TrafficGenerator();
 
-    void configure(const QHostAddress &destAddr,
+    void configure(const QString &destAddrsStr,
                    quint16 destPort,
                    const QHostAddress &localAddr,
                    quint16 localPort,
@@ -33,7 +34,7 @@ signals:
 private:
     QUdpSocket *m_socket = nullptr;
     QTimer *m_timer = nullptr;
-    QHostAddress m_destAddress;
+    QVector<QHostAddress> m_destAddresses;
     quint16 m_destPort = 0;
     QHostAddress m_localAddress;
     quint16 m_localPort = 0;

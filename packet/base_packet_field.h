@@ -41,7 +41,7 @@ protected:
                              QDataStream::ByteOrder byteOrder = QDataStream::LittleEndian);
 
     mutable QMutex m_mutex;
-    QMutexLocker<QMutex> lock() const { return QMutexLocker<QMutex>(&m_mutex); }
+    QMutexLocker lock() const { return QMutexLocker(&m_mutex); }
 
     QString m_name;                               // name of field
     QString m_type;                               // uint8, int8, float and etc.

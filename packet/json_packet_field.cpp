@@ -1,4 +1,5 @@
 #include "json_packet_field.h"
+#include <memory>
 #include <QJsonParseError>
 
 JsonPacketField::JsonPacketField(const QString &name,

@@ -1,4 +1,5 @@
 #include "nmea_packet_field.h"
+#include <memory>
 #include <QRegularExpression>
 
 NmeaPacketField::NmeaPacketField(const QString &name,

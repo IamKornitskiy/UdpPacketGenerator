@@ -1,6 +1,7 @@
 #pragma once
 
 #include "string_packet_field.h"
+#include <memory>
 
 struct NmeaValidationError
 {

@@ -94,8 +94,13 @@ bool VersionChecker::isNewerVersion(const QString &current, const QString &lates
         lat = lat.mid(1);
 
     // Split into components (e.g., "2.0.1" -> [2,0,1])
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     QStringList curParts = cur.split('.', Qt::SkipEmptyParts);
     QStringList latParts = lat.split('.', Qt::SkipEmptyParts);
+#else
+    QStringList curParts = cur.split('.', QString::SkipEmptyParts);
+    QStringList latParts = lat.split('.', QString::SkipEmptyParts);
+#endif
 
     int maxLen = qMax(curParts.size(), latParts.size());
     for (int i = 0; i < maxLen; ++i) {

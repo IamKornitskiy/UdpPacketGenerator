@@ -1,5 +1,7 @@
 #include "float_packet_field.h"
 namespace {
+#include <memory>
+
 const QHash<QString, std::pair<double, double>> kTypeFloatBounds
     = {{"float32", {std::numeric_limits<float>::lowest(), std::numeric_limits<float>::max()}},
        {"float64", {std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max()}}};

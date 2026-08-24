@@ -1,4 +1,5 @@
 #include "packet_builder.h"
+#include <memory>
 
 QByteArray PacketBuilder::buildPacket(const std::vector<std::unique_ptr<BasePacketField>> &fields)
 {

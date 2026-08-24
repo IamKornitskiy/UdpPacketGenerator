@@ -173,7 +173,9 @@ void TitleBar::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
         if (auto *win = window()->windowHandle()) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
             win->startSystemMove();
+#endif
         }
     }
     QWidget::mousePressEvent(event);

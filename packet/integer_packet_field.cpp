@@ -1,4 +1,5 @@
 #include "integer_packet_field.h"
+#include <memory>
 
 namespace {
 
@@ -65,7 +66,11 @@ std::unique_ptr<IntegerPacketField> IntegerPacketField::fromJson(const QJsonObje
     auto min = defMin;
 
     if (obj.contains("max") && !obj["max"].isNull()) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         max = obj["max"].toInteger();
+#else
+        max = obj["max"].toInt();
+#endif
         if (max > defMax) {
             if (outError)
                 *outError = QString("'max' greater than max limit of %1").arg(type);
@@ -74,7 +79,11 @@ std::unique_ptr<IntegerPacketField> IntegerPacketField::fromJson(const QJsonObje
     }
 
     if (obj.contains("min") && !obj["min"].isNull()) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         min = obj["min"].toInteger();
+#else
+        min = obj["min"].toInt();
+#endif
         if (min < defMin) {
             if (outError)
                 *outError = QString("'min' less than min limit of %1").arg(type);
