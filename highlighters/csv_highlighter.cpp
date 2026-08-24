@@ -13,9 +13,9 @@ CsvHighlighter::CsvHighlighter(QTextDocument *parent)
     fieldFormat.setForeground(QColor("#9cdcfe")); // light blue
 
     m_rules = {
-        {QRegularExpression(R"("[^"]*")"), quotedFormat},
+        {QRegularExpression(R"("[^"]*") quotedFormat},
         {QRegularExpression(R"(,)"), delimiterFormat},
-        {QRegularExpression(R"((?:^|,)([^,"]+))"), fieldFormat}
+        {QRegularExpression(R"((?:^|,)([^",]+))"), fieldFormat}
     };
 
     m_errorFormat.setUnderlineStyle(QTextCharFormat::WaveUnderline);

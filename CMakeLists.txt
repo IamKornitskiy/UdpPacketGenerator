@@ -14,6 +14,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network Core Gui 
 
 add_subdirectory(packet)
 add_subdirectory(settings)
+add_subdirectory(highlighters)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -35,9 +36,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         titlebar.h titlebar.cpp
         field_editor_factory.h field_editor_factory.cpp
         text_field_editor_dialog.h text_field_editor_dialog.cpp text_field_editor_dialog.ui
-        json_highlighter.h json_highlighter.cpp
-        nmea_highlighter.h nmea_highlighter.cpp
-        csv_highlighter.h csv_highlighter.cpp
+
         custom_button.h custom_button.cpp
         custom_statusbar.h custom_statusbar.cpp
         theme_manager.h theme_manager.cpp
@@ -45,7 +44,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 endif()
 
 target_compile_definitions(UdpPacketGenerator PRIVATE APP_VERSION="${PROJECT_VERSION}")
-target_link_libraries(UdpPacketGenerator PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Network Qt6::UiTools packet settings)
+target_link_libraries(UdpPacketGenerator PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Network Qt6::UiTools packet settings highlighters)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
