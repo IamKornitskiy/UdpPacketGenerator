@@ -5,8 +5,8 @@
 #include <QObject>
 #include <QTimer>
 #include <QUdpSocket>
+#include <QVector>
 #include "base_packet_field.h"
-#include <memory>
 
 class TrafficGenerator : public QObject
 {
@@ -16,7 +16,7 @@ public:
     ~TrafficGenerator();
 
     void configure(const QString &destAddrsStr,
-                   quint16 destPort,
+                   const QString &destPortsStr, // <--- 修改点 1：接收多端口字符串
                    const QHostAddress &localAddr,
                    quint16 localPort,
                    int intervalMs,
@@ -35,7 +35,7 @@ private:
     QUdpSocket *m_socket = nullptr;
     QTimer *m_timer = nullptr;
     QVector<QHostAddress> m_destAddresses;
-    quint16 m_destPort = 0;
+    QVector<quint16> m_destPorts;               // <--- 修改点 2：把单个端口变成了端口列表
     QHostAddress m_localAddress;
     quint16 m_localPort = 0;
     int m_sentCount = 0;

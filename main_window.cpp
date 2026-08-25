@@ -152,14 +152,19 @@ void MainWindow::onStart()
         return;
     }
 
-    // Modification 1: Retrieve the raw comma-separated string from the UI
+    // Modification 1: Retrieve IP addresses
     QString destAddrsStr = ui->leDestAddress->text().trimmed();
     if (destAddrsStr.isEmpty()) {
         QMessageBox::warning(this, "Error", "Please enter at least one destination IP address.");
         return;
     }
     
-    quint16 destPort = static_cast<quint16>(ui->sbDestPort->value());
+  // Modification 1.5: Retrieve Port addresses as string
+    QString destPortsStr = ui->sbDestPort->text().trimmed(); 
+    if (destPortsStr.isEmpty()) {
+        QMessageBox::warning(this, "Error", "Please enter at least one destination port.");
+        return;
+    }
 
     m_generator = new TrafficGenerator();
     m_workerThread = new QThread(this);
@@ -175,7 +180,7 @@ void MainWindow::onStart()
 
     // Modification 2: Pass the raw string directly to our updated configure method
     m_generator->configure(destAddrsStr,
-                           destPort,
+                           destPortsStr, // <--- 这里已经改成了咱们新写的多端口字符串变量！
                            localAddr,
                            localPort,
                            intervalMs,

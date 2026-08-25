@@ -1,7 +1,6 @@
 #include "traffic_generator.h"
 #include "packet_builder.h"
-#include <memory>
-#include <QStringList> // Include for string list processing
+#include <QStringList>
 
 TrafficGenerator::TrafficGenerator(QObject *parent)
     : QObject(parent)
@@ -12,21 +11,17 @@ TrafficGenerator::~TrafficGenerator()
     stop();
 }
 
-// Modification 1: Accept a comma-separated QString instead of a single QHostAddress
+// 修改点 1：接收多端口字符串 destPortsStr
 void TrafficGenerator::configure(const QString &destAddrsStr, 
-                                 quint16 destPort,
+                                 const QString &destPortsStr,
                                  const QHostAddress &localAddr,
                                  quint16 localPort,
                                  int intervalMs,
                                  const std::vector<std::unique_ptr<BasePacketField>> &fields)
 {
-    // Modification 2: Parse the comma-separated IP list
+    // 修改点 2：彻底移除 Qt5 判断，纯 Qt6 标准写法
     m_destAddresses.clear();
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     QStringList ipList = destAddrsStr.split(",", Qt::SkipEmptyParts);
-#else
-    QStringList ipList = destAddrsStr.split(",", QString::SkipEmptyParts);
-#endif
     for (const QString &ipStr : ipList) {
         QHostAddress ip(ipStr.trimmed());
         if (!ip.isNull()) {
@@ -34,7 +29,17 @@ void TrafficGenerator::configure(const QString &destAddrsStr,
         }
     }
 
-    m_destPort = destPort;
+    // 修改点 3：解析逗号分隔的端口字符串
+    m_destPorts.clear();
+    QStringList portList = destPortsStr.split(",", Qt::SkipEmptyParts);
+    for (const QString &portStr : portList) {
+        bool ok;
+        quint16 port = portStr.trimmed().toUShort(&ok);
+        if (ok && port > 0) {
+            m_destPorts.append(port);
+        }
+    }
+
     m_localAddress = localAddr;
     m_localPort = localPort;
     m_intervalMs = intervalMs;
@@ -64,12 +69,14 @@ void TrafficGenerator::start()
         
         QByteArray packet = PacketBuilder::buildPacket(*m_fields);
         
-        // Modification 3: Iterate through all parsed target IPs for broadcasting
+        // 修改点 4：双重循环！遍历所有目标 IP 和目标端口进行广播
         for (const auto &destAddr : m_destAddresses) {
-            qint64 ret = m_socket->writeDatagram(packet, destAddr, m_destPort);
-            if (ret == -1) {
-                // Log error if sending to a specific IP fails, but do not block other transmissions
-                emit errorOccurred("Send error to " + destAddr.toString() + ": " + m_socket->errorString());
+            for (quint16 destPort : m_destPorts) {
+                qint64 ret = m_socket->writeDatagram(packet, destAddr, destPort);
+                if (ret == -1) {
+                    // 记录具体的 IP 和端口发送失败信息
+                    emit errorOccurred("Send error to " + destAddr.toString() + ":" + QString::number(destPort) + " - " + m_socket->errorString());
+                }
             }
         }
         
