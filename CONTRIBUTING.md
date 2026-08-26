@@ -7,7 +7,7 @@ Here you will find guidelines for reporting bugs, suggesting features, and submi
 
 ## Bug Reports
 
-If you encounter a bug, please [open an issue](https://github.com/IamKornitskiy/UdpPacketGenerator/issues/new) and include:
+If you encounter a bug, please [open an issue](https://github.com/UdpPacketGenerator/UdpPacketGenerator/issues/new) and include:
 
 - application version (or release tag)
 - operating system
@@ -31,12 +31,36 @@ To contribute a template:
 
 ## Pull Request Process
 
-1. **Fork** the repository and create a branch with a descriptive name (`fix-crash-empty-payload`, `feature/ascii-support`).
+1. **Fork** the repository and create a branch from `dev` with a descriptive name (`fix-crash-empty-payload`, `feature/ascii-support`).
 2. Make your changes, following the code style described below.
 3. Ensure the project compiles without errors (CMake, Qt 6.8+, C++17).
 4. If you add a new feature, consider adding tests or an example template.
 5. Open a Pull Request to `dev` with a clear description of the changes.
 6. Your PR will be reviewed, and changes may be requested.
+
+```
+git checkout dev
+git pull origin dev
+git checkout -b fix-crash-empty-payload   # or feature/your-feature-name
+```
+
+>⚠️ Important: All changes must be based on the `dev` branch, not on `main`. `main` is reserved for stable releases and does not accept new features directly.
+
+```mermaid
+gitGraph
+    commit id: "initial"
+    branch dev
+    checkout dev
+    commit id: "dev start"
+    branch feature/ascii-support
+    checkout feature/ascii-support
+    commit id: "add ascii"
+    commit id: "fix tests"
+    checkout dev
+    merge feature/ascii-support id: "merge feature"
+    checkout main
+    merge dev id: "release v2.3.0" tag: "v2.3.0"
+```
 
 ## Code Style
 
@@ -64,10 +88,10 @@ To contribute a template:
 
 ## License
 
-The project is licensed under the [GNU General Public License v3.0](LICENSE).  
+The project is licensed under the [MIT License](LICENSE).  
 By contributing, you agree that your code will be distributed under the same license.
 
 ## Communication
 
-Questions and discussions can take place in issues or in [Discussions](https://github.com/IamKornitskiy/UdpPacketGenerator/discussions).  
+Questions and discussions can take place in issues or in [Discussions](https://github.com/UdpPacketGenerator/UdpPacketGenerator/discussions).  
 Pull Requests, documentation, and templates – all contributions are gratefully received!

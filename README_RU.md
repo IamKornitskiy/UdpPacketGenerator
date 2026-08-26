@@ -2,13 +2,13 @@
 
 <h1 align="center">UDP Packet Generator</h1>
 <div align="center">
-    <a href="https://github.com/IamKornitskiy/UdpPacketGenerator/releases"><img src="https://img.shields.io/github/v/release/IamKornitskiy/UdpPacketGenerator" alt="Latest Release"/></a>
-    <a href="https://github.com/IamKornitskiy/UdpPacketGenerator/releases"><img src="https://img.shields.io/github/downloads/IamKornitskiy/UdpPacketGenerator/total" alt="Downloads"/></a>
-    <a href="https://github.com/IamKornitskiy/UdpPacketGenerator/stargazers"><img src="https://img.shields.io/github/stars/IamKornitskiy/UdpPacketGenerator" alt="Stars"/></a>
+    <a href="https://github.com/UdpPacketGenerator/UdpPacketGenerator/releases"><img src="https://img.shields.io/github/v/release/UdpPacketGenerator/UdpPacketGenerator" alt="Latest Release"/></a>
+    <a href="https://github.com/UdpPacketGenerator/UdpPacketGenerator/releases"><img src="https://img.shields.io/github/downloads/UdpPacketGenerator/UdpPacketGenerator/total" alt="Downloads"/></a>
+    <a href="https://github.com/UdpPacketGenerator/UdpPacketGenerator/stargazers"><img src="https://img.shields.io/github/stars/UdpPacketGenerator/UdpPacketGenerator" alt="Stars"/></a>
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License"/></a>
     <a href="https://www.qt.io/"><img src="https://img.shields.io/badge/Qt-6.8%2B-lightgray?logo=Qt&logoColor=white&labelColor=brightgreen" alt="Qt"/></a>
     <a href="#"><img src="https://img.shields.io/badge/C%2B%2B-17-blue.svg?logo=c%2B%2B" alt="C++ Standard"/></a>
-    <a href="https://github.com/IamKornitskiy/UdpPacketGenerator/actions/workflows/test.yaml"><img src="https://github.com/IamKornitskiy/UdpPacketGenerator/actions/workflows/test.yaml/badge.svg" alt="CI"/></a>
+    <a href="https://github.com/UdpPacketGenerator/UdpPacketGenerator/actions/workflows/test.yaml"><img src="https://github.com/UdpPacketGenerator/UdpPacketGenerator/actions/workflows/test.yaml/badge.svg" alt="CI"/></a>
     <a href="#"><img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-lightgrey" alt="Platform"/></a>
 </div>
 <p align="center">
@@ -122,7 +122,7 @@ UDP Packet Generator создаёт и отправляет пользовате
 - **Компилятор C++17** (MSVC 2019+, GCC 9+, Clang 10+)
 
 ```bash
-git clone https://github.com/IamKornitskiy/UdpPacketGenerator.git
+git clone https://github.com/UdpPacketGenerator/UdpPacketGenerator.git
 cd UdpPacketGenerator
 mkdir build && cd build
 cmake .. -DCMAKE_PREFIX_PATH=/path/to/Qt/6.8.0/gcc_64
@@ -140,8 +140,8 @@ cmake --build .
 
 ## ❓ Поддержка и вопросы
 
-- **Сообщения об ошибках и запросы функций** — создайте [issue на GitHub](https://github.com/IamKornitskiy/UdpPacketGenerator/issues)
-- **Обсуждения** — используйте [GitHub Discussions](https://github.com/IamKornitskiy/UdpPacketGenerator/discussions) для вопросов и идей
+- **Сообщения об ошибках и запросы функций** — создайте [issue на GitHub](https://github.com/UdpPacketGenerator/UdpPacketGenerator/issues)
+- **Обсуждения** — используйте [GitHub Discussions](https://github.com/UdpPacketGenerator/UdpPacketGenerator/discussions) для вопросов и идей
 - **Документация** — смотрите папку [`templates/`](templates/) и файл [`whatsnew.md`](whatsnew.md) с обновлениями
 
 ## 🙌 Вклад в проект
