@@ -11,7 +11,6 @@ TrafficGenerator::~TrafficGenerator()
     stop();
 }
 
-// 修改点 1：接收多端口字符串 destPortsStr
 void TrafficGenerator::configure(const QString &destAddrsStr, 
                                  const QString &destPortsStr,
                                  const QHostAddress &localAddr,
@@ -19,7 +18,6 @@ void TrafficGenerator::configure(const QString &destAddrsStr,
                                  int intervalMs,
                                  const std::vector<std::unique_ptr<BasePacketField>> &fields)
 {
-    // 修改点 2：彻底移除 Qt5 判断，纯 Qt6 标准写法
     m_destAddresses.clear();
     QStringList ipList = destAddrsStr.split(",", Qt::SkipEmptyParts);
     for (const QString &ipStr : ipList) {
@@ -29,7 +27,6 @@ void TrafficGenerator::configure(const QString &destAddrsStr,
         }
     }
 
-    // 修改点 3：解析逗号分隔的端口字符串
     m_destPorts.clear();
     QStringList portList = destPortsStr.split(",", Qt::SkipEmptyParts);
     for (const QString &portStr : portList) {
@@ -69,12 +66,12 @@ void TrafficGenerator::start()
         
         QByteArray packet = PacketBuilder::buildPacket(*m_fields);
         
-        // 修改点 4：双重循环！遍历所有目标 IP 和目标端口进行广播
+       
         for (const auto &destAddr : m_destAddresses) {
             for (quint16 destPort : m_destPorts) {
                 qint64 ret = m_socket->writeDatagram(packet, destAddr, destPort);
                 if (ret == -1) {
-                    // 记录具体的 IP 和端口发送失败信息
+                    
                     emit errorOccurred("Send error to " + destAddr.toString() + ":" + QString::number(destPort) + " - " + m_socket->errorString());
                 }
             }

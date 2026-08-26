@@ -9,8 +9,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network Gui UiTools)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network Core Gui UiTools Test Concurrent)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Network UiTools Test Concurrent)
 
 add_subdirectory(packet)
 add_subdirectory(settings)
@@ -25,51 +24,32 @@ set(PROJECT_SOURCES
         main_window.ui
 )
 
-# Fallback logic to support both Qt5 and Qt6 environments
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(UdpPacketGenerator
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
-        traffic_generator.h traffic_generator.cpp
-        resources.qrc
-        titlebar.h titlebar.cpp
-        field_editor_factory.h field_editor_factory.cpp
-        text_field_editor_dialog.h text_field_editor_dialog.cpp text_field_editor_dialog.ui
-        json_highlighter.h json_highlighter.cpp
-        nmea_highlighter.h nmea_highlighter.cpp
-        csv_highlighter.h csv_highlighter.cpp
-    )
-else()
-    # Use the standard CMake method to create the executable for Qt5
-    add_executable(UdpPacketGenerator
-        ${PROJECT_SOURCES}
-        traffic_generator.h traffic_generator.cpp
-        resources.qrc
-        titlebar.h titlebar.cpp
-        field_editor_factory.h field_editor_factory.cpp
-        text_field_editor_dialog.h text_field_editor_dialog.cpp text_field_editor_dialog.ui
-
-        custom_button.h custom_button.cpp
-        custom_statusbar.h custom_statusbar.cpp
-        theme_manager.h theme_manager.cpp
-    )
-endif()
+qt_add_executable(UdpPacketGenerator
+    MANUAL_FINALIZATION
+    ${PROJECT_SOURCES}
+    traffic_generator.h traffic_generator.cpp
+    resources.qrc
+    titlebar.h titlebar.cpp
+    field_editor_factory.h field_editor_factory.cpp
+    text_field_editor_dialog.h text_field_editor_dialog.cpp text_field_editor_dialog.ui
+    nmea_highlighter.h nmea_highlighter.cpp
+    csv_highlighter.h csv_highlighter.cpp
+)
 
 target_compile_definitions(UdpPacketGenerator PRIVATE APP_VERSION="${PROJECT_VERSION}")
 
-# Dynamically link the detected Qt version libraries instead of hardcoding Qt6
-target_link_libraries(UdpPacketGenerator PRIVATE 
-    Qt${QT_VERSION_MAJOR}::Core 
-    Qt${QT_VERSION_MAJOR}::Gui 
-    Qt${QT_VERSION_MAJOR}::Widgets 
-    Qt${QT_VERSION_MAJOR}::Network 
-    Qt${QT_VERSION_MAJOR}::UiTools 
+target_link_libraries(UdpPacketGenerator PRIVATE
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Widgets
+    Qt6::Network
+    Qt6::UiTools
     packet
 )
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
-if(${QT_VERSION} VERSION_LESS 6.1.0)
+if(Qt6_VERSION VERSION_LESS 6.1.0)
   set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.UdpPacketGenerator)
 endif()
 set_target_properties(UdpPacketGenerator PROPERTIES
@@ -82,9 +62,7 @@ set_target_properties(UdpPacketGenerator PROPERTIES
 
 include(GNUInstallDirs)
 
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(UdpPacketGenerator)
-endif()
+qt_finalize_executable(UdpPacketGenerator)
 
 option(BUILD_TESTS "Build unit tests" ON)
 

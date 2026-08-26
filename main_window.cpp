@@ -180,7 +180,7 @@ void MainWindow::onStart()
 
     // Modification 2: Pass the raw string directly to our updated configure method
     m_generator->configure(destAddrsStr,
-                           destPortsStr, // <--- 这里已经改成了咱们新写的多端口字符串变量！
+                           destPortsStr,
                            localAddr,
                            localPort,
                            intervalMs,
