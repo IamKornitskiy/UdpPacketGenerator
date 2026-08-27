@@ -60,6 +60,22 @@ gitGraph
     merge dev id: "release v2.3.0" tag: "v2.3.0"
 ```
 
+## Сборка
+
+### Требования
+
+- **Qt 6.8+** (модули Core, Gui, Widgets, Network)
+- **CMake 3.16+**
+- **Компилятор C++17** (MSVC 2019+, GCC 9+, Clang 10+)
+
+```bash
+git clone https://github.com/UdpPacketGenerator/UdpPacketGenerator.git
+cd UdpPacketGenerator
+mkdir build && cd build
+cmake .. -DCMAKE_PREFIX_PATH=/path/to/Qt/6.8.0/gcc_64
+cmake --build .
+```
+
 ## Стиль кода
 
 - **C++17**, Qt 6 (Widgets)

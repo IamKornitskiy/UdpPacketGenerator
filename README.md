@@ -113,22 +113,6 @@ If you create a JSON template for a well-known protocol or packet, feel free to 
 </table>
 </details>
 
-## Build
-
-### Requirements
-
-- **Qt 6.8+** (Core, Gui, Widgets, Network)
-- **CMake 3.16+**
-- **C++17 compiler** (MSVC 2019+, GCC 9+, Clang 10+)
-
-```bash
-git clone https://github.com/UdpPacketGenerator/UdpPacketGenerator.git
-cd UdpPacketGenerator
-mkdir build && cd build
-cmake .. -DCMAKE_PREFIX_PATH=/path/to/Qt/6.8.0/gcc_64
-cmake --build .
-```
-
 ## Usage
 
 1. **Load a JSON template** – click `Load` and select a `.json` file with packet description.

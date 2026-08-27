@@ -113,22 +113,6 @@ UDP Packet Generator создаёт и отправляет пользовате
 </table>
 </details>
 
-## Сборка
-
-### Требования
-
-- **Qt 6.8+** (модули Core, Gui, Widgets, Network)
-- **CMake 3.16+**
-- **Компилятор C++17** (MSVC 2019+, GCC 9+, Clang 10+)
-
-```bash
-git clone https://github.com/UdpPacketGenerator/UdpPacketGenerator.git
-cd UdpPacketGenerator
-mkdir build && cd build
-cmake .. -DCMAKE_PREFIX_PATH=/path/to/Qt/6.8.0/gcc_64
-cmake --build .
-```
-
 ## Использование
 
 1. **Загрузите JSON-шаблон** – нажмите `Load` и выберите файл `.json` с описанием пакета.
