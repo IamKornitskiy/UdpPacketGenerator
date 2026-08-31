@@ -9,12 +9,13 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network Gui UiTools)
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets Network Gui UiTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network Core Gui UiTools Test Concurrent)
 
 add_subdirectory(packet)
 add_subdirectory(settings)
 add_subdirectory(highlighters)
+add_subdirectory(widgets)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -23,28 +24,23 @@ set(PROJECT_SOURCES
         version_checker.cpp
         version_checker.h
         main_window.ui
+        theme_manager.cpp
+        theme_manager.h
+        field_editor_factory.cpp
+        field_editor_factory.h
+        traffic_generator.cpp
+        traffic_generator.h        
 )
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(UdpPacketGenerator
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
+qt_add_executable(UdpPacketGenerator
+    MANUAL_FINALIZATION
+    ${PROJECT_SOURCES}
+    resources.qrc
+)
 
-
-        traffic_generator.h traffic_generator.cpp
-        resources.qrc
-        titlebar.h titlebar.cpp
-        field_editor_factory.h field_editor_factory.cpp
-        text_field_editor_dialog.h text_field_editor_dialog.cpp text_field_editor_dialog.ui
-
-        custom_button.h custom_button.cpp
-        custom_statusbar.h custom_statusbar.cpp
-        theme_manager.h theme_manager.cpp
-    )
-endif()
 
 target_compile_definitions(UdpPacketGenerator PRIVATE APP_VERSION="${PROJECT_VERSION}")
-target_link_libraries(UdpPacketGenerator PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Network Qt6::UiTools packet settings highlighters)
+target_link_libraries(UdpPacketGenerator PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Network Qt6::UiTools packet settings highlighters widgets)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

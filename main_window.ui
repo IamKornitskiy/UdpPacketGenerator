@@ -63,87 +63,125 @@
          <string>UDP Settings</string>
         </property>
         <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="3">
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>Interval</string>
+         <item row="0" column="0">
+          <layout class="QGridLayout" name="gridLayout_2" columnstretch="2,1,1,1,0,0">
+           <item row="0" column="1">
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>Source Port</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>Dest address</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="3">
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>Interval</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>Dest Port</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="4">
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="5">
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="2" column="0">
+          <widget class="QScrollArea" name="scrollAreaHost">
+           <property name="widgetResizable">
+            <bool>true</bool>
            </property>
            <property name="alignment">
-            <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+            <set>Qt::AlignmentFlag::AlignJustify|Qt::AlignmentFlag::AlignVCenter</set>
            </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>Dest Port</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="3">
-          <widget class="QSpinBox" name="sbInterval">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="suffix">
-            <string>ms</string>
-           </property>
-           <property name="minimum">
-            <number>1</number>
-           </property>
-           <property name="maximum">
-            <number>99999</number>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>Dest address</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="2">
-          <widget class="QSpinBox" name="sbDestPort">
-           <property name="maximum">
-            <number>65535</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLineEdit" name="leDestAddress">
-           <property name="maximumSize">
-            <size>
-             <width>150</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="inputMask">
-            <string>000.000.000.000</string>
-           </property>
-           <property name="text">
-            <string>127.0.0.1</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>Source Port</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QSpinBox" name="sbSrcPort">
-           <property name="maximum">
-            <number>65535</number>
-           </property>
+           <widget class="QWidget" name="scrollAreaWidgetContentsHost">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>374</width>
+              <height>145</height>
+             </rect>
+            </property>
+           </widget>
           </widget>
          </item>
         </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="leDestAddress">
+        <property name="maximumSize">
+         <size>
+          <width>150</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="inputMask">
+         <string>000.000.000.000</string>
+        </property>
+        <property name="text">
+         <string>127.0.0.1</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="sbInterval">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="suffix">
+         <string>ms</string>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>99999</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="sbDestPort">
+        <property name="maximum">
+         <number>65535</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="sbSrcPort">
+        <property name="maximum">
+         <number>65535</number>
+        </property>
        </widget>
       </item>
       <item>

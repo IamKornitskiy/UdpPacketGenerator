@@ -5,12 +5,14 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QRegularExpression>
-#include <QUiLoader>
 #include <QTimer>
+#include <QUiLoader>
 #include <QUrl>
 #include "./ui_main_window.h"
 #include "field_editor_factory.h"
-#include "custom_statusbar.h"
+#include "widgets/custom_statusbar.h"
+#include "widgets/stream_config_widget.h"
+#include "widgets/titlebar.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -26,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent)
     QVBoxLayout *vLayout = new QVBoxLayout(container);
     vLayout->setContentsMargins(0, 0, 0, 0);
     vLayout->setSpacing(0);
+
+    StreamConfigWidget *sc = new StreamConfigWidget(ui->scrollAreaWidgetContentsHost);
 
     m_titleBar = new TitleBar(this);
     vLayout->addWidget(m_titleBar);
