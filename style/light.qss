@@ -279,3 +279,48 @@ QLabel {
     background: #b8b9ba;
     margin: 4px 8px;
 }
+
+/* ---- Tool Buttons ---- */
+QToolButton {
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    padding: 4px;
+    color: #31363b;
+    icon-size: 20px;
+}
+
+QToolButton:hover {
+    background: #d6d8db;
+    border-radius: 4px;
+}
+
+QToolButton:pressed {
+    background: #c8cacd;
+    border-radius: 4px;
+}
+
+QToolButton:checked {
+    background: #d6d8db;
+    border-radius: 4px;
+}
+
+QToolButton:disabled {
+    color: #9a9b9c;
+}
+
+QTableWidget QToolButton {
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    padding: 2px;
+    icon-size: 18px;
+}
+
+QTableWidget QToolButton:hover {
+    background: #d6d8db;
+}
+
+QTableWidget QToolButton:pressed {
+    background: #c8cacd;
+}

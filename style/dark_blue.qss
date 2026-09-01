@@ -213,3 +213,48 @@ QScrollArea > QWidget > QWidget {
     background: #3d4f5d;
     margin: 4px 8px;
 }
+
+/* ---- Tool Buttons ---- */
+QToolButton {
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    padding: 4px;
+    color: #dddddd;
+    icon-size: 20px;
+}
+
+QToolButton:hover {
+    background: #3d4f5d;
+    border-radius: 4px;
+}
+
+QToolButton:pressed {
+    background: #4a5c6a;
+    border-radius: 4px;
+}
+
+QToolButton:checked {
+    background: #3d4f5d;
+    border-radius: 4px;
+}
+
+QToolButton:disabled {
+    color: #888888;
+}
+
+QTableWidget QToolButton {
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    padding: 2px;
+    icon-size: 18px;
+}
+
+QTableWidget QToolButton:hover {
+    background: #3d4f5d;
+}
+
+QTableWidget QToolButton:pressed {
+    background: #4a5c6a;
+}
