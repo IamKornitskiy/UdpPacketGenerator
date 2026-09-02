@@ -64,38 +64,38 @@
         </property>
         <layout class="QGridLayout" name="gridLayout">
          <item row="0" column="0">
-          <layout class="QGridLayout" name="gridLayout_2" columnstretch="2,0,0,0">
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
            <property name="leftMargin">
             <number>0</number>
            </property>
-           <item row="0" column="1">
-            <widget class="QLabel" name="labelSource">
-             <property name="text">
-              <string>Source Port</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
+           <item>
             <widget class="QLabel" name="labelAddress">
              <property name="text">
               <string>Dest address</string>
              </property>
             </widget>
            </item>
-           <item row="0" column="3">
+           <item>
+            <widget class="QLabel" name="labelSource">
+             <property name="text">
+              <string>Source Port</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelDest">
+             <property name="text">
+              <string>Dest Port</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QLabel" name="labelInterval">
              <property name="text">
               <string>Interval</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QLabel" name="labelDest">
-             <property name="text">
-              <string>Dest Port</string>
              </property>
             </widget>
            </item>
