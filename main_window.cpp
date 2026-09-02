@@ -11,7 +11,6 @@
 #include "./ui_main_window.h"
 #include "field_editor_factory.h"
 #include "widgets/custom_statusbar.h"
-#include "widgets/stream_config_widget.h"
 #include "widgets/titlebar.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -29,7 +28,27 @@ MainWindow::MainWindow(QWidget *parent)
     vLayout->setContentsMargins(0, 0, 0, 0);
     vLayout->setSpacing(0);
 
-    StreamConfigWidget *sc = new StreamConfigWidget(ui->scrollAreaWidgetContentsHost);
+    QVBoxLayout *hostLayout = new QVBoxLayout(ui->scrollAreaWidgetContentsHost);
+    hostLayout->setContentsMargins(0, 0, 0, 0);
+    m_streamConfigWidget = new StreamConfigWidget(ui->scrollAreaWidgetContentsHost);
+    hostLayout->addWidget(m_streamConfigWidget);
+
+    connect(m_streamConfigWidget,
+            &StreamConfigWidget::sendAddressXPos,
+            this,
+            &MainWindow::onAddressXPosChanged);
+    connect(m_streamConfigWidget,
+            &StreamConfigWidget::sendSourcePortXPos,
+            this,
+            &MainWindow::onSourcePortXPosChanged);
+    connect(m_streamConfigWidget,
+            &StreamConfigWidget::sendDestPortXPos,
+            this,
+            &MainWindow::onDestPortXPosChanged);
+    connect(m_streamConfigWidget,
+            &StreamConfigWidget::sendIntervalXPos,
+            this,
+            &MainWindow::onIntervalXPosChanged);
 
     m_titleBar = new TitleBar(this);
     vLayout->addWidget(m_titleBar);
@@ -62,13 +81,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Initialize version checker
     m_versionChecker = new VersionChecker(this);
-    connect(m_versionChecker, &VersionChecker::checkComplete,
-            this, &MainWindow::onVersionCheckComplete);
+    connect(m_versionChecker,
+            &VersionChecker::checkComplete,
+            this,
+            &MainWindow::onVersionCheckComplete);
 
     // Check for updates after a short delay (to not block UI startup)
-    QTimer::singleShot(1000, this, [this]() {
-        m_versionChecker->checkForUpdates();
-    });
+    QTimer::singleShot(1000, this, [this]() { m_versionChecker->checkForUpdates(); });
 
     statusBar()->showMessage("Ready");
     CustomStatusBar *customStatusBar = new CustomStatusBar(this);
@@ -135,7 +154,7 @@ void MainWindow::onLoadJson()
 
     ui->btnStart->setEnabled(true);
     ui->btnStop->setEnabled(false);
-    CustomStatusBar *customBar = qobject_cast<CustomStatusBar*>(statusBar());
+    CustomStatusBar *customBar = qobject_cast<CustomStatusBar *>(statusBar());
     if (customBar) {
         customBar->setStatus("Loaded " + fileName, false);
     } else {
@@ -187,7 +206,7 @@ void MainWindow::onStart()
     m_isRunning = true;
     ui->btnStart->setEnabled(false);
     ui->btnStop->setEnabled(true);
-    CustomStatusBar *customBar = qobject_cast<CustomStatusBar*>(statusBar());
+    CustomStatusBar *customBar = qobject_cast<CustomStatusBar *>(statusBar());
     if (customBar) {
         customBar->setStatusRunning();
     } else {
@@ -214,7 +233,7 @@ void MainWindow::onStop()
     m_isRunning = false;
     ui->btnStart->setEnabled(true);
     ui->btnStop->setEnabled(false);
-    CustomStatusBar *customBar = qobject_cast<CustomStatusBar*>(statusBar());
+    CustomStatusBar *customBar = qobject_cast<CustomStatusBar *>(statusBar());
     if (customBar) {
         customBar->setStatusStopped();
     } else {
@@ -224,7 +243,7 @@ void MainWindow::onStop()
 
 void MainWindow::onPacketSent(int count)
 {
-    CustomStatusBar *customBar = qobject_cast<CustomStatusBar*>(statusBar());
+    CustomStatusBar *customBar = qobject_cast<CustomStatusBar *>(statusBar());
     if (customBar) {
         customBar->setStatus("Packets sent: " + QString::number(count), false);
     } else {
@@ -234,7 +253,7 @@ void MainWindow::onPacketSent(int count)
 
 void MainWindow::onError(const QString &msg)
 {
-    CustomStatusBar *customBar = qobject_cast<CustomStatusBar*>(statusBar());
+    CustomStatusBar *customBar = qobject_cast<CustomStatusBar *>(statusBar());
     if (customBar) {
         customBar->setStatusError(msg);
     } else {
@@ -244,13 +263,16 @@ void MainWindow::onError(const QString &msg)
 
 void MainWindow::onAbout()
 {
-    QMessageBox::about(this, "About UDP Packet Generator",
-                       QString("<h2>UDP Packet Generator v%1</h2>"
-                               "<p>A flexible UDP packet generator configured through JSON templates.</p>"
-                               "<p>Built with Qt6 and C++17.</p>"
-                               "<p>© 2025-2026 Oleg Kornitskiy</p>"
-                               "<p><a href='https://github.com/UdpPacketGenerator/UdpPacketGenerator'>GitHub</a></p>")
-                           .arg(APP_VERSION));
+    QMessageBox::about(
+        this,
+        "About UDP Packet Generator",
+        QString(
+            "<h2>UDP Packet Generator v%1</h2>"
+            "<p>A flexible UDP packet generator configured through JSON templates.</p>"
+            "<p>Built with Qt6 and C++17.</p>"
+            "<p>© 2025-2026 Oleg Kornitskiy</p>"
+            "<p><a href='https://github.com/UdpPacketGenerator/UdpPacketGenerator'>GitHub</a></p>")
+            .arg(APP_VERSION));
 }
 
 void MainWindow::onThemeSelected(const QString &themeKey)
@@ -270,14 +292,16 @@ void MainWindow::onThemeSelected(const QString &themeKey)
             }
         }
 
-        CustomStatusBar *customBar = qobject_cast<CustomStatusBar*>(statusBar());
+        CustomStatusBar *customBar = qobject_cast<CustomStatusBar *>(statusBar());
         if (customBar) {
             customBar->setStatus("Theme: " + themeName, false);
         }
     }
 }
 
-void MainWindow::onVersionCheckComplete(bool newerAvailable, const QString &latestVersion, const QString &error)
+void MainWindow::onVersionCheckComplete(bool newerAvailable,
+                                        const QString &latestVersion,
+                                        const QString &error)
 {
     if (!error.isEmpty()) {
         // Silent fail: don't bother the user with network errors
@@ -301,7 +325,8 @@ void MainWindow::onVersionCheckComplete(bool newerAvailable, const QString &late
         msgBox.exec();
 
         if (msgBox.clickedButton() == downloadButton) {
-            QDesktopServices::openUrl(QUrl("https://github.com/UdpPacketGenerator/UdpPacketGenerator/releases"));
+            QDesktopServices::openUrl(
+                QUrl("https://github.com/UdpPacketGenerator/UdpPacketGenerator/releases"));
         }
     } else if (!latestVersion.isEmpty()) {
         qDebug() << "You are using the latest version (" << latestVersion << ")";
@@ -329,4 +354,25 @@ void MainWindow::buildDynamicFields()
             m_fieldEditors.insert(field->name(), editor);
         }
     }
+}
+
+void MainWindow::onAddressXPosChanged(int newXPos)
+{
+    ui->labelAddress->move(QPoint(newXPos + 15, ui->labelAddress->pos().y()));
+}
+
+void MainWindow::onSourcePortXPosChanged(int newXPos)
+{
+    ui->labelSource->move(QPoint(newXPos + 15, ui->labelSource->pos().y()));
+}
+
+void MainWindow::onDestPortXPosChanged(int newXPos)
+{
+    ui->labelDest->move(QPoint(newXPos + 15, ui->labelDest->pos().y()));
+}
+
+void MainWindow::onIntervalXPosChanged(int newXPos)
+{
+    qDebug() << Q_FUNC_INFO << newXPos;
+    ui->labelInterval->move(QPoint(newXPos + 15, ui->labelInterval->pos().y()));
 }

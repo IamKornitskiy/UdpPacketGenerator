@@ -9,10 +9,11 @@
 #include <QSpinBox>
 #include <QThread>
 #include "packet/packet_template.h"
+#include "stream_config_widget.h"
+#include "theme_manager.h"
 #include "titlebar.h"
 #include "traffic_generator.h"
 #include "version_checker.h"
-#include "theme_manager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -34,18 +35,26 @@ private slots:
     void onStop();
     void onPacketSent(int count);
     void onError(const QString &msg);
-    void onVersionCheckComplete(bool newerAvailable, const QString &latestVersion, const QString &error);
+    void onVersionCheckComplete(bool newerAvailable,
+                                const QString &latestVersion,
+                                const QString &error);
     void onAbout();
     void onThemeSelected(const QString &themeKey);
 
 private:
     Ui::MainWindow *ui;
     TitleBar *m_titleBar = nullptr;
+    StreamConfigWidget *m_streamConfigWidget;
 
     void clearDynamicFields();
     void buildDynamicFields();
 
     void setRunning(bool running);
+
+    void onAddressXPosChanged(int newXPos);
+    void onSourcePortXPosChanged(int newXPos);
+    void onDestPortXPosChanged(int newXPos);
+    void onIntervalXPosChanged(int newXPos);
 
     PacketTemplate m_packetTemplate;
 
