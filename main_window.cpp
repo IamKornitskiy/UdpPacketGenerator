@@ -373,6 +373,5 @@ void MainWindow::onDestPortXPosChanged(int newXPos)
 
 void MainWindow::onIntervalXPosChanged(int newXPos)
 {
-    qDebug() << Q_FUNC_INFO << newXPos;
     ui->labelInterval->move(QPoint(newXPos + 15, ui->labelInterval->pos().y()));
 }
