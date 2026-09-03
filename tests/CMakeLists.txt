@@ -11,6 +11,8 @@ function(setup_test_target TARGET)
         Qt6::Test
         Qt6::Widgets
         packet
+        settings
+        widgets
     )
     set_target_properties(${TARGET} PROPERTIES WIN32_EXECUTABLE OFF)
 
@@ -88,7 +90,7 @@ add_test(NAME PacketBuilder COMMAND test_packet_builder)
 add_executable(test_field_editor_factory
     tst_field_editor_factory.cpp
     ../field_editor_factory.cpp
-    ../text_field_editor_dialog.cpp
+    ../widgets/text_field_editor_dialog.cpp
 )
 setup_test_target(test_field_editor_factory)
 target_link_libraries(test_field_editor_factory PRIVATE highlighters)
