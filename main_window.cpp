@@ -33,23 +33,6 @@ MainWindow::MainWindow(QWidget *parent)
     m_streamConfigWidget = new StreamConfigWidget(ui->scrollAreaWidgetContentsHost);
     hostLayout->addWidget(m_streamConfigWidget);
 
-    connect(m_streamConfigWidget,
-            &StreamConfigWidget::sendAddressXPos,
-            this,
-            &MainWindow::onAddressXPosChanged);
-    connect(m_streamConfigWidget,
-            &StreamConfigWidget::sendSourcePortXPos,
-            this,
-            &MainWindow::onSourcePortXPosChanged);
-    connect(m_streamConfigWidget,
-            &StreamConfigWidget::sendDestPortXPos,
-            this,
-            &MainWindow::onDestPortXPosChanged);
-    connect(m_streamConfigWidget,
-            &StreamConfigWidget::sendIntervalXPos,
-            this,
-            &MainWindow::onIntervalXPosChanged);
-
     m_titleBar = new TitleBar(this);
     vLayout->addWidget(m_titleBar);
 
@@ -354,24 +337,4 @@ void MainWindow::buildDynamicFields()
             m_fieldEditors.insert(field->name(), editor);
         }
     }
-}
-
-void MainWindow::onAddressXPosChanged(int newXPos)
-{
-    ui->labelAddress->move(QPoint(newXPos + 15, ui->labelAddress->pos().y()));
-}
-
-void MainWindow::onSourcePortXPosChanged(int newXPos)
-{
-    ui->labelSource->move(QPoint(newXPos + 15, ui->labelSource->pos().y()));
-}
-
-void MainWindow::onDestPortXPosChanged(int newXPos)
-{
-    ui->labelDest->move(QPoint(newXPos + 15, ui->labelDest->pos().y()));
-}
-
-void MainWindow::onIntervalXPosChanged(int newXPos)
-{
-    ui->labelInterval->move(QPoint(newXPos + 15, ui->labelInterval->pos().y()));
 }

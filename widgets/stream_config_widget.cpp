@@ -12,13 +12,3 @@ StreamConfigWidget::~StreamConfigWidget()
 {
     delete ui;
 }
-
-void StreamConfigWidget::resizeEvent(QResizeEvent *event)
-{
-    QWidget::resizeEvent(event);
-
-    emit sendAddressXPos(ui->address->pos().x());
-    emit sendSourcePortXPos(ui->srcPort->pos().x());
-    emit sendDestPortXPos(ui->destPort->pos().x());
-    emit sendIntervalXPos(ui->interval->pos().x());
-}

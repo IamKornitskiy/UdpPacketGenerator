@@ -21,13 +21,7 @@ public:
     int getXInterval();
 
 protected:
-    void resizeEvent(QResizeEvent *event) override;
-
     Ui::StreamConfigWidget *ui;
 
 signals:
-    void sendAddressXPos(int XPos);
-    void sendSourcePortXPos(int XPos);
-    void sendDestPortXPos(int XPos);
-    void sendIntervalXPos(int XPos);
 };

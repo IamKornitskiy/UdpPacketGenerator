@@ -51,11 +51,6 @@ private:
 
     void setRunning(bool running);
 
-    void onAddressXPosChanged(int newXPos);
-    void onSourcePortXPosChanged(int newXPos);
-    void onDestPortXPosChanged(int newXPos);
-    void onIntervalXPosChanged(int newXPos);
-
     PacketTemplate m_packetTemplate;
 
     QFormLayout *m_dynamicLayout;
